@@ -1,2 +1,2 @@
 # GP-Grupo-A-Desenvolvimento
-Software Voto Online
+Aplicação Voto Online
