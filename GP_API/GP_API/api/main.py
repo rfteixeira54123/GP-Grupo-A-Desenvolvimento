@@ -1,5 +1,4 @@
-from curses import wrapper
-from email.base64mime import body_encode
+
 import json
 from flask import Flask,request,jsonify,abort
 
@@ -12,14 +11,7 @@ app = Flask(__name__)
 
 @app.errorhandler(501)
 def handle_error(error):
-
     return jsonify({"Error":'Endpoint not yet implemented'},501)
-
-
-
-@app.route("/")
-def home():
-    return "GP"
 
 
 
@@ -34,7 +26,7 @@ def pedido_recuperacao():
     if result_status != 200:
         abort(result_status)
 
-@app.route("/_cghpw<str:token>")
+@app.route("/_cghpw<string:token>")
 def pedido_recupercao_confirm(token):
     result_status = 501
 
