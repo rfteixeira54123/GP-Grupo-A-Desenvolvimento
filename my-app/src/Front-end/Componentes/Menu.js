@@ -6,13 +6,14 @@ const MenuAdmin = (props) => {
   const menuStyle = {
     background: "#9B91D9",
     width: '50vw',
-    height: '100vh',
+    height: '85vh',
     minWidth: '20rem',
-    maxWidth: '30rem',
+    maxWidth: '25rem',
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: "2rem",
+    paddingBottom: "5rem", //necessário para não colocar o fotter acima de outra coisa
     position: 'relative'
   };
 

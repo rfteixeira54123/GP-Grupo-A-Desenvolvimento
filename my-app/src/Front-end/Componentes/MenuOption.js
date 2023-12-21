@@ -1,3 +1,4 @@
+import * as constants from "../constants";
 import { useState } from 'react';
 import { GoArrowRight } from "react-icons/go";
 
@@ -24,7 +25,7 @@ const MenuBtn = (props) => {
   };
 
   const buttonStyle = {
-    backgroundColor: hovering ? '#23204A' : 'white', // Cor alterada quando hover
+    backgroundColor: hovering ? constants.color.secondary : constants.color.white, // Cor alterada quando hover
     transition: 'background-color 0.3s ease', // Adicionando transição suave na mudança de cor
     width: '17rem', 
     height: 50, 
@@ -41,14 +42,14 @@ const MenuBtn = (props) => {
   const labelStyle = {
     transition: 'color 0.3s ease, transform 0.6s ease',
     transform: hovering ? 'translateX(-20px)' : 'translateX(0)',
-    color: hovering ? 'white' : '#23204A',
+    color: hovering ? constants.color.white : constants.color.secondary,
     fontSize: 14, 
     fontFamily: 'verdana', 
     fontWeight: '600',
   };
 
   const iconStyle = {
-    color: 'white',
+    color: constants.color.white,
     fontSize: 30,
     filter: 'drop-shadow(2px 3px 1px rgb(0 0 0 / 0.4))',
     position: 'absolute',

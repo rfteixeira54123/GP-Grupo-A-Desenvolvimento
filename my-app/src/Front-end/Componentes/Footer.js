@@ -1,3 +1,4 @@
+import * as constants from "../constants";
 import Help from "../Imagens/Icons/Ajuda.png";
 import Lang from "../Imagens/Icons/Idioma.png";
 import Acess from "../Imagens/Icons/noAcessibilidade.png";
@@ -17,7 +18,7 @@ const foot = () => {
       }}
     >
         <img style={{ height: "2rem" }} src={Help} alt="help" />
-        <img style={{ height: "2rem" }} src={Acess} alt="accessibility" />
+        <img style={{ height: "2rem", filter: constants.shadow.sm_md }} src={Acess} alt="accessibility" />
         <img style={{ height: "2rem" }} src={Lang} alt="language" />
     </div>
   );

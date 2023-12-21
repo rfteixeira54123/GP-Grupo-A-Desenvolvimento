@@ -3,7 +3,6 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./Front-end/Testes/Layout";
 import Home from "./Front-end/Testes/Home";
-import MenuOption from "./Front-end/Componentes/MenuOption";
 import Menu from "./Front-end/Componentes/Menu";
 
 function App() {
@@ -12,10 +11,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route
-            path="ex1"
-            element={<MenuOption label={"AAA"} state={false} />}
-          />
           <Route
             path="ex2"
             element={

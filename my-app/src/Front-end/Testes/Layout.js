@@ -13,7 +13,7 @@ const Layout = () => {
         <h1> Hello, {formatName(user)}! </h1>
         <nav>
             <ul>
-                <li><Link to="/ex1">MenuOption</Link></li>
+                <li><Link to="/">Home</Link></li>
                 <li><Link to="/ex2">Menu</Link></li>
             </ul>
         </nav>
