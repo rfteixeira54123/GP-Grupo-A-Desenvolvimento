@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 export default function GetCandidatosListar() {
   const [listas, setListas] = useState([]);
@@ -6,20 +6,25 @@ export default function GetCandidatosListar() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://gp-api-alpha.vercel.app/candidato/listar', {
-          method: 'GET',
-          mode: 'cors',
-        });
+        const response = await fetch(
+          "https://gp-api-alpha.vercel.app/candidato/listar",
+          {
+            method: "GET",
+            mode: "cors",
+          }
+        );
 
         if (!response.ok) {
-          throw new Error(`Erro na solicitação: ${response.status} ${response.statusText}`);
+          throw new Error(
+            `Erro na solicitação: ${response.status} ${response.statusText}`
+          );
         }
 
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         setListas(data.Listas);
       } catch (error) {
-        console.error('Erro na solicitação:', error);
+        console.error("Erro na solicitação:", error);
       }
     };
 
@@ -49,3 +54,5 @@ export default function GetCandidatosListar() {
     </div>
   );
 }
+
+// nations
