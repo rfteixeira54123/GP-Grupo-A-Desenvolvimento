@@ -12,7 +12,7 @@ const DeleteForm = () => {
   });
 
   return (
-    <form action={FORM_ENDPOINT} onSubmit={handleSubmit} method="GET">
+    <form action={FORM_ENDPOINT} onSubmit={handleSubmit} method="DELETE">
       {status !== "loading" && (
         <div className="pt-0 mb-3">
           <button

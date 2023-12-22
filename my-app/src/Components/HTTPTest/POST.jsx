@@ -36,9 +36,9 @@ function usePost({ additionalData }) {
           setMessage("success");
         } else if (response.status === 403) {
           setMessage("unauthorized");
-        } else {
-          console.table(response);
         }
+        console.table(response);
+        return response.json();
       })
       .then(() => {
         setMessage("OK");

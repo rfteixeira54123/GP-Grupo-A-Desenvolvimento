@@ -10,7 +10,7 @@ function useGet({ additionalData }) {
     setMessage("");
 
     const finalFormEndpoint = e.target.action;
-    const deleteData = Array.from(e.target.elements)
+    const getData = Array.from(e.target.elements)
       .filter((input) => input.name)
       .reduce(
         (obj, input) => Object.assign(obj, { [input.name]: input.value }),
@@ -18,7 +18,7 @@ function useGet({ additionalData }) {
       );
 
     if (additionalData) {
-      Object.assign(deleteData, additionalData);
+      Object.assign(getData, additionalData);
     }
 
     fetch(finalFormEndpoint, {
@@ -27,18 +27,17 @@ function useGet({ additionalData }) {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: "a",
+        Authorization: "Token_Admin",
       },
-      body: JSON.stringify(deleteData),
     })
       .then((response) => {
         if (response.status === 200) {
           setMessage("success");
         } else if (response.status === 403) {
           setMessage("unauthorized");
-        } else {
-          console.table(response);
         }
+        console.table(response);
+        return response.json();
       })
       .then(() => {
         setMessage("OK");
