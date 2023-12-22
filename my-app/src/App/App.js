@@ -2,9 +2,9 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { useEffect } from "react";
-
-import GetCandidatosListar from "../Components/GetCandidatos";
-import Form from "../Components/FormPost";
+import PostForm from "../Components/HTTPForm/POSTRequestsForm";
+import GetForm from "../Components/HTTPForm/GETRequestsForm";
+import DeleteForm from "../Components/HTTPForm/DELETERequestsForm";
 
 function App() {
   useEffect(() => {
@@ -23,7 +23,9 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <div className="py-6">
-          <Form />
+          <PostForm />
+          <GetForm />
+          <DeleteForm />
         </div>
       </header>
     </div>
