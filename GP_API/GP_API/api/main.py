@@ -1,26 +1,44 @@
-
 import json
+from os import access
 from flask import Flask,request,jsonify,abort
+from flask_cors import CORS
+import auth.auth as auth
+from auth.auth import Access
+from auth.auth import AuthError
 
 app = Flask(__name__)
 
+CORS(app)
 
 
 
 
 
 @app.errorhandler(501)
-def handle_error(error):
-    return jsonify({"Error":'Endpoint not yet implemented'},501)
+def error_501(error):
+    return jsonify({"Error":'Endpoint nÃ£o implementado'}),501
 
+@app.errorhandler(415)
+def error_415(error):
+    return jsonify({"Error":"Content-type nÃ£o definido para 'application/json'. A ignorar pedido"}),415
 
+@app.errorhandler(422)
+def error_422(error):
+    return jsonify({"Error":'JSON em falta'}),422
+
+@app.errorhandler(AuthError)
+def error_hanlder(error):
+    return jsonify({"Error": error}),403
 
 ##
 ## -- LOGIN OU RECUPERCACAO
 ##
-@app.route("/pedido/recuperacao")
+@app.route("/pedido/recuperacao",methods=["POST"])
 def pedido_recuperacao():
-    body = request.get_json()
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
     result_status = 501
 
     if result_status != 200:
@@ -34,19 +52,31 @@ def pedido_recupercao_confirm(token):
         abort(result_status)
     
 
-@app.route("/login")
+@app.route("/login",methods=["POST"])
 def login():
-    body = request.get_json()
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
     result_status = 501
     if result_status != 200:
         abort(result_status)
 
-@app.route("/logout")
+
+    
+@app.route("/logout",methods=["GET"])
+@auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def logout():
-    body = request.get_json()
-    result_status = 501
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
+
+    result_status = 200
     if result_status != 200:
         abort(result_status)
+
+    return "OK" #NOT IMPLEMENTED
 
 ##
 ## -- 
@@ -57,13 +87,19 @@ def logout():
 ## -- Gestao Contas
 ##
 
-@app.route("/conta/remover")
+@app.route("/conta/remover",methods=["DELETE"])
+@auth.Authentication(access=[Access.ADMIN])
 def remover_conta():
-    body = request.get_json()
-    result_status = 501
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
+    result_status = 200
 
     if result_status != 200:
         abort(result_status)
+
+    return "OK"#NOT IMPLEMENTED
 
 @app.route("/conta/listar",methods=["GET"])
 def lista_contas():
@@ -71,7 +107,10 @@ def lista_contas():
 
 @app.route("/conta/inserir",methods=["POST"])
 def inserir_conta():
-    body = request.get_json()
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
     result_status = 501
     if result_status != 200: #200 = OK
         abort(result_status)
@@ -79,16 +118,22 @@ def inserir_conta():
 
 @app.route("/conta/editar",methods=["PATCH"])
 def editar_conta():
-    body = request.get_json()
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
     result_status = 501
 
     if result_status != 200:
         abort(result_status)
 
 
-@app.route("/conta/definir_ativo")
+@app.route("/conta/definir_ativo",methods=["PATCH"])
 def definir_ativo_conta():
-    body = request.get_json()
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
     result_status = 501
 
     if result_status != 200:
@@ -102,7 +147,7 @@ def definir_ativo_conta():
 ##
 ## -- Gestao Eleicoes
 ##
-@app.route("/eleicao/listar")
+@app.route("/eleicao/listar",methods=["GET"])
 def lista_eleicao():
     return {"Eleicoes":
             [
@@ -124,37 +169,55 @@ def lista_eleicao():
                       }
                  ] #Lista de candidatos
                 }
-            ] #Lista de elei��es
+            ] #Lista de eleiÃ§Ãµes
            }
 
-@app.route("/eleicao/votar")
+@app.route("/eleicao/votar",methods=["POST"])
+@auth.Authentication(access=[Access.ALUNO])
 def votar_eleicao():
-    body = request.get_json()
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
+
     result_status = 501
 
     if result_status != 200:
         abort(result_status)
 
-@app.route("/eleicao/criar")
+@app.route("/eleicao/criar",methods=["POST"])
 def criar_eleicao():
-    body = request.get_json()
+    
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
+
     result_status = 501
 
     if result_status != 200:
         abort(result_status)
 
-@app.route("/eleicao/editar")
+@app.route("/eleicao/editar",methods=["PATCH"])
 def editar_eleicao():
-    body = request.get_json()
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
+
     result_status = 501
 
     if result_status != 200:
         abort(result_status)
 
 
-@app.route("/eleicao/adicionar_candidato")
+@app.route("/eleicao/adicionar_candidato",methods=["POST"])
 def adicionar_candidato_eleicao():
-    body = request.get_json()
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
+
     result_status = 501
 
     if result_status != 200:
@@ -166,10 +229,10 @@ def adicionar_candidato_eleicao():
 ##
 
 
-@app.route("/candidato/listar")
+@app.route("/candidato/listar",methods=["GET"])
 def listar_candidato():
     return {"Listas":
-            [ {"ID_Lista_Candidatos": 1, #Como vai existir multiplos gestores de candidato, precisamos de identificar quem � quem, isto pode ser mudado para "ID_Eleicao" onde este candidato pertence
+            [ {"ID_Lista_Candidatos": 1, #Como vai existir multiplos gestores de candidato, precisamos de identificar quem Ã© quem, isto pode ser mudado para "ID_Eleicao" onde este candidato pertence
            "Candidatos":
                  [
                      {"ID_Candidato":1,
@@ -182,32 +245,44 @@ def listar_candidato():
             }]}
             
 
-@app.route("/candidato/inserir")
+@app.route("/candidato/inserir",methods=["POST"])
 def inserir_candidato():
-    body = request.get_json()
-    result_status = 501
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
+    result_status = 200
 
     if result_status != 200:
         abort(result_status)
+    return "OK" #NOT IMPLEMENTED
 
-@app.route("/candidato/editar")
+@app.route("/candidato/editar",methods=["PATCH"])
 def editar_candidato():
-    body = request.get_json()
-    result_status = 501
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
+    result_status = 200
 
     if result_status != 200:
         abort(result_status)
 
-@app.route("/candidato/remover")
+    return "OK" #NOT IMPLEMENTED
+
+@app.route("/candidato/remover",methods=["DELETE"])
 def remover_candidato():
-    body = request.get_json()
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
     result_status = 501
 
     if result_status != 200:
         abort(result_status)
 
 
-@app.route("/evento/listar")
+@app.route("/evento/listar",methods=["GET"])
 def listar_evento():
     return {"Eventos":[{
             "ID_Evento":0,
@@ -218,9 +293,12 @@ def listar_evento():
     }
         ]}
 
-@app.route("/evento/inserir")
+@app.route("/evento/inserir",methods=["POST"])
 def inserir_evento():
-    body = request.get_json()
+    if request.data:
+        body = request.get_json()
+    else:
+        abort(422)
     result_status = 501
 
     if result_status != 200:
