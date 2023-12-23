@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 import * as constants from "../constants";
 import { useState } from "react";
@@ -8,9 +8,8 @@ import { GoArrowRight } from "react-icons/go";
 //  id: identificador do botão
 //  label: texto do botão
 //  state: estado selecionado do botão
-//  link: rota que mostra a nova página ao clique do botão.
+//  handle: função a efetuar onClick
 const MenuBtn = (props) => {
-  
   const [hovering, setHovering] = useState(props.state);
   // Se receber props.state TRUE O item eatá selecionado e NÃO pode ser selecionado
   // Se receber props.state FALSE O item NÃO eatá selecionado e pode ser selecionado
@@ -60,38 +59,20 @@ const MenuBtn = (props) => {
     right: 20,
   };
 
-  if (hovering) {
-    return (
-      <>
-        <Link to={props.link}
-          style={{textDecoration: "none"}}
-        >
-          <button
-            id={props.id}
-            style={buttonStyle}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <span style={labelStyle}>{props.label}</span>
-            <GoArrowRight style={iconStyle} />
-          </button>
-        </Link>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <button
-          id={props.id}
-          style={buttonStyle}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <span style={labelStyle}>{props.label}</span>
-        </button>
-      </>
-    );
-  }
+  return (
+    <>
+      <button
+        id={props.id}
+        style={buttonStyle}
+        onClick={props.handle}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <span style={labelStyle}>{props.label}</span>
+        {hovering ? <GoArrowRight style={iconStyle} /> : <></>}
+      </button>
+    </>
+  );
 };
 
 export default MenuBtn;

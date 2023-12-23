@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Logo from "../Imagens/Full_Blue_Icon.png";
 import MenuOption from "./MenuOption";
 import Footer from "./Footer";
@@ -5,9 +7,16 @@ import Footer from "./Footer";
 // Recebe props:
 //  id: array com identificadores dos botões
 //  label: array com textos dos botões
-//  state: array com estados selecionado dos botões
-//  link: array com rotas que mostra a nova página ao clique do botão.
-const MenuAdmin = (props) => {
+//  state: valor que identifica o botão selecionado
+//  handle: função a efetuar onClick
+const Menu = (props) => {
+  const [forceRender, setForceRender] = useState(false);
+
+  const handleOptionClick = (index) => {
+    props.handle(index);
+    setForceRender(prevState => !prevState);
+  };
+
   const menuStyle = {
     background: "#9B91D9",
     width: '50vw',
@@ -30,13 +39,13 @@ const MenuAdmin = (props) => {
             alt="logo"
           />
         </div>
-        <div>
+        <div key={forceRender ? 'forceRender' : 'normalRender'}>
           {props.label.map((value, index) => (
             <MenuOption
               key={props.id[index]}
               label={value}
-              state={props.state[index]}
-              link={props.link[index]}
+              state={index === props.state}
+              handle={() => handleOptionClick(index)}
             />
           ))}
         </div>
@@ -46,4 +55,4 @@ const MenuAdmin = (props) => {
   );
 };
 
-export default MenuAdmin;
+export default Menu;
