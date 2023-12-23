@@ -1,5 +1,4 @@
 import json
-from os import access
 from flask import Flask,request,jsonify,abort
 from flask_cors import CORS
 import auth.auth as auth
@@ -102,10 +101,12 @@ def remover_conta():
     return "OK"#NOT IMPLEMENTED
 
 @app.route("/conta/listar",methods=["GET"])
+@auth.Authentication(access=[Access.ADMIN])
 def lista_contas():
     return {"Contas":[{"ID_Conta":1,"Tipo_Conta":'Aluno',"Nome": 'Nome', "Email": 'email@email.com',"Palavra-Passe": 'FDA$#BDHSAI"#232',"estado": True,"acessibilidade": False}] }
 
 @app.route("/conta/inserir",methods=["POST"])
+@auth.Authentication(access=[Access.ADMIN])
 def inserir_conta():
     if request.data:
         body = request.get_json()
@@ -117,6 +118,7 @@ def inserir_conta():
 
 
 @app.route("/conta/editar",methods=["PATCH"])
+@auth.Authentication(access=[Access.ALUNO,Access.ADMIN]) #Aluno pode editar sua própria password
 def editar_conta():
     if request.data:
         body = request.get_json()
@@ -129,6 +131,7 @@ def editar_conta():
 
 
 @app.route("/conta/definir_ativo",methods=["PATCH"])
+@auth.Authentication(access=[Access.ADMIN])
 def definir_ativo_conta():
     if request.data:
         body = request.get_json()
@@ -148,6 +151,7 @@ def definir_ativo_conta():
 ## -- Gestao Eleicoes
 ##
 @app.route("/eleicao/listar",methods=["GET"])
+@auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def lista_eleicao():
     return {"Eleicoes":
             [
@@ -186,6 +190,7 @@ def votar_eleicao():
         abort(result_status)
 
 @app.route("/eleicao/criar",methods=["POST"])
+@auth.Authentication(access=[Access.ADMIN])
 def criar_eleicao():
     
     if request.data:
@@ -199,6 +204,7 @@ def criar_eleicao():
         abort(result_status)
 
 @app.route("/eleicao/editar",methods=["PATCH"])
+@auth.Authentication(access=[Access.ADMIN])
 def editar_eleicao():
     if request.data:
         body = request.get_json()
@@ -212,6 +218,7 @@ def editar_eleicao():
 
 
 @app.route("/eleicao/adicionar_candidato",methods=["POST"])
+@auth.Authentication(access=[Access.ADMIN])
 def adicionar_candidato_eleicao():
     if request.data:
         body = request.get_json()
@@ -230,6 +237,7 @@ def adicionar_candidato_eleicao():
 
 
 @app.route("/candidato/listar",methods=["GET"])
+@auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def listar_candidato():
     return {"Listas":
             [ {"ID_Lista_Candidatos": 1, #Como vai existir multiplos gestores de candidato, precisamos de identificar quem Ã© quem, isto pode ser mudado para "ID_Eleicao" onde este candidato pertence
@@ -246,6 +254,7 @@ def listar_candidato():
             
 
 @app.route("/candidato/inserir",methods=["POST"])
+@auth.Authentication(access=[Access.ADMIN])
 def inserir_candidato():
     if request.data:
         body = request.get_json()
@@ -258,6 +267,7 @@ def inserir_candidato():
     return "OK" #NOT IMPLEMENTED
 
 @app.route("/candidato/editar",methods=["PATCH"])
+@auth.Authentication(access=[Access.ADMIN])
 def editar_candidato():
     if request.data:
         body = request.get_json()
@@ -271,6 +281,7 @@ def editar_candidato():
     return "OK" #NOT IMPLEMENTED
 
 @app.route("/candidato/remover",methods=["DELETE"])
+@auth.Authentication(access=[Access.ADMIN])
 def remover_candidato():
     if request.data:
         body = request.get_json()
@@ -283,6 +294,7 @@ def remover_candidato():
 
 
 @app.route("/evento/listar",methods=["GET"])
+@auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def listar_evento():
     return {"Eventos":[{
             "ID_Evento":0,
@@ -294,6 +306,7 @@ def listar_evento():
         ]}
 
 @app.route("/evento/inserir",methods=["POST"])
+@auth.Authentication(access=[Access.ADMIN])
 def inserir_evento():
     if request.data:
         body = request.get_json()
