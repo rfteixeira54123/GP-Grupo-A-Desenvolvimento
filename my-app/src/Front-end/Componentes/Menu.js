@@ -2,27 +2,30 @@ import Logo from "../Imagens/Full_Blue_Icon.png";
 import MenuOption from "./MenuOption";
 import Footer from "./Footer";
 
+// Recebe props:
+//  id: array com identificadores dos botões
+//  label: array com textos dos botões
+//  state: array com estados selecionado dos botões
+//  link: array com rotas que mostra a nova página ao clique do botão.
 const MenuAdmin = (props) => {
   const menuStyle = {
     background: "#9B91D9",
     width: '50vw',
-    height: '85vh',
+    height: '100%',
     minWidth: '20rem',
     maxWidth: '25rem',
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "2rem",
-    paddingBottom: "5rem", //necessário para não colocar o fotter acima de outra coisa
     position: 'relative'
   };
 
   return (
     <>
       <div style={menuStyle}>
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "100%", height: "10rem"}}>
           <img
-            style={{ width: "10rem", paddingLeft: "2rem" }}
+            style={{ width: "9rem", padding: "1rem 0 0 2rem" }}
             src={Logo}
             alt="logo"
           />
@@ -33,6 +36,7 @@ const MenuAdmin = (props) => {
               key={props.id[index]}
               label={value}
               state={props.state[index]}
+              link={props.link[index]}
             />
           ))}
         </div>

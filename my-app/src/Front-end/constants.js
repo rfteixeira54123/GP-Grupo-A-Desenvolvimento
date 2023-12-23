@@ -29,4 +29,5 @@ export const color = {
 export const shadow = {
     small: 'drop-shadow(2px 3px 1px rgb(0 0 0 / 0.4))',
     sm_md: 'drop-shadow(0px 4px 2px rgb(0 0 0 / 0.25))',
+    sm: 'drop-shadow(0px 2px 1px rgb(0 0 0 / 0.25))',
 }
