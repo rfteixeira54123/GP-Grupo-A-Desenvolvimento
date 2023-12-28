@@ -1,3 +1,5 @@
+import {TableEventos} from "../../Componentes/Table";
+
 const styleWindow = {
   background: "pink",
   width: "100%",
@@ -5,11 +7,28 @@ const styleWindow = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  position: "relative",
 };
 
-const Page = () => {
+
+// Recebe props:
+//  array: objetos do tipo Eleicao
+const Page = (props) => {
   return (
-    <div style={styleWindow}>Gerir Eventos</div>
+    <div style={styleWindow}>
+      <div style={{width: "80%", height: "80%",}}>
+        <TableEventos 
+          array={[
+            {id_evento: 0, nome: "ANome do Evento ", data: "22/10/2023 às 15:30"},
+            {id_evento: 1, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
+            {id_evento: 2, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
+            {id_evento: 3, nome: "BNome do Evento ", data: "22/10/2023 às 15:30"},
+            {id_evento: 4, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
+            {id_evento: 5, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
+            {id_evento: 6, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
+          ]}/>
+      </div>
+    </div>
   );
 };
 

@@ -13,6 +13,7 @@ const stylePerfil = {
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-end",
+  zIndex: 99999999,
 };
 
 const styleTop = {
