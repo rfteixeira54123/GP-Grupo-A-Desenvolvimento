@@ -71,7 +71,7 @@ export const TableEleicoes = (props) => {
           </thead>
           <tbody style={{overflowY: "auto"}}>
             {props.array.map((obj, index) => (
-              <tr key={"RowEleicao"+index} style={{background:(index % 2) != 0 ? constants.color.primary_light : constants.color.white} }>
+              <tr key={"RowEleicao"+index} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
                 <td style={styleCell}></td>
                 <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
                 <td style={styleCell}>{obj.cargo_disputa}</td>
@@ -106,7 +106,7 @@ export const TableCandidatos = (props) => {
           </thead>
           <tbody style={{overflowY: "auto"}}>
             {props.array.map((obj, index) => (
-              <tr key={"RowCandidato"+obj.id_candidato} style={{background:(index % 2) != 0 ? constants.color.primary_light : constants.color.white} }>
+              <tr key={"RowCandidato"+obj.id_candidato} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
                 <td style={styleCell}></td>
                 <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
                 <td style={styleCell}>{obj.tipo}</td>
@@ -142,7 +142,7 @@ export const TableUtilizadores = (props) => {
           </thead>
           <tbody style={{overflowY: "auto"}}>
             {props.array.map((user, index) => (
-              <tr key={"RowConta"+user.id_conta} style={{background:(index % 2) != 0 ? constants.color.primary_light : constants.color.white} }>
+              <tr key={"RowConta"+user.id_conta} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
                 <td style={styleCell}></td>
                 <td style={{...styleCell, textAlign: "start"}}>{user.nome}</td>
                 <td style={{...styleCell, textAlign: "start"}}>{user.email}</td>
@@ -178,7 +178,7 @@ export const TableEventos = (props) => {
           </thead>
           <tbody style={{overflowY: "auto"}}>
             {props.array.map((obj, index) => (
-              <tr key={"RowEvento"+obj.id_evento} style={{background:(index % 2) != 0 ? constants.color.primary_light : constants.color.white} }>
+              <tr key={"RowEvento"+obj.id_evento} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
                 <td style={styleCell}></td>
                 <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
                 <td style={styleCell}>{obj.data}</td>

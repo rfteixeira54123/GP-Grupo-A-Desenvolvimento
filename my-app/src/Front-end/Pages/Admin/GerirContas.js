@@ -16,7 +16,7 @@ const styleWindow = {
 const Page = (props) => {
   return (
     <div style={styleWindow}>
-      <div style={{width: "100%", height: "80%",}}>
+      <div style={{width: "96%", height: "80%",}}>
         <TableUtilizadores 
           array={[
             {id_conta:0, nome: "Nome do Utilizador Completo", email: "a20121456@estgoh.ipc.pt", numero_id: "a2021258755", tipo:"Administrador", estado: true},
