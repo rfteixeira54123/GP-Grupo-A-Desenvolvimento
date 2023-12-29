@@ -2,6 +2,8 @@ import {Table} from 'react-bootstrap';
 import { AiFillDelete } from "react-icons/ai";
 import { MdOutlineEdit } from "react-icons/md";
 
+import CheckBox from "../Componentes/CheckBox";
+import FirstCheckBox from "../Componentes/FirstCheckBox";
 import * as constants from "../constants";
 
 const styleContainerTable = {
@@ -60,7 +62,7 @@ export const TableEleicoes = (props) => {
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={styleHeaderText}></th>
+              <th style={{...styleHeaderText, padding: "0px", paddingInline: "0px"}}><FirstCheckBox /></th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Tipo</th>
               <th style={styleHeaderText}>Início</th>
@@ -72,7 +74,7 @@ export const TableEleicoes = (props) => {
           <tbody style={{overflowY: "auto"}}>
             {props.array.map((obj, index) => (
               <tr key={"RowEleicao"+index} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
-                <td style={styleCell}></td>
+                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox /></td>
                 <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
                 <td style={styleCell}>{obj.cargo_disputa}</td>
                 <td style={styleCell}>{obj.data_inicio}</td>
@@ -97,7 +99,7 @@ export const TableCandidatos = (props) => {
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={styleHeaderText}></th>
+              <th style={{...styleHeaderText, padding: "0px", paddingInline: "0px"}}><FirstCheckBox /></th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Tipo</th>
               <th style={{...styleHeaderText, fontSize:11}}>Editar</th>
@@ -107,7 +109,7 @@ export const TableCandidatos = (props) => {
           <tbody style={{overflowY: "auto"}}>
             {props.array.map((obj, index) => (
               <tr key={"RowCandidato"+obj.id_candidato} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
-                <td style={styleCell}></td>
+                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox /></td>
                 <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
                 <td style={styleCell}>{obj.tipo}</td>
                 <td style={styleCell}><MdOutlineEdit size={25} /></td>
@@ -130,7 +132,7 @@ export const TableUtilizadores = (props) => {
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={styleHeaderText}></th>
+              <th style={{...styleHeaderText, padding: "0px", paddingInline: "0px"}}><FirstCheckBox /></th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Email</th>
               <th style={styleHeaderText}>Nº ID</th>
@@ -143,7 +145,7 @@ export const TableUtilizadores = (props) => {
           <tbody style={{overflowY: "auto"}}>
             {props.array.map((user, index) => (
               <tr key={"RowConta"+user.id_conta} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
-                <td style={styleCell}></td>
+                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox /></td>
                 <td style={{...styleCell, textAlign: "start"}}>{user.nome}</td>
                 <td style={{...styleCell, textAlign: "start"}}>{user.email}</td>
                 <td style={styleCell}>{user.numero_id}</td>
@@ -169,7 +171,7 @@ export const TableEventos = (props) => {
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={styleHeaderText}></th>
+              <th style={{...styleHeaderText, padding: "0px", paddingInline: "0px"}}><FirstCheckBox /></th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Início</th>
               <th style={{...styleHeaderText, fontSize:11}}>Editar</th>
@@ -179,7 +181,7 @@ export const TableEventos = (props) => {
           <tbody style={{overflowY: "auto"}}>
             {props.array.map((obj, index) => (
               <tr key={"RowEvento"+obj.id_evento} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
-                <td style={styleCell}></td>
+                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox /></td>
                 <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
                 <td style={styleCell}>{obj.data}</td>
                 <td style={styleCell}><MdOutlineEdit size={25} /></td>
