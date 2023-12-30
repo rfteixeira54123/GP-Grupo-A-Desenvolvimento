@@ -30,6 +30,7 @@ const styleNome = {
   color: constants.color.secondary,
   wordWrap: "break-word",
   textAlign: "end",
+  filter: constants.shadow.sm,
 };
 
 // Recebe props:
@@ -49,7 +50,7 @@ const Perfil = (props) => {
           <div style={styleNome}>
             <div
               style={{
-                fontSize: "14px",
+                fontSize: "16px",
                 fontWeight: "bold",
               }}
             >
@@ -57,7 +58,7 @@ const Perfil = (props) => {
             </div>
             <div
               style={{
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               {props.numId}
@@ -76,7 +77,7 @@ const Perfil = (props) => {
           <div style={styleNome}>
             <div
               style={{
-                fontSize: "14px",
+                fontSize: "16px",
                 fontWeight: "bold",
               }}
             >
@@ -84,7 +85,7 @@ const Perfil = (props) => {
             </div>
             <div
               style={{
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               {props.numId}

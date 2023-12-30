@@ -12,7 +12,7 @@ const styleWindow = {
 
 
 // Recebe props:
-//  array: objetos do tipo Eleicao
+//  array: objetos do tipo Evento
 const Page = (props) => {
   return (
     <div style={styleWindow}>

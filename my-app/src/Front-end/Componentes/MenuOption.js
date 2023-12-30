@@ -31,7 +31,8 @@ const MenuBtn = (props) => {
       ? constants.color.secondary
       : constants.color.white, // Cor alterada quando hover
     transition: "background-color 0.3s ease", // Adicionando transição suave na mudança de cor
-    width: "17rem",
+    width: "16rem",
+    minWidth: "fit-content",
     height: 50,
     border: "none",
     borderRadius: 50,
@@ -47,8 +48,9 @@ const MenuBtn = (props) => {
     transition: "color 0.3s ease, transform 0.6s ease",
     transform: hovering ? "translateX(-20px)" : "translateX(0)",
     color: hovering ? constants.color.white : constants.color.secondary,
-    fontSize: "18px",
+    fontSize: "16px",
     fontWeight: "bold",
+    letterSpacing: 1,
   };
 
   const iconStyle = {

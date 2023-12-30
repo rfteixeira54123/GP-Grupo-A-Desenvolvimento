@@ -4,6 +4,7 @@ import { MdOutlineEdit } from "react-icons/md";
 
 import CheckBox from "../Componentes/CheckBox";
 import FirstCheckBox from "../Componentes/FirstCheckBox";
+import CheckBoxEstado from "../Componentes/CheckBoxEstado";
 import * as constants from "../constants";
 
 const styleContainerTable = {
@@ -12,11 +13,11 @@ const styleContainerTable = {
   height: "100%", 
   background: constants.color.white60, 
   overflowY: "auto",
-  // boxSizing: "border-box",
-  // boxShadow: '1px 1px 0px 0px '+constants.color.secondary,
-  // border: "1px "+constants.color.secondary+" solid",
-  // borderRadius: 10,
-  // borderCollapse: 'collapse',
+  boxSizing: "content-box",
+  boxShadow: '0px 0px 0px 1px '+constants.color.secondary,
+  border: "1px "+constants.color.secondary+" solid",
+  borderRadius: "12px",
+  borderCollapse: 'collapse',
 }
 
 const styleHeader = {
@@ -29,20 +30,21 @@ const styleHeader = {
 
 const styleHeaderText = {
   color: constants.color.white,
-  fontSize: 14,
-  minWidth: "1.8rem",
+  fontSize: "14px",
   fontWeight: "500",
+  letterSpacing: 1,
+  minWidth: "1.8rem",
   wordWrap: "break-word",
   textAlign: "center",
   padding: "0.3rem",
   paddingInline: "0.7rem",
   border: "1px "+constants.color.secondary+" solid",
-  // filter: constants.shadow.sm_md,
+  filter: constants.shadow.small,
 };
 
 const styleCell = {
   color: constants.color.secondary,
-  fontSize: 14,
+  fontSize: "16px",
   minWidth: "2rem", 
   fontWeight: "500",
   wordWrap: "break-word",
@@ -62,13 +64,16 @@ export const TableEleicoes = (props) => {
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={{...styleHeaderText, padding: "0px", paddingInline: "0px"}}><FirstCheckBox /></th>
+              <th style={{
+                border: "1px "+constants.color.secondary+" solid", 
+                textAlign: "center",
+              }}><FirstCheckBox /></th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Tipo</th>
               <th style={styleHeaderText}>Início</th>
               <th style={styleHeaderText}>Fim</th>
-              <th style={{...styleHeaderText, fontSize:11}}>Editar</th>
-              <th style={{...styleHeaderText, fontSize:11}}>Apagar</th>
+              <th style={{...styleHeaderText, fontSize:12}}>Editar</th>
+              <th style={{...styleHeaderText, fontSize:12}}>Apagar</th>
             </tr>
           </thead>
           <tbody style={{overflowY: "auto"}}>
@@ -99,11 +104,14 @@ export const TableCandidatos = (props) => {
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={{...styleHeaderText, padding: "0px", paddingInline: "0px"}}><FirstCheckBox /></th>
+              <th style={{
+                border: "1px "+constants.color.secondary+" solid", 
+                textAlign: "center",
+              }}><FirstCheckBox /></th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Tipo</th>
-              <th style={{...styleHeaderText, fontSize:11}}>Editar</th>
-              <th style={{...styleHeaderText, fontSize:11}}>Apagar</th>
+              <th style={{...styleHeaderText, fontSize:12}}>Editar</th>
+              <th style={{...styleHeaderText, fontSize:12}}>Apagar</th>
             </tr>
           </thead>
           <tbody style={{overflowY: "auto"}}>
@@ -132,14 +140,17 @@ export const TableUtilizadores = (props) => {
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={{...styleHeaderText, padding: "0px", paddingInline: "0px"}}><FirstCheckBox /></th>
+              <th style={{
+                border: "1px "+constants.color.secondary+" solid", 
+                textAlign: "center",
+              }}><FirstCheckBox /></th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Email</th>
               <th style={styleHeaderText}>Nº ID</th>
               <th style={styleHeaderText}>Tipo</th>
               <th style={styleHeaderText}>Estado</th>
-              <th style={{...styleHeaderText, fontSize:11}}>Editar</th>
-              <th style={{...styleHeaderText, fontSize:11}}>Apagar</th>
+              <th style={{...styleHeaderText, fontSize:12}}>Editar</th>
+              <th style={{...styleHeaderText, fontSize:12}}>Apagar</th>
             </tr>
           </thead>
           <tbody style={{overflowY: "auto"}}>
@@ -150,7 +161,7 @@ export const TableUtilizadores = (props) => {
                 <td style={{...styleCell, textAlign: "start"}}>{user.email}</td>
                 <td style={styleCell}>{user.numero_id}</td>
                 <td style={styleCell}>{user.tipo}</td>
-                <td style={styleCell}>{user.estado ? "Desativar" : "Ativar"}</td>
+                <td style={styleCell}><CheckBoxEstado state={user.estado} /></td>
                 <td style={styleCell}><MdOutlineEdit size={25} /></td>
                 <td style={styleCell}><AiFillDelete size={22} /></td>
               </tr>
@@ -171,11 +182,14 @@ export const TableEventos = (props) => {
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={{...styleHeaderText, padding: "0px", paddingInline: "0px"}}><FirstCheckBox /></th>
+              <th style={{
+                border: "1px "+constants.color.secondary+" solid", 
+                textAlign: "center",
+              }}><FirstCheckBox /></th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Início</th>
-              <th style={{...styleHeaderText, fontSize:11}}>Editar</th>
-              <th style={{...styleHeaderText, fontSize:11}}>Apagar</th>
+              <th style={{...styleHeaderText, fontSize:12}}>Editar</th>
+              <th style={{...styleHeaderText, fontSize:12}}>Apagar</th>
             </tr>
           </thead>
           <tbody style={{overflowY: "auto"}}>

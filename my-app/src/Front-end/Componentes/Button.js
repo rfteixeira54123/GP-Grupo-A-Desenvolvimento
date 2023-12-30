@@ -1,11 +1,10 @@
-import { Link } from "react-router-dom";
-import * as constants from "../constants";
 import { useState } from "react";
+
+import * as constants from "../constants";
 
 // Recebe props:
 //  id: identificador do botão
 //  label: texto do botão
-//  link: rota que mostra a nova página ao clique do botão.
 const Btn = (props) => {
   const [hovering, setHovering] = useState(false);
 
@@ -26,39 +25,39 @@ const Btn = (props) => {
       ? constants.color.secondary
       : constants.color.primary, // Cor alterada quando hover
     transition: "background-color 0.3s ease", // Adicionando transição suave na mudança de cor
-    width: "12rem",
-    height: 38,
+    width: "15rem",
+    minWidth: "fit-content",
+    height: "50px",
     border: "none",
-    borderRadius: 25,
-    margin: 3,
+    borderRadius: "25px",
+    margin: 5,
     wordWrap: "break-word",
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     position: "relative",
+    boxSizing: "content-box",
     boxShadow: constants.shadow.md,
   };
 
   const labelStyle = {
+    fontSize: "16px",
+    fontWeight: "bold",
+    letterSpacing: 1,
     color: constants.color.white,
-    fontSize: "14px",
-    letterSpacing: 0.5,
-    paddingLeft: "1rem",
-    textShadow: constants.shadow.small,
+    textShadow: constants.shadow.md,
   };
 
   return (
     <>
-      <Link to={props.link} style={{ textDecoration: "none" }}>
-        <button
-          id={props.id}
-          style={buttonStyle}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div style={labelStyle}>{props.label}</div>
-        </button>
-      </Link>
+      <button
+        id={props.id}
+        style={buttonStyle}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div style={labelStyle}>{props.label}</div>
+      </button>
     </>
   );
 };

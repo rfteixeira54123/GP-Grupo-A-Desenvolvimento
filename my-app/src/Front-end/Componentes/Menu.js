@@ -19,7 +19,7 @@ const Menu = (props) => {
 
   const menuStyle = {
     background: "#9B91D9",
-    width: '50vw',
+    width: '30vw',
     height: '100%',
     minWidth: '20rem',
     maxWidth: '25rem',
