@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {Table} from 'react-bootstrap';
 import { AiFillDelete } from "react-icons/ai";
 import { MdOutlineEdit } from "react-icons/md";
@@ -58,6 +59,24 @@ const styleCell = {
 // Recebe props:
 //  array: objetos do tipo Eleicao
 export const TableEleicoes = (props) => {
+
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+
+  const handleChange = (checkboxId) => {
+    let updatedCheckboxes = [];
+
+    // Atualiza a lista de checkBoxes selecionados
+    if(!selectedCheckboxes.includes(checkboxId)){
+      updatedCheckboxes = [...selectedCheckboxes, checkboxId];
+    } else {
+      updatedCheckboxes = selectedCheckboxes.filter((id) => id !== checkboxId);
+    }
+
+    setSelectedCheckboxes(updatedCheckboxes);
+    props.handleCheckboxChange(updatedCheckboxes);
+  };
+
+
   return (
     <>
       <div style={styleContainerTable}>
@@ -67,7 +86,7 @@ export const TableEleicoes = (props) => {
               <th style={{
                 border: "1px "+constants.color.secondary+" solid", 
                 textAlign: "center",
-              }}><FirstCheckBox /></th>
+              }}><FirstCheckBox  onChange={() => handleChange(-1)}/></th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Tipo</th>
               <th style={styleHeaderText}>Início</th>
@@ -79,7 +98,7 @@ export const TableEleicoes = (props) => {
           <tbody style={{overflowY: "auto"}}>
             {props.array.map((obj, index) => (
               <tr key={"RowEleicao"+index} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
-                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox /></td>
+                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox onChange={() => handleChange(obj.id_eleicao)}/></td>
                 <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
                 <td style={styleCell}>{obj.cargo_disputa}</td>
                 <td style={styleCell}>{obj.data_inicio}</td>
@@ -134,6 +153,24 @@ export const TableCandidatos = (props) => {
 // Recebe props:
 //  array: objetos do tipo Utilizador
 export const TableUtilizadores = (props) => {
+
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+
+  const handleChange = (checkboxId) => {
+    let updatedCheckboxes = [];
+
+    // Atualiza a lista de checkBoxes selecionados
+    if(!selectedCheckboxes.includes(checkboxId)){
+      updatedCheckboxes = [...selectedCheckboxes, checkboxId];
+    } else {
+      updatedCheckboxes = selectedCheckboxes.filter((id) => id !== checkboxId);
+    }
+
+    setSelectedCheckboxes(updatedCheckboxes);
+    props.handleCheckboxChange(updatedCheckboxes);
+  };
+
+
   return (
     <>
       <div style={styleContainerTable}>
@@ -143,7 +180,7 @@ export const TableUtilizadores = (props) => {
               <th style={{
                 border: "1px "+constants.color.secondary+" solid", 
                 textAlign: "center",
-              }}><FirstCheckBox /></th>
+              }}><FirstCheckBox onChange={() => handleChange(-1)}/></th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Email</th>
               <th style={styleHeaderText}>Nº ID</th>
@@ -156,7 +193,7 @@ export const TableUtilizadores = (props) => {
           <tbody style={{overflowY: "auto"}}>
             {props.array.map((user, index) => (
               <tr key={"RowConta"+user.id_conta} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
-                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox /></td>
+                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox onChange={() => handleChange(user.id_conta)}/></td>
                 <td style={{...styleCell, textAlign: "start"}}>{user.nome}</td>
                 <td style={{...styleCell, textAlign: "start"}}>{user.email}</td>
                 <td style={styleCell}>{user.numero_id}</td>

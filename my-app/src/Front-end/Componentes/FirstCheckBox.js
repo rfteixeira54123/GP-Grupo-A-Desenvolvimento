@@ -7,7 +7,7 @@ const FirstCheck = (props) => {
   return (
     <OverlayTrigger placement="right" overlay={<Tooltip>Selecione todos os {props.itens}.</Tooltip>}>
       <a href="#">
-        <CheckBox />
+        <CheckBox onChange={props.onChange}/>
       </a>
     </OverlayTrigger>
   );

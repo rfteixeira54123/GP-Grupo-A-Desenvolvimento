@@ -4,11 +4,15 @@ import { BiCheckboxSquare } from "react-icons/bi";
 
 import * as constants from "../constants";
 
-const Check = () => {
+const Check = ({onChange}) => {
   const [select, setSelect] = useState(false);
 
   const handleClick = () => {
     setSelect(!select);
+
+    if(onChange){
+      onChange(select);
+    }
   };
 
   if (!select) {

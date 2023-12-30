@@ -1,6 +1,8 @@
+import { useState } from "react";
+
 import { TableUtilizadores } from "../../Componentes/Table";
 import Button from "../../Componentes/Button";
-import { FilterUtilizadores } from "../../Componentes/Filter";
+import Filter from "../../Componentes/Filter";
 
 import * as constants from "../../constants";
 
@@ -34,18 +36,41 @@ const styleContainer = {
   flexDirection: "column",
 };
 
-
-
 // Recebe props:
 //  array: objetos do tipo Utilizador
 const Page = (props) => {
+  const [showButtons, setShowButtons] = useState(false);
+
+  const updateShowButtons = (array) => {
+    console.log(array);
+    setShowButtons(array.length > 1 || array.includes(-1));
+    handleRenderButtons();
+  };
+
+  const [forceRenderTable, setForceRenderTable] = useState(false);
+
+  const handleOptionClick = () => {
+    setForceRenderTable((prevState) => !prevState);
+  };
+
+  const [forceRenderButtons, setForceRenderButtons] = useState(false);
+
+  const handleRenderButtons = () => {
+    setForceRenderButtons((prevState) => !prevState);
+  };
+
+
   return (
     <div style={styleWindow}>
       <div style={styleTitle}>GESTÃO DE CONTAS</div>
       <div style={styleContainer}>
-        <FilterUtilizadores />
-        <div style={{ width: "96%", height: "inherit", maxHeight: "65vh", }}>
+        <Filter id={0} handle={() => handleOptionClick()} />
+        <div
+          key={forceRenderTable ? "forceRenderTable" : "normalRenderTable"}
+          style={{ width: "96%", height: "inherit", maxHeight: forceRenderTable ? "46vh": "65vh" }}
+        >
           <TableUtilizadores
+            handleCheckboxChange={updateShowButtons}
             array={[
               {
                 id_conta: 0,
@@ -131,16 +156,24 @@ const Page = (props) => {
           />
         </div>
         <div
+          key={forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons"}
           style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-around",
+            width: "96%",
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            justifyItems:  "center",
             paddingBlock: "1.5rem",
           }}
         >
-          <Button id="a" label="Desativar Selecionados" />
-          <Button id="a" label="Adicionar Conta" />
-          <Button id="a" label="Remover Selecionados" />
+          <div style={{gridColumn: 1}}>
+            <Button id="a" label="Desativar Selecionados" show={showButtons} />
+          </div>
+          <div style={{gridColumn: 2}}>
+            <Button id="a" label="Adicionar Conta" />
+          </div>
+          <div style={{gridColumn: 3}}>
+            <Button id="a" label="Remover Selecionados" show={showButtons} />
+          </div>
         </div>
       </div>
     </div>

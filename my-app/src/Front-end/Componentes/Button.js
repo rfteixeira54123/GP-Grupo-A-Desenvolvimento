@@ -5,6 +5,7 @@ import * as constants from "../constants";
 // Recebe props:
 //  id: identificador do botão
 //  label: texto do botão
+//  show: booleano mostra ou não o botão
 const Btn = (props) => {
   const [hovering, setHovering] = useState(false);
 
@@ -32,7 +33,7 @@ const Btn = (props) => {
     borderRadius: "25px",
     margin: 5,
     wordWrap: "break-word",
-    display: "flex",
+    display: props.show? "flex" : "none",
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
@@ -60,6 +61,10 @@ const Btn = (props) => {
       </button>
     </>
   );
+};
+
+Btn.defaultProps = {
+  show: true,
 };
 
 export default Btn;
