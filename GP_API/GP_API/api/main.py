@@ -1,4 +1,5 @@
 import json
+import oracledb
 from flask import Flask,request,jsonify,abort
 from flask_cors import CORS
 import auth.auth as auth
@@ -6,9 +7,13 @@ from auth.auth import Access
 from auth.auth import AuthError
 
 app = Flask(__name__)
-
+try:
+    oracledb.init_oracle_client()
+except:
+    print("Oracle client not found")
 CORS(app)
 
+#connection = oracledb.connect(user="hr", password="pwd", dsn="dbhost.example.com/orclpdb")
 
 
 
@@ -32,7 +37,7 @@ def error_hanlder(error):
 ##
 ## -- LOGIN OU RECUPERCACAO
 ##
-@app.route("/pedido/recuperacao",methods=["POST"])
+@app.post("/pedido/recuperacao")
 def pedido_recuperacao():
     if request.data:
         body = request.get_json()
@@ -51,7 +56,7 @@ def pedido_recupercao_confirm(token):
         abort(result_status)
     
 
-@app.route("/login",methods=["POST"])
+@app.post("/login")
 def login():
     if request.data:
         body = request.get_json()
@@ -63,7 +68,7 @@ def login():
 
 
     
-@app.route("/logout",methods=["GET"])
+@app.get("/logout")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def logout():
     if request.data:
@@ -86,7 +91,7 @@ def logout():
 ## -- Gestao Contas
 ##
 
-@app.route("/conta/remover",methods=["DELETE"])
+@app.delete("/conta/remover")
 @auth.Authentication(access=[Access.ADMIN])
 def remover_conta():
     if request.data:
@@ -100,12 +105,12 @@ def remover_conta():
 
     return "OK"#NOT IMPLEMENTED
 
-@app.route("/conta/listar",methods=["GET"])
+@app.get("/conta/listar")
 @auth.Authentication(access=[Access.ADMIN])
 def lista_contas():
     return {"Contas":[{"ID_Conta":1,"Tipo_Conta":'Aluno',"Nome": 'Nome', "Email": 'email@email.com',"Palavra-Passe": 'FDA$#BDHSAI"#232',"estado": True,"acessibilidade": False}] }
 
-@app.route("/conta/inserir",methods=["POST"])
+@app.post("/conta/inserir")
 @auth.Authentication(access=[Access.ADMIN])
 def inserir_conta():
     if request.data:
@@ -117,7 +122,7 @@ def inserir_conta():
         abort(result_status)
 
 
-@app.route("/conta/editar",methods=["PATCH"])
+@app.patch("/conta/editar")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN]) #Aluno pode editar sua própria password
 def editar_conta():
     if request.data:
@@ -130,7 +135,7 @@ def editar_conta():
         abort(result_status)
 
 
-@app.route("/conta/definir_ativo",methods=["PATCH"])
+@app.patch("/conta/definir_ativo")
 @auth.Authentication(access=[Access.ADMIN])
 def definir_ativo_conta():
     if request.data:
@@ -150,7 +155,7 @@ def definir_ativo_conta():
 ##
 ## -- Gestao Eleicoes
 ##
-@app.route("/eleicao/listar",methods=["GET"])
+@app.get("/eleicao/listar")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def lista_eleicao():
     return {"Eleicoes":
@@ -176,7 +181,7 @@ def lista_eleicao():
             ] #Lista de eleiÃ§Ãµes
            }
 
-@app.route("/eleicao/votar",methods=["POST"])
+@app.post("/eleicao/votar")
 @auth.Authentication(access=[Access.ALUNO])
 def votar_eleicao():
     if request.data:
@@ -189,7 +194,7 @@ def votar_eleicao():
     if result_status != 200:
         abort(result_status)
 
-@app.route("/eleicao/criar",methods=["POST"])
+@app.post("/eleicao/criar")
 @auth.Authentication(access=[Access.ADMIN])
 def criar_eleicao():
     
@@ -203,7 +208,7 @@ def criar_eleicao():
     if result_status != 200:
         abort(result_status)
 
-@app.route("/eleicao/editar",methods=["PATCH"])
+@app.patch("/eleicao/editar")
 @auth.Authentication(access=[Access.ADMIN])
 def editar_eleicao():
     if request.data:
@@ -217,7 +222,7 @@ def editar_eleicao():
         abort(result_status)
 
 
-@app.route("/eleicao/adicionar_candidato",methods=["POST"])
+@app.post("/eleicao/adicionar_candidato")
 @auth.Authentication(access=[Access.ADMIN])
 def adicionar_candidato_eleicao():
     if request.data:
@@ -236,7 +241,7 @@ def adicionar_candidato_eleicao():
 ##
 
 
-@app.route("/candidato/listar",methods=["GET"])
+@app.get("/candidato/listar")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def listar_candidato():
     return {"Listas":
@@ -253,7 +258,7 @@ def listar_candidato():
             }]}
             
 
-@app.route("/candidato/inserir",methods=["POST"])
+@app.post("/candidato/inserir")
 @auth.Authentication(access=[Access.ADMIN])
 def inserir_candidato():
     if request.data:
@@ -266,7 +271,7 @@ def inserir_candidato():
         abort(result_status)
     return "OK" #NOT IMPLEMENTED
 
-@app.route("/candidato/editar",methods=["PATCH"])
+@app.patch("/candidato/editar")
 @auth.Authentication(access=[Access.ADMIN])
 def editar_candidato():
     if request.data:
@@ -280,7 +285,7 @@ def editar_candidato():
 
     return "OK" #NOT IMPLEMENTED
 
-@app.route("/candidato/remover",methods=["DELETE"])
+@app.delete("/candidato/remover")
 @auth.Authentication(access=[Access.ADMIN])
 def remover_candidato():
     if request.data:
@@ -293,7 +298,7 @@ def remover_candidato():
         abort(result_status)
 
 
-@app.route("/evento/listar",methods=["GET"])
+@app.get("/evento/listar")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def listar_evento():
     return {"Eventos":[{
@@ -305,7 +310,7 @@ def listar_evento():
     }
         ]}
 
-@app.route("/evento/inserir",methods=["POST"])
+@app.post("/evento/inserir")
 @auth.Authentication(access=[Access.ADMIN])
 def inserir_evento():
     if request.data:
