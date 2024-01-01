@@ -25,3 +25,5 @@ class Utilizador extends React.Component {
     );
   }
 }
+
+export default Utilizador;
