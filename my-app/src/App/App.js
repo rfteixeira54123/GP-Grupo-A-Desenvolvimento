@@ -25,6 +25,7 @@ function App() {
         <div className="py-6">
           <PostForm />
           <GetForm />
+          <Candidato nome="nome" x="X" />
           <DeleteForm />
         </div>
       </header>
