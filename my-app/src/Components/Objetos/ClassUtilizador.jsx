@@ -18,9 +18,9 @@ class Utilizador extends React.Component {
     return (
       <div>
         <p>Nome: {this.state.nome}</p>
-        <p>Nome: {this.state.nome}</p>
-        <p>Nome: {this.state.nome}</p>
-        <p>Nome: {this.state.nome}</p>
+        <p>Nome: {this.state.email}</p>
+        <p>Nome: {this.state.estado}</p>
+        <p>Nome: {this.state.acessibilidade}</p>
       </div>
     );
   }
