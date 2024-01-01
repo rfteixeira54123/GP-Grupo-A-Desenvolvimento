@@ -5,13 +5,13 @@ class Eleicao extends React.Component {
     super(props);
 
     this.state = {
-      id: props.id,
+      id_eleicao: props.id_eleicao,
       nome: props.nome,
-      dataInicio: props.inicio,
-      dataFim: props.dataFim,
-      eleitores: props.eleitores || [],
+      data_inicio: props.data_inici,
+      data_fim: props.data_fim,
+      lista_eleitores_presenca: props.lista_eleitores_presenca || [],
       descricao: props.descricao,
-      cargoDisputado: props.cargoDisputado,
+      cargo_disputa: props.cargo_disputa,
       estado: props.estado,
     };
   }
@@ -19,16 +19,16 @@ class Eleicao extends React.Component {
   render() {
     return (
       <div>
-        <h2>{props.name}</h2>
-        <h3>{props.cargoDisputado}</h3>
-        <p>Data de Inicio: {props.dataInicio}</p>
-        <p>Data de Fim: {props.dataFim}</p>
-        <p>Descrição: {props.descricao}</p>
+        <h2>{this.state.nome}</h2>
+        <h3>{this.state.cargo_disputa}</h3>
+        <p>Data de Inicio: {this.state.data_inicio}</p>
+        <p>Data de Fim: {this.state.data_fim}</p>
+        <p>Descrição: {this.state.descricao}</p>
         <div>
           <h3>Eleitores:</h3>
           <ul>
-            {props.eleitores.map((eleitor, index) => (
-              <li key="index">{eleitor}</li>
+            {this.state.lista_eleitores_presenca.map((eleitor, index) => (
+              <li key={index}>{eleitor}</li>
             ))}
           </ul>
         </div>

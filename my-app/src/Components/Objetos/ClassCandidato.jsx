@@ -5,7 +5,7 @@ class Candidato extends React.Component {
     super(props);
 
     this.state = {
-      id: props.id,
+      id_conta: props.id,
       nome: props.nome,
       tipo: props.tipo,
       descricao: props.descricao,
