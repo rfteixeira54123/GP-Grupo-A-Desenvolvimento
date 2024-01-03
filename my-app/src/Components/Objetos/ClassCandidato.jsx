@@ -5,12 +5,32 @@ class Candidato extends React.Component {
     super(props);
 
     this.state = {
-      id_conta: props.id_conta,
+      id_candidato: props.id_candidato,
       nome: props.nome,
       tipo: props.tipo,
       descricao: props.descricao,
       votos: props.votos,
     };
+  }
+
+  getID() {
+    return this.id_candidato;
+  }
+
+  getNome() {
+    return this.nome;
+  }
+
+  getTipo() {
+    return this.tipo;
+  }
+
+  getDescricao() {
+    return this.descricao;
+  }
+
+  getNumVotos() {
+    return this.votos;
   }
 
   render() {
