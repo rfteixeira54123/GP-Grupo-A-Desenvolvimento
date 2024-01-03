@@ -1,5 +1,6 @@
 import json
 from sqlite3 import connect
+from tokenize import Token
 #import oracledb
 import mysql.connector
 from flask import Flask,request,jsonify,abort
@@ -283,12 +284,22 @@ def votar_eleicao():
         body = request.get_json()
     else:
         abort(422)
+     
+    userID = 0
+    #getUserID(request.headers.get('Authorization'))
+
+    keys = ["ID_Eleicao","ID_Candidato"]
+    for key in keys:
+        if key not in body:
+            raise JSONPropError(key)
+
+
 
     result_status = 501
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("listarContas",(0,))#Nao ha procedure para votar
+    cursor.callproc("votar",(0,userID,body["ID_Eleicao"],body["ID_Candidato"]))
     
     if result_status != 200:
         abort(result_status)
@@ -303,12 +314,16 @@ def criar_eleicao():
         body = request.get_json()
     else:
         abort(422)
-
+        
+    keys = ["Nome","Data_Inicio","Descricao","Cargo_Disputa"]
+    for key in keys:
+        if key not in body:
+            raise JSONPropError(key)
     result_status = 501
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("listarContas",(0,)) #Nao ha procedure para criar eleicao
+    cursor.callproc("criacaoEleicao",(0,body["Nome"],body["Data_Inicio"],body["Descricao"],body["Cargo_Disputa"])) #Falta a data_fim
     
     if result_status != 200:
         abort(result_status)
@@ -323,11 +338,16 @@ def editar_eleicao():
     else:
         abort(422)
 
+    keys = ["ID_Eleicao","Nome","Data_Inicio","Descricao","Cargo_Disputa"]
+    for key in keys:
+        if key not in body:
+            raise JSONPropError(key)
+
     result_status = 501
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("listarContas",(0,)) #Nao ha procedure para editar eleicao
+    cursor.callproc("editarEleicao",(0,body["ID_Eleicao"],body["Nome"],body["Data_Inicio"],body["Descricao"],body["Cargo_Disputa"]))
     
     if result_status != 200:
         abort(result_status)
@@ -352,7 +372,8 @@ def adicionar_candidato_eleicao():
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("inserirCandidato",(body["ID_Lista_Candidatos"],body["ID_Candidato"])) #ID_Lista_Candidatos poderia ser o mesmo que o ID da eleicao para simplificar
+    cursor.callproc("inserirCandidato",(body["ID_Lista_Candidatos"],body["ID_Candidato"]))
+    #ID_Lista_Candidatos poderia ser o mesmo que o ID da eleicao para simplificar
     
     if result_status != 200:
         abort(result_status)

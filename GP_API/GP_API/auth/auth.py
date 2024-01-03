@@ -74,7 +74,8 @@ def Authentication(access = None):
                     anyaccess = result[0]
             else:
                 anyaccess = has_acess(token,access) #Se nao houver nenhum tipo de acesso especifico o token pode ser ainda usado para verificar se o utilizador Ã© valido
-
+            
+            
             if anyaccess != 0:
                 raise AuthError(error_type(anyaccess)) 
             val = func(*args, **kwargs)
