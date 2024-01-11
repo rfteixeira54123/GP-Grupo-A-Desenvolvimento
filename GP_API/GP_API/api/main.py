@@ -29,11 +29,11 @@ CORS(app)
 
 
 def getconnectionDB():
-    connection = mysql.connector.connect(host="188.82.245.122",
-                                         user="root", 
-                                         password="1234",
-                                         database="bd",
-                                         port=3306)
+    connection = mysql.connector.connect(host=os.environ["Host"],
+                                         user=os.environ["User"], 
+                                         password=os.environ["Password"],
+                                         database=os.environ["DataBase"],
+                                         port=os.environ["Port"])
     return connection
 
 getconnectionDB().close()
