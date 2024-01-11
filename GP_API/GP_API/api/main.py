@@ -13,15 +13,11 @@ from dataclasses import dataclass
 
 app = Flask(__name__)
 '''
-try:
-    oracledb.init_oracle_client(lib_dir=os.getcwd() + "/instantclient_21_12")
-except Exception as e:
-    print(e)
-    print("Oracle client not found")
-    if oracledb.is_thin_mode():
-    print("Oracle running in thin mode")
-else:
-    print("Oracle running in thick mode")
+TODO
+Verificar tamanho de inputs, mesmo nao mencionado penso que seja importante verificar estas variáveis na edição/adição
+Saber como é sobre autenticação para proceder com a implementação final (dependente da base de dados)
+
+Testar com dados de teste
     
 '''
 CORS(app)
@@ -33,12 +29,14 @@ CORS(app)
 
 
 def getconnectionDB():
-    connection = mysql.connector.connect(host="2001:8a0:fecf:3700:11d9:662c:79ad:8234",
+    connection = mysql.connector.connect(host="188.82.245.122",
                                          user="root", 
-                                         password="estgoh")
+                                         password="1234",
+                                         database="bd",
+                                         port=3306)
     return connection
 
-#getconnectionDB().close()
+getconnectionDB().close()
 
 
 @app.errorhandler(501)
@@ -56,6 +54,11 @@ def error_422(error):
 @app.errorhandler(AuthError)
 def error_hanlder(error):
     return jsonify({"Error": error}),403
+
+@app.errorhandler(Exception)
+def error_handler_except(error):
+    error_message = str(error)
+    return jsonify({"Error": error_message}),422
 
 @dataclass
 class JSONPropError(Exception):
@@ -150,9 +153,9 @@ def lista_contas():
     connection = getconnectionDB()
     cursor = connection.cursor()
     cursor.callproc("listarContas",(0,))
-    
-    for row in cursor.stored_results():
-        print(row.fetchall())
+
+    for conta in cursor.fetchall():
+        print(conta)
         
     return {"Contas":[{"ID_Conta":1,"Tipo_Conta":'Aluno',"Nome": 'Nome', "Email": 'email@email.com',"Palavra-Passe": 'FDA$#BDHSAI"#232',"estado": True,"acessibilidade": False}] }
 
@@ -169,7 +172,14 @@ def inserir_conta():
         if key not in body:
             raise JSONPropError(key)
 
-            
+    
+    #Verificar se conseguimos fazer login com esta conta para saber se podemos inserir esta conta!
+    '''
+    connection = getconnectionDB()
+    cursor = connection.cursor()
+    cursor.callproc("Login",(body["Email"],body["Palavra-Passe"]))
+    connection.close()
+    '''
         
     
     result_status = 501
@@ -199,9 +209,15 @@ def editar_conta():
     for key in keys:
         if key not in body:
             raise JSONPropError(key)
-        
+    
+    
+    #Verificar se o ID da conta com o token dado neste pedido é igual a "ID_Conta" ou se o token dado neste pedido é de um administrador
+    #Preciso de saber ainda se os tokens vão ser na base de dados ou na API
+
     result_status = 501
-  
+    
+
+
     connection = getconnectionDB()
     cursor = connection.cursor()
     cursor.callproc("EditarConta",(body["ID_Conta"],body["Nome"],body["Email"],body["Palavra-Passe"],body["estado"],body["acessibilidade"]))
@@ -251,7 +267,9 @@ def lista_eleicao():
     connection = getconnectionDB()
     cursor = connection.cursor()
     cursor.callproc("ListarEleicoes")
-    
+
+    for eleicao in cursor.fetchall():
+        print(eleicao)
 
     
     return {"Eleicoes":
@@ -293,13 +311,15 @@ def votar_eleicao():
         if key not in body:
             raise JSONPropError(key)
 
-
+    #Por alguma razao na procedure de votar já temos os checks lá dentro, entao nao preciso de me preocupar com verificações, só se SUCCESS = TRUE/FALSE
 
     result_status = 501
     
     connection = getconnectionDB()
     cursor = connection.cursor()
     cursor.callproc("votar",(0,userID,body["ID_Eleicao"],body["ID_Candidato"]))
+
+    print(cursor.fetchone())
     
     if result_status != 200:
         abort(result_status)
@@ -402,16 +422,21 @@ def listar_candidato():
     
     
     Ids_Listas = [0,1,2,4]
-    cursor.close()
-    
+
+    #TODO <- Mudar isto, talvez criar multiplas conexões com a base de dados é degradante para a API, talvez o que queremos é listar candidatos de um gestor só
+    #Se fizermos isto preciso entao de fazer outro endpoint que devolve os IDs da lista de candidatos para depois podermos selecionar este
     for _id in Ids_Listas:
         cursor = connection.cursor()
         cursor.callproc("listarCandidatos",(_id,)) #Buscar os candidatos de cada gestor de candidatos diferente
+
+        for item in cursor.fetchall():
+            print(item)
+
         
     
      
     return {"Listas":
-            [ {"ID_Lista_Candidatos": 1, #Como vai existir multiplos gestores de candidato, precisamos de identificar quem Ã© quem, isto pode ser mudado para "ID_Eleicao" onde este candidato pertence
+            [ {"ID_Lista_Candidatos": 1, #Como vai existir multiplos gestores de candidato, precisamos de identificar quem é quem, isto pode ser mudado para "ID_Eleicao" onde este candidato pertence
            "Candidatos":
                  [
                      {"ID_Candidato":1,
@@ -502,7 +527,7 @@ def remover_candidato():
     connection = getconnectionDB()
     cursor = connection.cursor()
     cursor.callproc("removeCandidato",(body["ID_Lista_Candidatos"],body["ID_Candidato"]))
-    #Isto só remove a associacao de um candidato para o seu gestor, ela nao apaga mesmo
+    #Isto só remove a associacao de um candidato para o seu gestor, ela nao apaga mesmo da base de dados
 
     if result_status != 200:
         abort(result_status)
@@ -514,8 +539,11 @@ def listar_evento():
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("listarContas",(0,))
+    cursor.callproc("listarEventos",(0,))
     #Nao existe uma procedure para listar eventos
+
+    for evento in cursor.fetchall():
+        print(evento)
     
     return {"Eventos":[{
             "ID_Evento":0,
@@ -534,7 +562,7 @@ def inserir_evento():
     else:
         abort(422)
         
-    keys = ["ID_Gestor","ID_Evento"]
+    keys = ["ID_Evento"]
     for key in keys:
         if key not in body:
             raise JSONPropError(key)
@@ -543,7 +571,7 @@ def inserir_evento():
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("inserirEvento",(body["ID_Gestor"],body["ID_Evento"]))
+    cursor.callproc("inserirEvento",(0,body["ID_Evento"]))
     #Isto nao insere um evento, so faz a associacao a um GestorEvento
 
     if result_status != 200:
