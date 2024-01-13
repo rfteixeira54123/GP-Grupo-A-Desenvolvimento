@@ -24,6 +24,7 @@ export const color = {
     light_gray: "#E2E2E2",
     gray2: "#EEEEEE",
     gray3: "#D9D9D9",
+    gray4: "#EFEFEF",
 
     green: "#00DA4A",
 }
@@ -33,4 +34,5 @@ export const shadow = {
     sm_md: 'drop-shadow(0px 4px 2px rgb(0 0 0 / 0.25))',
     sm: 'drop-shadow(0px 2px 1px rgb(0 0 0 / 0.25))',
     md: "0px 4px 4px #00000040",
+    bg: "0px 6px 6px #00000070",
 }

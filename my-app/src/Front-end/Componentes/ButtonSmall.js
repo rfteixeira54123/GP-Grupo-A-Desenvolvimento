@@ -1,11 +1,11 @@
-import { useState } from "react";
-
+import { Link } from "react-router-dom";
 import * as constants from "../constants";
+import { useState } from "react";
 
 // Recebe props:
 //  id: identificador do botão
 //  label: texto do botão
-//  show: booleano mostra ou não o botão
+//  link: rota que mostra a nova página ao clique do botão.
 const Btn = (props) => {
   const [hovering, setHovering] = useState(false);
 
@@ -26,45 +26,40 @@ const Btn = (props) => {
       ? constants.color.secondary
       : constants.color.primary, // Cor alterada quando hover
     transition: "background-color 0.3s ease", // Adicionando transição suave na mudança de cor
-    width: "15rem",
+    width: "10rem",
     minWidth: "fit-content",
-    height: "50px",
+    height: "2.5rem",
     border: "none",
-    borderRadius: "25px",
-    margin: 5,
-    wordWrap: "break-word",
-    display: props.show? "flex" : "none",
+    borderRadius: "30px",
+    margin: 3,
+    display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    position: "relative",
-    boxSizing: "content-box",
-    boxShadow: constants.shadow.md,
   };
 
   const labelStyle = {
-    fontSize: "16px",
-    fontWeight: "600",
-    letterSpacing: 1,
     color: constants.color.white,
-    textShadow: constants.shadow.md,
+    fontSize: "14px",
+    fontWeight: "600",
+    letterSpacing: 0.5,
+    paddingInline: "1rem",
+    textShadow: constants.shadow.small,
   };
 
   return (
     <>
-      <button
-        id={props.id}
-        style={buttonStyle}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <div style={labelStyle}>{props.label}</div>
-      </button>
+      <Link to={props.link} style={{ textDecoration: "none" }}>
+        <button
+          id={props.id}
+          style={buttonStyle}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div style={labelStyle}>{props.label}</div>
+        </button>
+      </Link>
     </>
   );
-};
-
-Btn.defaultProps = {
-  show: true,
 };
 
 export default Btn;

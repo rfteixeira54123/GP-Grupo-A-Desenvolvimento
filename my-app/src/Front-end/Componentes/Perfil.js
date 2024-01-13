@@ -1,6 +1,6 @@
 import { HiMenu } from "react-icons/hi";
 import * as constants from "../constants";
-import Btn from "./SmallBtn";
+import Btn from "./ButtonTopMenu";
 import { useState } from "react";
 
 const stylePerfil = {

@@ -15,13 +15,13 @@ const styleWindow = {
 };
 
 const styleTitle = {
-  color: "#23204a",
+  color: constants.color.secondary,
   fontSize: "22px",
   width: "100%",
   letterSpacing: 0,
   fontWeight: 600,
   lineHeight: "normal",
-  textShadow: "0px 4px 4px #00000040",
+  textShadow: constants.shadow.md,
   marginBlock: "15px",
 };
 

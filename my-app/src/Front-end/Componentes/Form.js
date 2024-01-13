@@ -22,7 +22,7 @@ const FormLogin = () => {
         <FloatingLabel controlId="floatingPassword" label="Palavra-passe" className="w-100 mb-4" >
           <Form.Control type="password" placeholder="Palavra-passe" />
         </FloatingLabel>
-      <Link to="/ad" style={{ width: "100%", }}><Button id="" label="Entrar" /></Link>
+      <Link to="/to" style={{ width: "100%", }}><Button id="" label="Entrar" /></Link>
     </Form>
   );
 };
