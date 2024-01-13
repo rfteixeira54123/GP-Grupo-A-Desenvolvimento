@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import * as constants from "../../constants";
 import Logo from "../../Imagens/Full_Blue_Icon.png";
 import Button from "../../Componentes/FormBtn";
-import CheckBox from "../../Componentes/CheckBox";
+import CheckVoto from "../../Componentes/CheckVoto";
 
 const styleWindow = {
   display: "flex",
@@ -39,6 +39,7 @@ const styleTop = {
   paddingBlock: "10px",
   width: "100%",
   position: "sticky",
+  top: 0,
 };
 
 const styleContainer = {
@@ -57,7 +58,7 @@ const styleContainer = {
 const array = [
   { nome: "AAAAAAA" },
   { nome: "BBBBBBBB" },
-  { nome: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBBBBBBBBBB" },
+  { nome: "BBBBBB" },
   { nome: "BBBBBBBB" },
   { nome: "BBBBBBBB" },
   { nome: "BBBBBBBB" },
@@ -114,7 +115,7 @@ const Window = () => {
               >
                 {candidato.nome}
               </div>
-              <CheckBox />
+              <CheckVoto />
             </div>
           ))}
         </div>
