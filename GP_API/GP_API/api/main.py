@@ -7,9 +7,12 @@ from flask import Flask,request,jsonify,abort
 from flask_cors import CORS
 import auth.auth as auth
 from auth.auth import Access
-from auth.auth import AuthError
+from auth.auth import AuthError , refresh_token, error_type
 import os
 from dataclasses import dataclass
+import jwt
+import datetime
+
 
 app = Flask(__name__)
 '''
@@ -36,7 +39,7 @@ def getconnectionDB():
                                          port=os.environ["Port"])
     return connection
 
-getconnectionDB().close()
+#getconnectionDB().close()
 
 
 @app.errorhandler(501)
@@ -78,6 +81,17 @@ def error_handler(error):
 ##
 ## -- LOGIN OU RECUPERCACAO
 ##
+
+@app.post("/token/refresh")
+@auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
+def refresh_token_auth(): 
+    token = request.headers.get('Authorization')
+    data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
+
+    newdata = refresh_token(data)
+
+    return jsonify({'token': newdata})
+
 @app.post("/pedido/recuperacao")
 def pedido_recuperacao():
     if request.data:
@@ -103,9 +117,18 @@ def login():
         body = request.get_json()
     else:
         abort(422)
-    result_status = 501
+    result_status = 200
+    token = jwt.encode({'userID' : 0,
+                        'userName': 'ContaAluno',
+                        'Access':Access.ADMIN,
+                        'expiration': (datetime.datetime.utcnow() + datetime.timedelta(hours=1)).isoformat()},
+                       os.environ["SECRET_KEY"])
+
     if result_status != 200:
         abort(result_status)
+
+    return jsonify({'token': token})
+
 
 
     
@@ -173,12 +196,9 @@ def inserir_conta():
             raise JSONPropError(key)
 
     
-    #Verificar se conseguimos fazer login com esta conta para saber se podemos inserir esta conta!
+    #Verificar se conseguimos fazer login com esta conta para saber se podemos inserir esta conta, buscar ID e role da conta com JWT!!!!
     '''
-    connection = getconnectionDB()
-    cursor = connection.cursor()
-    cursor.callproc("Login",(body["Email"],body["Palavra-Passe"]))
-    connection.close()
+        JWT
     '''
         
     
@@ -250,6 +270,13 @@ def definir_ativo_conta():
     
     if result_status != 200:
         abort(result_status)
+
+@app.get("/conta/detalhes")
+@auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
+def detalhes_conta():
+    token = request.headers.get('Authorization')
+    data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
+    return data
 
 
 

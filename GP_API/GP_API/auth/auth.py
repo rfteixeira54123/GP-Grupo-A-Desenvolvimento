@@ -1,13 +1,21 @@
-from enum import Enum
+from enum import IntEnum, auto
 from http.client import ACCEPTED
+import os
 from os import abort
 from flask import request
+import jwt
 from dataclasses import dataclass
 from functools import wraps
+from dotenv import load_dotenv
+import datetime
+load_dotenv()
 
-class Access(Enum):
-    ADMIN = 1 #Acesso a administradores
-    ALUNO = 2 #Acesso a alunos
+SECRET_KEY = os.environ["SECRET_KEY"]
+
+@dataclass
+class Access(IntEnum):
+    ADMIN: int = auto() #Acesso a administradores
+    ALUNO: int = auto() #Acesso a alunos
 
 @dataclass
 class AuthError(Exception):
@@ -18,26 +26,17 @@ class AuthError(Exception):
     def __str__(self):
         return str(self.args[0])
 
-def has_acess(token,access):
-    if token == None and access == None:
+def has_acess(data,access):
+    if data == None or access == None:
         return 0
 
-    if token == None:
+    if data == None:
         return 1
 
-    if not (token == "Token_Aluno" or token == "Token_Admin"): #O token dado e valido?
-        return 2
 
-    if access == None:
-        return 0
 
     #WE HAVE TO KNOW WICH TYPE OF ACCOUNT THIS IS FIRST
-    accounttype = -1 #<- TYPE OF ACCOUNT IS STORED HERE!
-    if token == "Token_Aluno":
-        accounttype = Access.ALUNO
-    elif token == "Token_Admin":
-        accounttype = Access.ADMIN
-    
+    accounttype = data['Access'] #<- TYPE OF ACCOUNT IS STORED HERE!
     
     return (0 if accounttype == access else 3)
 
@@ -48,8 +47,19 @@ def error_type(num):
         return "Token disponibilizado nÃ£o Ã© vÃ¡lido"
     if num == 3:
         return "Accesso negado"
+    if num == 4:
+        return "Token Expirado"
 
     return "Erro desconhecido"
+
+def refresh_token(data):
+
+    newtoken = jwt.encode({'userID' : data['userID'],
+                           'userName': data['userName'],
+                           'Access': data['Access'],
+                           'expiration': (datetime.datetime.utcnow() + datetime.timedelta(hours=1)).isoformat()},
+                          os.environ["SECRET_KEY"])
+    return newtoken
         
 
 def Authentication(access = None):
@@ -59,25 +69,37 @@ def Authentication(access = None):
             try:
                 token = request.headers.get('Authorization') #Buscar token se este existir
             except:
-                token = None
+                raise AuthError(error_type(1))
+            if token == None:
+                raise AuthError(error_type(1))
+            try:
+                data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
+            except:
+                raise AuthError(error_type(2))
+
+            #Verificar se expirou
+            expiration_time = datetime.datetime.strptime(data["expiration"], "%Y-%m-%dT%H:%M:%S.%f")
+            if datetime.datetime.now() > expiration_time:
+                raise AuthError(error_type(4))
 
             anyaccess = 3 #Erro default sera "Acesso negado"
 
             if access != None: 
                 result = []
                 for ac in access:
-                    result.append(has_acess(token,ac))
+                    result.append(has_acess(data,ac))
 
                 if 0 in result:
                     anyaccess = 0
                 else:
                     anyaccess = result[0]
             else:
-                anyaccess = has_acess(token,access) #Se nao houver nenhum tipo de acesso especifico o token pode ser ainda usado para verificar se o utilizador Ã© valido
+                anyaccess = has_acess(data,access) #Se nao houver nenhum tipo de acesso especifico o token pode ser ainda usado para verificar se o utilizador Ã© valido
             
             
             if anyaccess != 0:
                 raise AuthError(error_type(anyaccess)) 
+
             val = func(*args, **kwargs)
             return val
 
