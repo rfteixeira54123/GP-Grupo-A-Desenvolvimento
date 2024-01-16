@@ -22,7 +22,7 @@ const styleWindow = {
 
 const styleContainer = {
   width: "100%",
-  background: constants.color.gray2,
+  background: constants.color.light_gray,
   borderRadius: "25px",
   display: "flex",
   alignItems: "center",

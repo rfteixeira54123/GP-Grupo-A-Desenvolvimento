@@ -6,6 +6,7 @@ import { useState } from "react";
 //  id: identificador do botão
 //  label: texto do botão
 //  link: rota que mostra a nova página ao clique do botão.
+//  disabled: boleano que define se o botão está válido.
 const Btn = (props) => {
   const [hovering, setHovering] = useState(false);
 
@@ -22,7 +23,9 @@ const Btn = (props) => {
   };
 
   const buttonStyle = {
-    backgroundColor: hovering
+    backgroundColor: props.disabled 
+    ? constants.color.dark_gray
+    : hovering
       ? constants.color.secondary
       : constants.color.primary, // Cor alterada quando hover
     transition: "background-color 0.3s ease", // Adicionando transição suave na mudança de cor
@@ -54,6 +57,7 @@ const Btn = (props) => {
           style={buttonStyle}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          disabled={props.disabled}
         >
           <div style={labelStyle}>{props.label}</div>
         </button>
@@ -61,5 +65,9 @@ const Btn = (props) => {
     </>
   );
 };
+
+Btn.defaultProps = {
+  desactivated: false,
+}
 
 export default Btn;

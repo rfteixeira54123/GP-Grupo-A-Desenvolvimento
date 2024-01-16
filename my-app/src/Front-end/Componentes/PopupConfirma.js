@@ -18,14 +18,14 @@ const styleTop = {
   top: 0,
 };
 
-const styleList = {
-  minWidth: "fit-content",
-  width: "20rem",
-  margin: "1rem",
-  display: "flex",
-  flexDirection: "column",
-  gap: "0.5rem",
-};
+// const styleList = {
+//   minWidth: "fit-content",
+//   width: "20rem",
+//   margin: "1rem",
+//   display: "flex",
+//   flexDirection: "column",
+//   gap: "0.5rem",
+// };
 
 const styleContainer = {
   position: "relative",

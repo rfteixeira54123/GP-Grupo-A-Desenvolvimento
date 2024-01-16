@@ -27,20 +27,20 @@ const styleTitle = {
 
 //Definir candidatos a exibir
 const array = [
-  { id: 0, nome: "AAAAAAA" },
-  { id: 1, nome: "BBBBBBBB" },
-  { id: 2, nome: "BBBBBB" },
-  { id: 3, nome: "BBBBBBBB" },
-  { id: 4, nome: "BBBBBBBB" },
-  { id: 5, nome: "BBBBBBBB" },
-  { id: 6, nome: "BBBBBBBB" },
-  { id: 7, nome: "BBBBBBBB" },
-  { id: 8, nome: "BBBBBBBB" },
-  { id: 9, nome: "BBBBBBBB" },
-  { id: 10, nome: "BBBBBBBB" },
-  { id: 11, nome: "BBBBBBBB" },
-  { id: 12, nome: "BBBBBBBB" },
-  { id: 13, nome: "CCCCCC" },
+  { id_candidato: 0, nome: "AAAAAAA" },
+  { id_candidato: 1, nome: "BBBBBBBB" },
+  { id_candidato: 2, nome: "BBBBBB" },
+  { id_candidato: 3, nome: "BBBBBBBB" },
+  { id_candidato: 4, nome: "BBBBBBBB" },
+  { id_candidato: 5, nome: "BBBBBBBB" },
+  { id_candidato: 6, nome: "BBBBBBBB" },
+  { id_candidato: 7, nome: "BBBBBBBB" },
+  { id_candidato: 8, nome: "BBBBBBBB" },
+  { id_candidato: 9, nome: "BBBBBBBB" },
+  { id_candidato: 10, nome: "BBBBBBBB" },
+  { id_candidato: 11, nome: "BBBBBBBB" },
+  { id_candidato: 12, nome: "BBBBBBBB" },
+  { id_candidato: 13, nome: "CCCCCC" },
 ];
 const nome = "";
 

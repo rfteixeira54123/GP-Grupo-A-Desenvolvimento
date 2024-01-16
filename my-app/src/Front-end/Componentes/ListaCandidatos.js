@@ -80,7 +80,7 @@ const List = ({ array, OnHandleBtn }) => {
             <CheckVoto
               key={"RowCandidato" + index}
               candidato={candidato}
-              onChange={() => handleChange(candidato.id)}
+              onChange={() => handleChange(candidato.id_candidato)}
               state={index === selectedCheckboxes[0]}
             />
           ))}

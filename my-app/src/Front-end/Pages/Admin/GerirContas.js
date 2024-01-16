@@ -28,7 +28,7 @@ const styleTitle = {
 const styleContainer = {
   width: "100%",
   height: "100%",
-  background: constants.color.gray2,
+  background: constants.color.light_gray,
   border: "2px " + constants.color.secondary + " solid",
   borderRadius: "25px",
   display: "flex",

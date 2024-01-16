@@ -46,7 +46,7 @@ const Lista = (props) => {
       onMouseLeave={handleMouseLeave}
     >
       <div style={styleText}>{props.name}</div>
-      <Button label="Consultar" link={props.linkConsulta} />
+      <Button label="Consultar" link={props.linkConsulta} disabled={true} />
     </div>
   );
 };

@@ -46,7 +46,7 @@ const Lista = (props) => {
     >
       <div style={styleText}>{props.name}</div>
       <div style={{ display: "flex", gap: "2rem" }}>
-        <Button label="Informações" link={props.linkInfo} />
+        <Button label="Informações" link={props.linkInfo} disabled={true} />
         <Button label="Votar" link={props.linkVotar} />
       </div>
     </div>

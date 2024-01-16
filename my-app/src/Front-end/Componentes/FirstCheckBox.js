@@ -3,12 +3,11 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 // Recebe props:
 //  itens: String identificador dos itens da tabela.
+//  onChange: handle do checkbox.
 const FirstCheck = (props) => {
   return (
     <OverlayTrigger placement="right" overlay={<Tooltip>Selecione todos os {props.itens}.</Tooltip>}>
-      <a href="#">
-        <CheckBox onChange={props.onChange}/>
-      </a>
+      <CheckBox onChange={props.onChange}/>
     </OverlayTrigger>
   );
 };
