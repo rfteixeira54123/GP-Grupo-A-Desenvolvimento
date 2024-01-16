@@ -12,7 +12,7 @@ const buttonStyle = {
     textShadow: contants.shadow.md,
     width: "100%",
     minWidth: "fit-content",
-    height: "4rem",
+    height: "3.5rem",
     minHeight: "fit-content",
     boxShadow: contants.shadow.md,
     overflow: "hidden"
@@ -21,9 +21,10 @@ const buttonStyle = {
 // Recebe props:
 //  id: identificador do botão
 //  label: texto do botão
+//  handle: ação do botão
 const Button = (props) => {
   return (
-    <button id={props.id} style={buttonStyle}>
+    <button id={props.id} style={buttonStyle} onClick={props.handle}>
       {props.label}
     </button>
   );

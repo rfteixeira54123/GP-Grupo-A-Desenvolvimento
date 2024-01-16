@@ -1,14 +1,13 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 
 import * as constants from "../../constants";
 import Logo from "../../Imagens/Full_Blue_Icon.png";
-import Button from "../../Componentes/FormBtn";
-import CheckVoto from "../../Componentes/CheckVoto";
+import ListaCandidatos from "../../Componentes/ListaCandidatos";
+import Popup from "../../Componentes/PopupConfirma";
 
 const styleWindow = {
   display: "flex",
   alignItems: "center",
-  justifyContent: "space-evenly",
   flexDirection: "column",
   width: "100%",
   height: "100vh",
@@ -26,57 +25,48 @@ const styleTitle = {
   marginBlock: "1rem",
 };
 
-const styleTop = {
-  backgroundColor: constants.color.primary,
-  color: constants.color.white,
-  fontSize: "18px",
-  fontWeight: 700,
-  textShadow: constants.shadow.md,
-  alignContent: "center",
-  textAlign: "start",
-  paddingInline: "2rem",
-  letterSpacing: 1,
-  paddingBlock: "10px",
-  width: "100%",
-  position: "sticky",
-  top: 0,
-};
-
-const styleContainer = {
-  position: "relative",
-  backgroundColor: constants.color.primary_light,
-  borderRadius: "25px",
-  height: "70%",
-  overflowY: "auto",
-  width: "60rem",
-  minWidth: "fit-content",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-};
-
+//Definir candidatos a exibir
 const array = [
-  { nome: "AAAAAAA" },
-  { nome: "BBBBBBBB" },
-  { nome: "BBBBBB" },
-  { nome: "BBBBBBBB" },
-  { nome: "BBBBBBBB" },
-  { nome: "BBBBBBBB" },
-  { nome: "BBBBBBBB" },
-  { nome: "BBBBBBBB" },
-  { nome: "BBBBBBBB" },
-  { nome: "BBBBBBBB" },
-  { nome: "BBBBBBBB" },
-  { nome: "BBBBBBBB" },
-  { nome: "BBBBBBBB" },
-  { nome: "CCCCCC" },
+  { id: 0, nome: "AAAAAAA" },
+  { id: 1, nome: "BBBBBBBB" },
+  { id: 2, nome: "BBBBBB" },
+  { id: 3, nome: "BBBBBBBB" },
+  { id: 4, nome: "BBBBBBBB" },
+  { id: 5, nome: "BBBBBBBB" },
+  { id: 6, nome: "BBBBBBBB" },
+  { id: 7, nome: "BBBBBBBB" },
+  { id: 8, nome: "BBBBBBBB" },
+  { id: 9, nome: "BBBBBBBB" },
+  { id: 10, nome: "BBBBBBBB" },
+  { id: 11, nome: "BBBBBBBB" },
+  { id: 12, nome: "BBBBBBBB" },
+  { id: 13, nome: "CCCCCC" },
 ];
 const nome = "";
 
-// Recebe:
-//  nome: nome da eleição
-//  array: {nome} nome do candidato
 const Window = () => {
+  let [state, setState] = useState(0);
+
+  function handleState(page) {
+    setState(page);
+    console.log(page)
+  }
+
+  const defineContent = () => {
+    switch (state) {
+      default:
+        return (
+          <>
+            <div style={styleWindow}>Hello World!</div>
+          </>
+        );
+      case 0:
+        return <ListaCandidatos array={array} OnHandleBtn={handleState}/>;
+
+      case 1:
+        return <Popup OnHandleBtn={handleState} />;
+    }
+  };
   return (
     <div style={styleWindow}>
       <img
@@ -91,38 +81,7 @@ const Window = () => {
         alt="logo"
       />
       <div style={styleTitle}>ELEIÇÕES DE {nome}</div>
-      <div style={styleContainer}>
-        <div style={styleTop}>Candidatos</div>
-        <div
-          style={{
-            minWidth: "fit-content",
-            width: "20rem",
-            margin: "1rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-          }}
-        >
-          {array.map((candidato, index) => (
-            <div style={{display: "flex", justifyContent: "space-between"}}>
-              <div
-                style={{
-                  color: constants.color.secondary,
-                  fontWeight: 600,
-                  fontSize: "20px",
-                  textAlign: "start",
-                }}
-              >
-                {candidato.nome}
-              </div>
-              <CheckVoto />
-            </div>
-          ))}
-        </div>
-      </div>
-      <Link to="/to" style={{ width: "18rem", marginTop: "1.5rem" }}>
-        <Button id="" label="Submeter voto" />
-      </Link>
+      {defineContent(0)}
     </div>
   );
 };
