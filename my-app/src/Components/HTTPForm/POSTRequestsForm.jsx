@@ -1,12 +1,18 @@
 import usePost from "../HTTPTest/POST";
 
-const FORM_ENDPOINT = "https://gp-api-alpha.vercel.app/eleicao/votar"; // TODO - update to the correct endpoint
+const FORM_ENDPOINT = "https://gp-api-alpha.vercel.app/eleicao/votar"; 
 
 const PostForm = () => {
   const additionalData = {
-    data: "OK",
+    "Nome":"Miguel",
+    "Email":"miguel@gmail.com",
+    "Palavra-Passe":123,
+    "estado":1,
+    "acessibilidade":"ok?"
   };
 
+  const token = "Token_Admin" // "Token_Aluno"
+  
   const { handleSubmit, status } = usePost({
     additionalData,
   });

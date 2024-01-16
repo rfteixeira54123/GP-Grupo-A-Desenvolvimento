@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function usePost({ additionalData }) {
+function usePost({ Data, token,FORM_ENDPOINT }) {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
 
@@ -9,27 +9,17 @@ function usePost({ additionalData }) {
     setStatus("loading");
     setMessage("");
 
-    const finalFormEndpoint = e.target.action;
-    const postData = Array.from(e.target.elements)
-      .filter((input) => input.name)
-      .reduce(
-        (obj, input) => Object.assign(obj, { [input.name]: input.value }),
-        {}
-      );
 
-    if (additionalData) {
-      Object.assign(postData, additionalData);
-    }
 
-    fetch(finalFormEndpoint, {
+    fetch(FORM_ENDPOINT, {
       method: "POST",
       mode: "cors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: "Token_Aluno",
+        Authorization: token,
       },
-      body: JSON.stringify(postData),
+      body: JSON.stringify(Data),
     })
       .then((response) => {
         if (response.status === 200) {
