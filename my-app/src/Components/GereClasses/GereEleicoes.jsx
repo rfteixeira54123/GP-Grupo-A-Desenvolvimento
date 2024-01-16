@@ -6,7 +6,7 @@ class GereEleicao {
   }
 
   eleicoesAntes(data) {
-    return this.eleicoes.filter((e) => c.data < data)
+    return this.eleicoes.filter((e) => c.data < data);
   }
 
   listarContasTipo(tipo) {
@@ -41,4 +41,4 @@ class GereEleicao {
   logOutConta(id) {}
 }
 
-export { Utilizador, GereContas };
+export { Eleicao, GereContas };
