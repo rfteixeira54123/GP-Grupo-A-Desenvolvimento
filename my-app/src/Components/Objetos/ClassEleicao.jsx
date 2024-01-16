@@ -5,7 +5,7 @@ import React from "react";
 //original apenas está o método getData().
 
 //O método encontrarCandidato, numeroVotos & getTipos estão comentados
-//porque não fazem sentido existir nesta classe 
+//porque não fazem sentido existir nesta classe
 
 class Eleicao extends React.Component {
   constructor(props) {
@@ -16,48 +16,57 @@ class Eleicao extends React.Component {
       nome: props.nome,
       data_inicio: props.data_inicio,
       data_fim: props.data_fim,
+<<<<<<< HEAD
       gestorCandidatos:props.gestorCandidatos,
+=======
+      lista_candidatos: props.lista_candidatos,
+>>>>>>> ae8069a0d0637d06ddd05d89c23fe1954fd20ca1
       lista_eleitores_presenca: props.lista_eleitores_presenca || [],
       descricao: props.descricao,
       cargo_disputa: props.cargo_disputa,
       estado: props.estado,
-    };  
+    };
   }
 
-  getID(){
+  getID() {
     return this.id_eleicao;
-  } 
+  }
 
-  getNome(){
+  getNome() {
     return this.nome;
   }
 
-  getEstado(){
+  getEstado() {
     return this.estado;
   }
 
-  getDataInicio(){
-    return this.data_inicio
+  getDataInicio() {
+    return this.data_inicio;
   }
 
+<<<<<<< HEAD
   getDataFim(){
     return this.data_fim
+=======
+  getDataFim() {
+    return this.data_fim;
+>>>>>>> ae8069a0d0637d06ddd05d89c23fe1954fd20ca1
   }
 
-  getDescricao(){
-    return this.descricao
+  getDescricao() {
+    return this.descricao;
   }
 
-  getCargo(){
-    return this.cargo_disputa
+  getCargo() {
+    return this.cargo_disputa;
   }
 
-  definirEstado(estado){
-    this.estado = estado
+  definirEstado(estado) {
+    this.estado = estado;
   }
 
-  encontrarEleitor(id){
-    return lista_eleitores_presenca.filter((e) => e.id_conta === id)
+  encontrarEleitor(id) {
+    return lista_eleitores_presenca.filter((e) => e.id_conta === id);
   }
 
   // encontrarCandidatos(id){
@@ -71,7 +80,6 @@ class Eleicao extends React.Component {
   // getTipos(){
   //   return this.t
   // }
-
 
   render() {
     return (

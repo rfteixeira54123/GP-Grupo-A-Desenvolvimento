@@ -6,7 +6,7 @@ class GereEleicao {
   }
 
   eleicoesAntes(data) {
-    return this.eleicoes.filter((e) => c.data < data)
+    return this.eleicoes.filter((e) => c.data < data);
   }
 
   encontrarEleicao(id){
