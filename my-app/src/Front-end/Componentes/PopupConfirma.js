@@ -1,4 +1,3 @@
-
 import * as constants from "../constants";
 import Button from "./FormBtn";
 
@@ -18,22 +17,13 @@ const styleTop = {
   top: 0,
 };
 
-// const styleList = {
-//   minWidth: "fit-content",
-//   width: "20rem",
-//   margin: "1rem",
-//   display: "flex",
-//   flexDirection: "column",
-//   gap: "0.5rem",
-// };
-
 const styleContainer = {
   position: "relative",
   backgroundColor: constants.color.primary_light,
   borderRadius: "25px",
-  height: "70%",
   overflowY: "auto",
-  width: "60rem",
+  height: "12rem",
+  width: "50rem",
   minWidth: "fit-content",
   display: "flex",
   flexDirection: "column",
@@ -42,21 +32,50 @@ const styleContainer = {
 };
 
 // Recebe:
-//  array: {nome, id} do candidato
 //  OnHandleBtn: ação do botão
-const List = ({ array, OnHandleBtn }) => {
+//  choice: candidato selecionado
+const List = ({ OnHandleBtn, choice }) => {
   return (
     <>
       <div style={styleContainer}>
-        <div style={styleTop}>Candidatos</div>
-        <div></div>
+        {choice != null ? (
+          <>
+            <div style={styleTop}>Confirme seu voto</div>
+            <div
+              style={{ color: constants.color.secondary, marginTop: "2rem" }}
+            >
+              Tem a certeza que quer submeter o voto em {choice.nome}?
+            </div>
+          </>
+        ) : (
+          <>
+            <div style={styleTop}>Voto em branco</div>
+            <div
+              style={{ color: constants.color.secondary, marginTop: "2rem" }}
+            >
+              Tem a certeza que quer submeter o voto em branco?
+            </div>
+          </>
+        )}
+        <p style={{ color: constants.color.secondary, marginBlock: "2rem" }}>
+          Ao confirmar o seu voto é submetido
+          <strong> irreversivelmente.</strong>
+        </p>
       </div>
-      <div style={{display: "flex", gap: "5rem"}}>
+      <div style={{ display: "flex", gap: "5rem" }}>
         <div style={{ width: "18rem", marginTop: "1.5rem" }}>
-          <Button id="" label="Cancelar" handle={() => OnHandleBtn(0)} />
+          <Button
+            id=""
+            label="Cancelar"
+            handle={() => OnHandleBtn(0, choice)}
+          />
         </div>
         <div style={{ width: "18rem", marginTop: "1.5rem" }}>
-          <Button id="" label="Confirmar" handle={() => OnHandleBtn(2)} />
+          <Button
+            id=""
+            label="Confirmar"
+            handle={() => OnHandleBtn(2, choice)}
+          />
         </div>
       </div>
     </>

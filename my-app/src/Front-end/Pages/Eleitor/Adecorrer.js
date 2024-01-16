@@ -33,9 +33,9 @@ const styleContainer = {
 };
 
 const array = [
-  { name: "Presidente", linkVotar: "vote/0", linkInfo: "" },
-  { name: "Presidente", linkVotar: "vote/1", linkInfo: "" },
-  { name: "Presidente", linkVotar: "vote/2", linkInfo: "" },
+  { name: "Presidente", linkVotar: "vote", linkInfo: "" },
+  // { name: "Presidente", linkVotar: "vote", linkInfo: "" },
+  // { name: "Presidente", linkVotar: "vote", linkInfo: "" },
 ];
 
 const Adecorrer = () => {
@@ -43,13 +43,18 @@ const Adecorrer = () => {
     <div style={styleWindow}>
       <div style={styleTitle}>ELEIÇÕES A DECORRER</div>
       <div style={styleContainer}>
-        {array.map((obj, index) => (
-          <ListaEleicoes
-            name={obj.name}
-            linkInfo={obj.linkInfo}
-            linkVotar={obj.linkVotar}
-          />
-        ))}
+        {array.length === 0 ? (
+          <div>Não existe eleições atuais.</div>
+        ) : (
+          array.map((obj, index) => (
+            <ListaEleicoes
+              key={"ELeicao" + index}
+              name={obj.name}
+              linkInfo={obj.linkInfo}
+              linkVotar={obj.linkVotar}
+            />
+          ))
+        )}
       </div>
     </div>
   );

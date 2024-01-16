@@ -1,3 +1,5 @@
+import Alert from 'react-bootstrap/Alert';
+
 import * as constants from "../../constants";
 import ListaEleicoes from "../../Componentes/ItemEleicoesPassadas";
 
@@ -33,19 +35,19 @@ const styleContainer = {
 };
 
 const array = [
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
+  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
 ];
 
 const Passadas = () => {
@@ -53,12 +55,17 @@ const Passadas = () => {
     <div style={styleWindow}>
       <div style={styleTitle}>ELEIÇÕES PASSADAS</div>
       <div style={styleContainer}>
-        {array.map((obj, index) => (
-          <ListaEleicoes
-            name={obj.name}
-            linkConsulta={obj.linkConsulta}
-          />
-        ))}
+        {array.length === 0 ? (
+          <div>Não existe eleições passadas.</div>
+        ) : (
+          array.map((obj, index) => (
+            <ListaEleicoes
+              key={"ELeicao" + index}
+              name={obj.name}
+              linkConsulta={obj.linkConsulta}
+            />
+          ))
+        )}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import * as constants from "../../constants";
 import Logo from "../../Imagens/Full_Blue_Icon.png";
 import ListaCandidatos from "../../Componentes/ListaCandidatos";
 import Popup from "../../Componentes/PopupConfirma";
+import PopupFinaliza from "../../Componentes/PopupFinaliza";
 
 const styleWindow = {
   display: "flex",
@@ -27,29 +28,32 @@ const styleTitle = {
 
 //Definir candidatos a exibir
 const array = [
-  { id_candidato: 0, nome: "AAAAAAA" },
-  { id_candidato: 1, nome: "BBBBBBBB" },
-  { id_candidato: 2, nome: "BBBBBB" },
-  { id_candidato: 3, nome: "BBBBBBBB" },
-  { id_candidato: 4, nome: "BBBBBBBB" },
-  { id_candidato: 5, nome: "BBBBBBBB" },
-  { id_candidato: 6, nome: "BBBBBBBB" },
-  { id_candidato: 7, nome: "BBBBBBBB" },
-  { id_candidato: 8, nome: "BBBBBBBB" },
-  { id_candidato: 9, nome: "BBBBBBBB" },
-  { id_candidato: 10, nome: "BBBBBBBB" },
+  { id_candidato: 10, nome: "AAAAAAA" },
   { id_candidato: 11, nome: "BBBBBBBB" },
-  { id_candidato: 12, nome: "BBBBBBBB" },
-  { id_candidato: 13, nome: "CCCCCC" },
+  { id_candidato: 12, nome: "BBBBBB" },
+  { id_candidato: 13, nome: "BBBBBBBB" },
+  { id_candidato: 14, nome: "BBBBBBBB" },
+  { id_candidato: 15, nome: "BBBBBBBB" },
+  { id_candidato: 16, nome: "BBBBBBBB" },
+  { id_candidato: 17, nome: "BBBBBBBB" },
+  { id_candidato: 18, nome: "BBBBBBBB" },
+  { id_candidato: 19, nome: "BBBBBBBB" },
+  { id_candidato: 110, nome: "BBBBBBBB" },
+  { id_candidato: 111, nome: "BBBBBBBB" },
+  { id_candidato: 112, nome: "BBBBBBBB" },
+  { id_candidato: 113, nome: "CCCCCC" },
 ];
+
 const nome = "";
 
 const Window = () => {
   let [state, setState] = useState(0);
+  let [obj, setObj] = useState(null);
 
-  function handleState(page) {
+  function handleState(page, choice) {
     setState(page);
-    console.log(page)
+    setObj(choice);
+    console.log(JSON.stringify(choice));
   }
 
   const defineContent = () => {
@@ -61,12 +65,21 @@ const Window = () => {
           </>
         );
       case 0:
-        return <ListaCandidatos array={array} OnHandleBtn={handleState}/>;
+        return (
+          <ListaCandidatos
+            array={array}
+            OnHandleBtn={handleState}
+            selected={[array.findIndex((item) => item === obj)]}
+          />
+        );
 
       case 1:
-        return <Popup OnHandleBtn={handleState} />;
+        return <Popup OnHandleBtn={handleState} choice={obj} />;
+      case 2:
+        return <PopupFinaliza />;
     }
   };
+
   return (
     <div style={styleWindow}>
       <img
@@ -81,7 +94,7 @@ const Window = () => {
         alt="logo"
       />
       <div style={styleTitle}>ELEIÇÕES DE {nome}</div>
-      {defineContent(0)}
+      {defineContent()}
     </div>
   );
 };

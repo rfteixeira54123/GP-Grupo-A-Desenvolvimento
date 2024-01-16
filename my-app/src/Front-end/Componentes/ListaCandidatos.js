@@ -44,10 +44,11 @@ const styleContainer = {
 };
 
 // Recebe:
-//  array: {nome, id} do candidato
+//  array: {nome, id_candidato} do candidato
 //  OnHandleBtn: ação do botão
-const List = ({ array, OnHandleBtn }) => {
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+//  selected: array de posições escolhidas anteriormente.
+const List = ({ array, OnHandleBtn, selected }) => {
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState(selected);
 
   const handleChange = (checkboxId) => {
     let updatedCheckboxes = [];
@@ -80,14 +81,14 @@ const List = ({ array, OnHandleBtn }) => {
             <CheckVoto
               key={"RowCandidato" + index}
               candidato={candidato}
-              onChange={() => handleChange(candidato.id_candidato)}
+              onChange={() => handleChange(index)}
               state={index === selectedCheckboxes[0]}
             />
           ))}
         </div>
       </div>
       <div style={{ width: "18rem", marginTop: "1.5rem" }}>
-        <Button id="" label="Submeter voto" handle={() => OnHandleBtn(1)} />
+        <Button id="" label="Submeter voto" handle={() => OnHandleBtn(1, array[selectedCheckboxes[0]])} />
       </div>
     </>
   );
