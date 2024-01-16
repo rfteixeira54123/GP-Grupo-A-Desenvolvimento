@@ -3,7 +3,7 @@ import usePost from "../HTTPTest/POST";
 const FORM_ENDPOINT = "https://gp-api-alpha.vercel.app/eleicao/votar"; 
 
 const PostForm = () => {
-  const additionalData = {
+  const Data = {
     "Nome":"Miguel",
     "Email":"miguel@gmail.com",
     "Palavra-Passe":123,

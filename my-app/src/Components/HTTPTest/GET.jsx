@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function useGet({ additionalData }) {
+function useGet({ Data, token,FORM_ENDPOINT }) {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
 
@@ -9,25 +9,13 @@ function useGet({ additionalData }) {
     setStatus("loading");
     setMessage("");
 
-    const finalFormEndpoint = e.target.action;
-    const getData = Array.from(e.target.elements)
-      .filter((input) => input.name)
-      .reduce(
-        (obj, input) => Object.assign(obj, { [input.name]: input.value }),
-        {}
-      );
-
-    if (additionalData) {
-      Object.assign(getData, additionalData);
-    }
-
-    fetch(finalFormEndpoint, {
+    fetch(FORM_ENDPOINT, {
       method: "GET",
       mode: "cors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: "Token_Admin",
+        Authorization: token,
       },
     })
       .then((response) => {

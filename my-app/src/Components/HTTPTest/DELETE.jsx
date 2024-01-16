@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function useDelete({ additionalData }) {
+function useDelete({ Data, token,FORM_ENDPOINT }) {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
 
@@ -9,27 +9,15 @@ function useDelete({ additionalData }) {
     setStatus("loading");
     setMessage("");
 
-    const finalFormEndpoint = e.target.action;
-    const deleteData = Array.from(e.target.elements)
-      .filter((input) => input.name)
-      .reduce(
-        (obj, input) => Object.assign(obj, { [input.name]: input.value }),
-        {}
-      );
-
-    if (additionalData) {
-      Object.assign(deleteData, additionalData);
-    }
-
-    fetch(finalFormEndpoint, {
+    fetch(FORM_ENDPOINT, {
       method: "DELETE",
       mode: "cors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: "Token_Admin",
+        Authorization: token,
       },
-      body: JSON.stringify(deleteData),
+      body: JSON.stringify(Data),
     })
       .then((response) => {
         if (response.status === 200) {

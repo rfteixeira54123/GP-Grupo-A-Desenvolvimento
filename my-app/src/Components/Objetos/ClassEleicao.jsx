@@ -14,9 +14,9 @@ class Eleicao extends React.Component {
     this.state = {
       id_eleicao: props.id_eleicao,
       nome: props.nome,
-      data_inicio: props.data_inici,
+      data_inicio: props.data_inicio,
       data_fim: props.data_fim,
-      lista_candidatos:props.lista_candidatos,
+      gestorCandidatos:props.gestorCandidatos,
       lista_eleitores_presenca: props.lista_eleitores_presenca || [],
       descricao: props.descricao,
       cargo_disputa: props.cargo_disputa,
@@ -39,7 +39,6 @@ class Eleicao extends React.Component {
   getDataInicio(){
     return this.data_inicio
   }
-
 
   getDataFim(){
     return this.data_fim

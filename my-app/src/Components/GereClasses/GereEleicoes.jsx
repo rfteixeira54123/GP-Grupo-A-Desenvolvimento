@@ -9,36 +9,51 @@ class GereEleicao {
     return this.eleicoes.filter((e) => c.data < data)
   }
 
-  listarContasTipo(tipo) {
-    return this.contas.filter((c) => c.tipo === tipo);
+  encontrarEleicao(id){
+    if (this.eleicoes.filter((e) => e.id_eleicao == id) != null)
+      return true
+    return false
   }
 
-  getUtilizador(id) {
-    return this.contas.filter((c) => c.id === id);
+  getEleicao(id){
+    return this.eleicoes.filter((e) => e.id_eleicao == id);
   }
 
-  getListagemUtilizador(nome, tipo) {
-    return this.contas.filter((c) => c.tipo === tipo && c.nome === nome);
+  getListagemEleicoes(){
+    return this.eleicoes;
   }
 
-  inserirConta(candidato) {
-    this.contas.push(contas);
+  votou(id){
+    if(this.eleicoes.filter((e) => e.lista_eleitores_presenca.filter((el) => el.id_conta) == id))
+      return true
+    return false
   }
 
-  editarConta(id, novaConta) {
-    const index = this.contas.findIndex((c) => c.id_conta === id);
-    if (index !== -1) {
-      this.contas[index] = novaConta;
-    }
+  votar(id_eleitor,id_eleicao,id_candidato){
+    this.eleicoes.filter((e) => e.id_eleicao == id_eleicao)
+    .filter((e1) => e1.lista_eleitores_presenca = id_eleitor)
+    this.eleicoes.gestorCandidatos.filter((c) => c.id_candidato = id_candidato).votos +=1    
   }
 
-  removerConta(id) {
-    this.contas = this.contas.filter((c) => c.id_conta !== id);
+  listagemEleicoesMes(mes){
+    return this.eleicoes.filter((e) => {
+      const data = new Date(e.data);
+      return data.getMonth() + 1 == mes;
+    });
   }
 
-  definirContaAtivo(id, estado) {}
+  criarEleicao(eleicao){
+    return this.eleicoes.push(eleicao)
+  }
 
-  logOutConta(id) {}
+  editarEleicao(id,eleicao){
+    return this.eleicoes.filter((e) => e.id_eleicao == id) = eleicao;
+  }
+
+  adicionarCandidato(id_eleicao,candidato){
+    return this.eleicoes.filter((e) => e.id_eleicao == id_eleicao).gestorCandidatos.adicionarCandidato(candidato)
+  }
+  
 }
 
-export { Utilizador, GereContas };
+export { Eleicao, GereContas };
