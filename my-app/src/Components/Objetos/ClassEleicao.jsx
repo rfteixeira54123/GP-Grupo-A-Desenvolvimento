@@ -16,11 +16,7 @@ class Eleicao extends React.Component {
       nome: props.nome,
       data_inicio: props.data_inicio,
       data_fim: props.data_fim,
-<<<<<<< HEAD
       gestorCandidatos:props.gestorCandidatos,
-=======
-      lista_candidatos: props.lista_candidatos,
->>>>>>> ae8069a0d0637d06ddd05d89c23fe1954fd20ca1
       lista_eleitores_presenca: props.lista_eleitores_presenca || [],
       descricao: props.descricao,
       cargo_disputa: props.cargo_disputa,
@@ -44,13 +40,8 @@ class Eleicao extends React.Component {
     return this.data_inicio;
   }
 
-<<<<<<< HEAD
   getDataFim(){
     return this.data_fim
-=======
-  getDataFim() {
-    return this.data_fim;
->>>>>>> ae8069a0d0637d06ddd05d89c23fe1954fd20ca1
   }
 
   getDescricao() {

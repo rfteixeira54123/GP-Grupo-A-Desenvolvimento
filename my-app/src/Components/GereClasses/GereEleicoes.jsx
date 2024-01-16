@@ -30,9 +30,17 @@ class GereEleicao {
   }
 
   votar(id_eleitor,id_eleicao,id_candidato){
-    this.eleicoes.filter((e) => e.id_eleicao == id_eleicao)
-    .filter((e1) => e1.lista_eleitores_presenca = id_eleitor)
-    this.eleicoes.gestorCandidatos.filter((c) => c.id_candidato = id_candidato).votos +=1    
+    const eleicaoSelecionada = this.eleicoes.find((e) => e.id_eleicao == id_eleicao);
+    if (eleicaoSelecionada) 
+      if (eleicaoSelecionada.lista_eleitores_presenca.includes(id_eleitor)) {
+        const candidatoSelecionado = eleicaoSelecionada.gestorCandidatos.find((c) => c.id_candidato == id_candidato);
+        if (candidatoSelecionado) {
+          candidatoSelecionado.votos += 1;
+          return true
+        }
+      }
+    return false
+    
   }
 
   listagemEleicoesMes(mes){
@@ -47,11 +55,24 @@ class GereEleicao {
   }
 
   editarEleicao(id,eleicao){
-    return this.eleicoes.filter((e) => e.id_eleicao == id) = eleicao;
+    const novaeleicao = this.eleicoes.find((e) => e.id_eleicao == id);
+  
+    if (novaeleicao) {
+      Object.assign(novaeleicao, eleicao);
+      return true; 
+    }
+    return false; 
+    
   }
 
   adicionarCandidato(id_eleicao,candidato){
-    return this.eleicoes.filter((e) => e.id_eleicao == id_eleicao).gestorCandidatos.adicionarCandidato(candidato)
+    const novaeleicao = this.eleicoes.find((e) => e.id_eleicao == id_eleicao);
+    if (novaeleicao) {
+      novaeleicao.gestorCandidatos.adicionarCandidato(candidato);
+      return true; 
+    } 
+    return false; 
+    
   }
   
 }
