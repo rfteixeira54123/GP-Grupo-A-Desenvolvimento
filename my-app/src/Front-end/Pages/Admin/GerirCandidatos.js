@@ -1,4 +1,10 @@
-import {TableCandidatos} from "../../Componentes/Table";
+import { TableCandidatos } from "../../Componentes/Table";
+// import useGet from "../HTTPTest/GET";
+//import Candidato from "../Objetos/ClassCandidato";
+//import GereCandidatos from "../Objetos/GereCandidatos";
+//import useGet from "../HTTPTest/GET";
+
+import React, { useState, useEffect } from "react";
 
 const styleWindow = {
   background: "pink",
@@ -10,23 +16,34 @@ const styleWindow = {
   position: "relative",
 };
 
-
 // Recebe props:
 //  array: objetos do tipo Candidato
-const Page = (props) => {
+const Page = () => {
+  const [candidatos, setCandidatos] = useState([]);
+  //const [gereCandidatos] = useState(new GereCandidatos());
+  // const { handleSubmit, status, message } = useGet({
+  //   FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/xxx/xxx",
+  // });
+
+  // useEffect(() => {
+  //   handleSubmit();
+  // });
+
+  // useEffect(() => {
+  //   if (status === "success") {
+  //     const candidatosList = message.map((candidato) => {
+  //       const novoCandidato = new Candidato(candidato);
+  //       gereCandidatos.inserirCandidato(novoCandidato);
+  //       return novoCandidato;
+  //     });
+  //     setCandidatos(candidatosList);
+  //   }
+  // }, [status, message, gereCandidatos]);
+
   return (
     <div style={styleWindow}>
-      <div style={{width: "80%", height: "80%",}}>
-        <TableCandidatos 
-          array={[
-            {id_candidato:0, nome: "Nome do Candidato", tipo: "Lista"},
-            {id_candidato:1, nome: "Nome do Candidato", tipo: "Lista"},
-            {id_candidato:2, nome: "Nome do Candidato", tipo: "Presidente"},
-            {id_candidato:3, nome: "Nome do Candidato", tipo: "Lista"},
-            {id_candidato:4, nome: "Nome do Candidato", tipo: "Diretor"},
-            {id_candidato:5, nome: "Nome do Candidato", tipo: "Lista"},
-            
-          ]}/>
+      <div style={{ width: "80%", height: "80%" }}>
+        <TableCandidatos array={candidatos} />
       </div>
     </div>
   );
