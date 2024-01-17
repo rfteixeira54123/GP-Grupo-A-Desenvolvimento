@@ -9,7 +9,9 @@ class Utilizador extends React.Component {
       nome: props.nome,
       email: props.email,
       palavra_passe: props.palavra_passe,
+      numero_id: props.numero_id,
       estado: props.estado,
+      tipo: props.tipo,
       acessibilidade: props.acessibilidade,
     };
   }
