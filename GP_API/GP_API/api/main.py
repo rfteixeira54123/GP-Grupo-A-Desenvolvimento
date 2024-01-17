@@ -12,6 +12,7 @@ import os
 from dataclasses import dataclass
 import jwt
 import datetime
+from json_checker import CheckJson
 
 
 app = Flask(__name__)
@@ -41,6 +42,9 @@ def getconnectionDB():
 
 #getconnectionDB().close()
 
+@app.errorhandler(500)
+def error_501(error):
+    return jsonify({"Error":'Erro de servidor Interno'}),500
 
 @app.errorhandler(501)
 def error_501(error):
@@ -112,6 +116,8 @@ def pedido_recupercao_confirm(token):
     
 
 @app.post("/login")
+@CheckJson(properties = [("Nome",str,8),
+                         ("Palavra-Passe",str,8)])
 def login():
     if request.data:
         body = request.get_json()
@@ -184,28 +190,22 @@ def lista_contas():
 
 @app.post("/conta/inserir")
 @auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("Nome",str,8),
+                         ("Email",str,3),
+                         ("Palavra-Passe",str,8),
+                         ("estado",bool),
+                         ("acessibilidade",bool)
+                         ])
 def inserir_conta():
     if request.data:
         body = request.get_json()
     else:
         abort(422)
-   
-    keys = ["Nome","Email","Palavra-Passe","estado","acessibilidade"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
 
-    
-    #Verificar se conseguimos fazer login com esta conta para saber se podemos inserir esta conta, buscar ID e role da conta com JWT!!!!
-    '''
-        JWT
-    '''
-        
-    
     result_status = 501
     
     connection = getconnectionDB()
-    cursor = connection.cursor() #Precisamos de saber o tipo de conta! (Assumindo que este tipo de conta é de aluno)
+    cursor = connection.cursor() #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta é de aluno)
     cursor.callproc("InserirConta",(body["Nome"],body["Email"],body["Palavra-Passe"],body["estado"],body["acessibilidade"]))
     
 
@@ -219,31 +219,40 @@ def inserir_conta():
 
 @app.patch("/conta/editar")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN]) #Aluno pode editar sua própria password
+@CheckJson(properties = [("Nome",str,8),
+                         ("Email",str,3),
+                         ("Palavra-Passe",str,8),
+                         ("estado",bool),
+                         ("acessibilidade",bool),
+                         ("ID_Conta",int)
+                         ])
 def editar_conta():
     if request.data:
         body = request.get_json()
     else:
         abort(422)
-        
-    keys = ["ID_Conta","Nome","Email","Palavra-Passe","estado","acessibilidade"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
+      
     
     
-    #Verificar se o ID da conta com o token dado neste pedido é igual a "ID_Conta" ou se o token dado neste pedido é de um administrador
-    #Preciso de saber ainda se os tokens vão ser na base de dados ou na API
+    token = request.headers.get('Authorization')
+    data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
 
-    result_status = 501
-    
+    if data["Access"] != Access.ADMIN: #Se nao for administrador, temos que saber se este é o proprio utilizador, ele pode editar --SÓ-- a sua password
+        if data["userID"] != body["ID_Conta"]:
+            raise AuthError(error_type(3))
 
+        connection = getconnectionDB()
+        cursor = connection.cursor()
+        cursor.callproc("EditarContaLite",(body["ID_Conta"],body["Acessibilidade"],body["Palavra-Passe"])) #Ideia de procedimento, nao podemos arriscar mudar a conta toda só para mudar estes 2 valores
+
+        return "OK"
 
     connection = getconnectionDB()
     cursor = connection.cursor()
     cursor.callproc("EditarConta",(body["ID_Conta"],body["Nome"],body["Email"],body["Palavra-Passe"],body["estado"],body["acessibilidade"]))
-    
-    if result_status != 200:
-        abort(result_status)
+
+
+    return "OK"
 
 
 
@@ -251,17 +260,15 @@ def editar_conta():
 
 @app.patch("/conta/definir_ativo")
 @auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("estado",bool),
+                         ("ID_Conta",int)
+                         ])
 def definir_ativo_conta():
     if request.data:
         body = request.get_json()
     else:
         abort(422)
-        
-    keys = ["ID_Conta","estado"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
-        
+          
     result_status = 501
     
     connection = getconnectionDB()
@@ -324,19 +331,18 @@ def lista_eleicao():
 
 @app.post("/eleicao/votar")
 @auth.Authentication(access=[Access.ALUNO])
+@CheckJson(properties = [("ID_Eleicao",int),
+                         ("ID_Candidato",int)
+                         ])
 def votar_eleicao():
     if request.data:
         body = request.get_json()
     else:
         abort(422)
      
-    userID = 0
-    #getUserID(request.headers.get('Authorization'))
-
-    keys = ["ID_Eleicao","ID_Candidato"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
+    token = request.headers.get('Authorization')
+    data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
+    userID = int(data["userID"])
 
     #Por alguma razao na procedure de votar já temos os checks lá dentro, entao nao preciso de me preocupar com verificações, só se SUCCESS = TRUE/FALSE
 
@@ -355,6 +361,11 @@ def votar_eleicao():
 
 @app.post("/eleicao/criar")
 @auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("Nome",str,5),
+                         ("Data_Inicio",str),
+                         ("Descricao",str),
+                         ("Cargo_Disputa",str,2)
+                         ])
 def criar_eleicao():
     
     if request.data:
@@ -362,10 +373,6 @@ def criar_eleicao():
     else:
         abort(422)
         
-    keys = ["Nome","Data_Inicio","Descricao","Cargo_Disputa"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
     result_status = 501
     
     connection = getconnectionDB()
@@ -379,16 +386,17 @@ def criar_eleicao():
 
 @app.patch("/eleicao/editar")
 @auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("ID_Eleicao",int),
+                         ("Nome",str,5),
+                         ("Data_Inicio",str),
+                         ("Descricao",str),
+                         ("Cargo_Disputa",str,2)
+                         ])
 def editar_eleicao():
     if request.data:
         body = request.get_json()
     else:
         abort(422)
-
-    keys = ["ID_Eleicao","Nome","Data_Inicio","Descricao","Cargo_Disputa"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
 
     result_status = 501
     
@@ -404,6 +412,9 @@ def editar_eleicao():
 
 @app.post("/eleicao/adicionar_candidato")
 @auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("ID_Lista_Candidatos",int),
+                         ("ID_Candidato",int)
+                         ])
 def adicionar_candidato_eleicao():
     if request.data:
         body = request.get_json()
@@ -411,11 +422,7 @@ def adicionar_candidato_eleicao():
         abort(422)
 
     result_status = 501
-    
-    keys = ["ID_Lista_Candidatos","ID_Candidato"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
+   
     
     connection = getconnectionDB()
     cursor = connection.cursor()
@@ -478,17 +485,14 @@ def listar_candidato():
 
 @app.post("/candidato/inserir")
 @auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("ID_Lista_Candidatos",int)
+                         ])
 def inserir_candidato():
     if request.data:
         body = request.get_json()
     else:
         abort(422)
-        
-
-    keys = ["ID_Lista_Candidatos"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
+       
         
     result_status = 200
     
@@ -507,16 +511,16 @@ def inserir_candidato():
 
 @app.patch("/candidato/editar")
 @auth.Authentication(access=[Access.ADMIN])
-def editar_candidato():
+@CheckJson(properties = [("ID_Candidato",int),
+                         ("Nome",str,5),
+                         ("Tipo",str,2),
+                         ("Votos",int)
+                         ])
+def editar_candidato(): #Agora que percebi que estamos literalmente a dar uma backdoor para editar votos... nao sei se isto seria uma boa ideia de implementar assim
     if request.data:
         body = request.get_json()
     else:
         abort(422)
-        
-    keys = ["ID_Candidato","Nome","Tipo","Votos"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
 
 
     result_status = 200
@@ -538,16 +542,15 @@ def editar_candidato():
 
 @app.delete("/candidato/remover")
 @auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("ID_Lista_Candidatos",int),
+                         ("ID_Candidato",int)
+                         ])
 def remover_candidato():
     if request.data:
         body = request.get_json()
     else:
         abort(422)
-        
-    keys = ["ID_Lista_Candidatos","ID_Candidato"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
+
 
     result_status = 501
     
@@ -583,17 +586,14 @@ def listar_evento():
 
 @app.post("/evento/inserir")
 @auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("ID_Evento",int)
+                         ])
 def inserir_evento():
     if request.data:
         body = request.get_json()
     else:
         abort(422)
         
-    keys = ["ID_Evento"]
-    for key in keys:
-        if key not in body:
-            raise JSONPropError(key)
-    
     result_status = 501
     
     connection = getconnectionDB()

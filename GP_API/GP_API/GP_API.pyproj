@@ -23,6 +23,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="api\json_checker.py" />
     <Compile Include="api\main.py" />
     <Compile Include="auth\auth.py" />
     <Compile Include="GP_API.py" />
