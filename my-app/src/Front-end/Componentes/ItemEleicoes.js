@@ -6,7 +6,7 @@ import Button from "./ButtonSmall";
 // Recebe props:
 //  name: identificador da elição
 //  linkVotar: link para votar nessa eleição
-//  linkInfo: link para aceder informacoes da eleicao
+//  handleInfo: ação para aceder informacoes da eleicao
 const Lista = (props) => {
   const [hovering, setHovering] = useState(false);
 
@@ -46,7 +46,7 @@ const Lista = (props) => {
     >
       <div style={styleText}>{props.name}</div>
       <div style={{ display: "flex", gap: "2rem" }}>
-        <Button label="Informações" link={props.linkInfo} disabled={true} />
+        <Button label="Informações" /*disabled={true}*/ handle={props.handleInfo} />
         <Button label="Votar" link={props.linkVotar} />
       </div>
     </div>

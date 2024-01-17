@@ -21,7 +21,7 @@ export const color = {
     red_light: "#FF5E5E",
 
     gray: "#DFDFDF",
-    light_gray: "#EEEEEE",
+    light_gray: "#E2E2E2",
     dark_gray: "#D9D9D9",
 
     green: "#00DA4A",

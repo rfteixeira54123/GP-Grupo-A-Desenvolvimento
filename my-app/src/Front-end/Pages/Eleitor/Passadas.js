@@ -1,5 +1,3 @@
-import Alert from 'react-bootstrap/Alert';
-
 import * as constants from "../../constants";
 import ListaEleicoes from "../../Componentes/ItemEleicoesPassadas";
 

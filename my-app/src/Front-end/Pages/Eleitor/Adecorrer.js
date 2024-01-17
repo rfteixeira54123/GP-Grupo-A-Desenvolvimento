@@ -1,5 +1,6 @@
 import * as constants from "../../constants";
-import ListaEleicoes from "../../Componentes/ItemEleicoes";
+import ItemEleicoes from "../../Componentes/ItemEleicoes";
+import { useState } from "react";
 
 const styleTitle = {
   color: constants.color.secondary,
@@ -33,12 +34,24 @@ const styleContainer = {
 };
 
 const array = [
-  { name: "Presidente", linkVotar: "vote", linkInfo: "" },
+  { id_eleicao: 110, nome: "Presidente" },
   // { name: "Presidente", linkVotar: "vote", linkInfo: "" },
   // { name: "Presidente", linkVotar: "vote", linkInfo: "" },
 ];
 
-const Adecorrer = () => {
+//  Recebe handle para ação do botão de informações de uma eleição
+const Adecorrer = ({ handle }) => {
+  let [page, setPage] = useState(0);
+  let [eleicao, setEleicao] = useState(null);
+
+  const handleInfo = (newPage, obj) => {
+    setPage(newPage);
+    setEleicao(obj);
+    console.log(newPage);
+    console.log(JSON.stringify(obj));
+    handle(2);
+  };
+
   return (
     <div style={styleWindow}>
       <div style={styleTitle}>ELEIÇÕES A DECORRER</div>
@@ -47,11 +60,11 @@ const Adecorrer = () => {
           <div>Não existe eleições atuais.</div>
         ) : (
           array.map((obj, index) => (
-            <ListaEleicoes
+            <ItemEleicoes
               key={"ELeicao" + index}
-              name={obj.name}
-              linkInfo={obj.linkInfo}
-              linkVotar={obj.linkVotar}
+              name={obj.nome}
+              handleInfo={() => handleInfo(1, obj)}
+              linkVotar={"vote"/*/" + obj.id_eleicao*/}
             />
           ))
         )}

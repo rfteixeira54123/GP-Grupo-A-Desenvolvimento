@@ -1,6 +1,7 @@
-import "./App.css";
+// import "./App.css";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from './Layout';
 import { Outlet } from "react-router-dom";
 import Admin from "./Front-end/Pages/Admin/Base";
 import Eleitor from "./Front-end/Pages/Eleitor/Base";
@@ -14,10 +15,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Outlet />}>
           <Route index element={<Login />} />
-          <Route path="to" element={<Home />} />
+          <Route path="home" element={<Home option={true}/>} />
           <Route path="ad" element={<Admin />} />
           <Route path="el" element={<Eleitor />} />
-          <Route path="vote" element={<Votacao />} />
+          <Route path="home/vote" element={<Votacao />} />
         </Route>
       </Routes>
     </BrowserRouter>

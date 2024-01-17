@@ -6,6 +6,7 @@ import { useState } from "react";
 //  id: identificador do botão
 //  label: texto do botão
 //  link: rota que mostra a nova página ao clique do botão.
+//  handle: método a executar ao clique do botão.
 //  disabled: boleano que define se o botão está válido.
 const Btn = (props) => {
   const [hovering, setHovering] = useState(false);
@@ -23,9 +24,9 @@ const Btn = (props) => {
   };
 
   const buttonStyle = {
-    backgroundColor: props.disabled 
-    ? constants.color.dark_gray
-    : hovering
+    backgroundColor: props.disabled
+      ? constants.color.dark_gray
+      : hovering
       ? constants.color.secondary
       : constants.color.primary, // Cor alterada quando hover
     transition: "background-color 0.3s ease", // Adicionando transição suave na mudança de cor
@@ -49,25 +50,42 @@ const Btn = (props) => {
     textShadow: constants.shadow.small,
   };
 
-  return (
-    <>
-      <Link to={props.link} style={{ textDecoration: "none" }}>
-        <button
-          id={props.id}
-          style={buttonStyle}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          disabled={props.disabled}
-        >
-          <div style={labelStyle}>{props.label}</div>
-        </button>
-      </Link>
-    </>
-  );
+  if (props.link) {
+    return (
+      <>
+        <Link to={props.link} style={{ textDecoration: "none" }}>
+          <button
+            id={props.id}
+            style={buttonStyle}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            disabled={props.disabled}
+          >
+            <div style={labelStyle}>{props.label}</div>
+          </button>
+        </Link>
+      </>
+    );
+  } else {
+    return (
+      <>
+          <button
+            id={props.id}
+            style={buttonStyle}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            disabled={props.disabled}
+            onClick={props.handle}
+          >
+            <div style={labelStyle}>{props.label}</div>
+          </button>
+      </>
+    );
+  }
 };
 
 Btn.defaultProps = {
-  desactivated: false,
-}
+  disabled: false,
+};
 
 export default Btn;

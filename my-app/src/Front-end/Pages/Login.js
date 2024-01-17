@@ -34,7 +34,7 @@ const styleInfo = {
 };
 
 const styleWind = {
-  backgroundColor: contants.color.gray3,
+  backgroundColor: contants.color.dark_gray,
   width: "70%",
   height: "70%",
   borderRadius: "50px",
