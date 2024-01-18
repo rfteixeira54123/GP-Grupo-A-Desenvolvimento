@@ -17,6 +17,7 @@ from json_checker import CheckJson
 app = Flask(__name__)
 '''
 TODO
+BlackList de Tokens (Anular sessões de tokens com uma lista de tokens invalidos)
 Implementacao Base de dados + Nota no "/candidato/listar"
 Testar com dados de teste
 Sistema Email Flask
