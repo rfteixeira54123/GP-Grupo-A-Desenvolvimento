@@ -1,13 +1,9 @@
-import json
-from sqlite3 import connect
-from tokenize import Token
-#import oracledb
-import mysql.connector
+from errors import *
+import psycopg2
 from flask import Flask,request,jsonify,abort
 from flask_cors import CORS
-import auth.auth as auth
-from auth.auth import Access
-from auth.auth import AuthError , refresh_token, error_type
+import auth as auth
+from auth import refresh_token, error_type
 import os
 from dataclasses import dataclass
 import jwt
@@ -15,14 +11,15 @@ import datetime
 from json_checker import CheckJson
 
 
+
+
+
 app = Flask(__name__)
 '''
 TODO
-Verificar tamanho de inputs, mesmo nao mencionado penso que seja importante verificar estas variáveis na edição/adição
-Saber como é sobre autenticação para proceder com a implementação final (dependente da base de dados)
-
+Implementacao Base de dados + Nota no "/candidato/listar"
 Testar com dados de teste
-    
+Sistema Email Flask
 '''
 CORS(app)
 
@@ -31,9 +28,8 @@ CORS(app)
 
 
 
-
 def getconnectionDB():
-    connection = mysql.connector.connect(host=os.environ["Host"],
+    connection = psycopg2.connect(host=os.environ["Host"],
                                          user=os.environ["User"], 
                                          password=os.environ["Password"],
                                          database=os.environ["DataBase"],
@@ -42,43 +38,52 @@ def getconnectionDB():
 
 #getconnectionDB().close()
 
-@app.errorhandler(500)
+@app.errorhandler(ERRO_INTERNO)
 def error_501(error):
-    return jsonify({"Error":'Erro de servidor Interno'}),500
+    return jsonify({"Error":'Erro de servidor Interno'}),ERRO_INTERNO
 
-@app.errorhandler(501)
+@app.errorhandler(ERRO_NAO_IMPLEMENTADO)
 def error_501(error):
-    return jsonify({"Error":'Endpoint nÃ£o implementado'}),501
+    return jsonify({"Error":'Endpoint nÃ£o implementado'}),ERRO_NAO_IMPLEMENTADO
 
-@app.errorhandler(415)
+@app.errorhandler(ERRO_CONTENT_TYPE)
 def error_415(error):
-    return jsonify({"Error":"Content-type nÃ£o definido para 'application/json'. A ignorar pedido"}),415
+    return jsonify({"Error":"Content-type nÃ£o definido para 'application/json'. A ignorar pedido"}),ERRO_CONTENT_TYPE
 
-@app.errorhandler(422)
+@app.errorhandler(ERRO_JSON_MISSING)
 def error_422(error):
-    return jsonify({"Error":'JSON em falta'}),422
+    return jsonify({"Error":'JSON em falta'}),ERRO_JSON_MISSING
 
-@app.errorhandler(AuthError)
+@app.errorhandler(AuthFalta)
+def error_no_token(error):
+    return jsonify({"Error": error}),ERRO_AUTENTICACAO_FALTA
+
+@app.errorhandler(AuthErroLogin)
 def error_hanlder(error):
-    return jsonify({"Error": error}),403
+    return jsonify({"Error": error}),ERRO_AUTENTICACAO
 
-@app.errorhandler(Exception)
-def error_handler_except(error):
-    error_message = str(error)
-    return jsonify({"Error": error_message}),422
+@app.errorhandler(AuthInvalido)
+def erro_autenticacao_invalida(error):
+    return jsonify({"Error": error}),ERRO_AUTENTICACAO_INVALIDA
 
-@dataclass
-class JSONPropError(Exception):
-    error: str
-    def __init__(self,message):
-        super().__init__(message)
-        self.error = "'" + message + "' propriedade em falta no JSON"
-    def __str__(self):
-        return str(self.error)
+@app.errorhandler(AuthExpire)
+def erro_autenticacao_invalida(error):
+    return jsonify({"Error": error}),ERRO_AUTENTICACAO_EXPIRE
     
 @app.errorhandler(JSONPropError)
 def error_handler(error):
-    return jsonify({"Error": error}),422
+    return jsonify({"Error": error}),ERRO_JSON_PROPERTY
+
+@app.errorhandler(JSONTypeError)
+def error_handler(error):
+    return jsonify({"Error": error}),ERRO_JSON_TYPE
+
+@app.errorhandler(JSONSizeError)
+def error_handler(error):
+    return jsonify({"Error": error}),ERRO_JSON_SIZE
+
+
+
 
 
 
@@ -101,15 +106,16 @@ def pedido_recuperacao():
     if request.data:
         body = request.get_json()
     else:
-        abort(422)
-    result_status = 501
+        abort(ERRO_JSON_MISSING)
+
+    result_status = ERRO_NAO_IMPLEMENTADO
 
     if result_status != 200:
         abort(result_status)
 
 @app.route("/_cghpw<string:token>")
 def pedido_recupercao_confirm(token):
-    result_status = 501
+    result_status = ERRO_NAO_IMPLEMENTADO
 
     if result_status != 200:
         abort(result_status)
@@ -119,11 +125,14 @@ def pedido_recupercao_confirm(token):
 @CheckJson(properties = [("Nome",str,8),
                          ("Palavra-Passe",str,8)])
 def login():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
+
+    body = request.get_json()
+
     result_status = 200
+
+    #ERRO_AUTENTICACAO se nao encontrar utilizador
+
+
     token = jwt.encode({'userID' : 0,
                         'userName': 'ContaAluno',
                         'Access':Access.ADMIN,
@@ -141,11 +150,7 @@ def login():
 @app.get("/logout")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def logout():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
-
+    body = request.get_json()
     result_status = 200
     if result_status != 200:
         abort(result_status)
@@ -163,14 +168,11 @@ def logout():
 
 @app.delete("/conta/remover")
 @auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("ID_Conta",int)
+                         ])
 def remover_conta():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
+    body = request.get_json()
     result_status = 200
-    
-
     if result_status != 200:
         abort(result_status)
 
@@ -197,12 +199,11 @@ def lista_contas():
                          ("acessibilidade",bool)
                          ])
 def inserir_conta():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
 
-    result_status = 501
+    body = request.get_json()
+
+
+    result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
     cursor = connection.cursor() #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta é de aluno)
@@ -227,10 +228,9 @@ def inserir_conta():
                          ("ID_Conta",int)
                          ])
 def editar_conta():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
+
+    body = request.get_json()
+
       
     
     
@@ -239,7 +239,7 @@ def editar_conta():
 
     if data["Access"] != Access.ADMIN: #Se nao for administrador, temos que saber se este é o proprio utilizador, ele pode editar --SÓ-- a sua password
         if data["userID"] != body["ID_Conta"]:
-            raise AuthError(error_type(3))
+            abort(ERRO_ACESSO_NEGADO)
 
         connection = getconnectionDB()
         cursor = connection.cursor()
@@ -264,12 +264,11 @@ def editar_conta():
                          ("ID_Conta",int)
                          ])
 def definir_ativo_conta():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
+
+    body = request.get_json()
+
           
-    result_status = 501
+    result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
     cursor = connection.cursor()
@@ -335,10 +334,9 @@ def lista_eleicao():
                          ("ID_Candidato",int)
                          ])
 def votar_eleicao():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
+
+    body = request.get_json()
+
      
     token = request.headers.get('Authorization')
     data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
@@ -346,7 +344,7 @@ def votar_eleicao():
 
     #Por alguma razao na procedure de votar já temos os checks lá dentro, entao nao preciso de me preocupar com verificações, só se SUCCESS = TRUE/FALSE
 
-    result_status = 501
+    result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
     cursor = connection.cursor()
@@ -368,12 +366,11 @@ def votar_eleicao():
                          ])
 def criar_eleicao():
     
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
+
+    body = request.get_json()
+
         
-    result_status = 501
+    result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
     cursor = connection.cursor()
@@ -393,12 +390,11 @@ def criar_eleicao():
                          ("Cargo_Disputa",str,2)
                          ])
 def editar_eleicao():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
 
-    result_status = 501
+    body = request.get_json()
+
+
+    result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
     cursor = connection.cursor()
@@ -419,9 +415,9 @@ def adicionar_candidato_eleicao():
     if request.data:
         body = request.get_json()
     else:
-        abort(422)
+        abort(ERRO_JSON_MISSING)
 
-    result_status = 501
+    result_status = ERRO_NAO_IMPLEMENTADO
    
     
     connection = getconnectionDB()
@@ -442,12 +438,7 @@ def adicionar_candidato_eleicao():
 
 @app.get("/candidato/listar")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
-def listar_candidato():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
-        
+def listar_candidato():    
     
     connection = getconnectionDB()
     cursor = connection.cursor()
@@ -459,6 +450,7 @@ def listar_candidato():
 
     #TODO <- Mudar isto, talvez criar multiplas conexões com a base de dados é degradante para a API, talvez o que queremos é listar candidatos de um gestor só
     #Se fizermos isto preciso entao de fazer outro endpoint que devolve os IDs da lista de candidatos para depois podermos selecionar este
+
     for _id in Ids_Listas:
         cursor = connection.cursor()
         cursor.callproc("listarCandidatos",(_id,)) #Buscar os candidatos de cada gestor de candidatos diferente
@@ -488,10 +480,9 @@ def listar_candidato():
 @CheckJson(properties = [("ID_Lista_Candidatos",int)
                          ])
 def inserir_candidato():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
+
+    body = request.get_json()
+
        
         
     result_status = 200
@@ -517,10 +508,9 @@ def inserir_candidato():
                          ("Votos",int)
                          ])
 def editar_candidato(): #Agora que percebi que estamos literalmente a dar uma backdoor para editar votos... nao sei se isto seria uma boa ideia de implementar assim
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
+
+    body = request.get_json()
+
 
 
     result_status = 200
@@ -546,13 +536,12 @@ def editar_candidato(): #Agora que percebi que estamos literalmente a dar uma ba
                          ("ID_Candidato",int)
                          ])
 def remover_candidato():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
+
+    body = request.get_json()
 
 
-    result_status = 501
+
+    result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
     cursor = connection.cursor()
@@ -589,12 +578,10 @@ def listar_evento():
 @CheckJson(properties = [("ID_Evento",int)
                          ])
 def inserir_evento():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(422)
+
+    body = request.get_json()
         
-    result_status = 501
+    result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
     cursor = connection.cursor()

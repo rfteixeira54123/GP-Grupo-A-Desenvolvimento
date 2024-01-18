@@ -1,38 +1,7 @@
-﻿from enum import Enum
-from http.client import ACCEPTED
-from flask import abort
+﻿from flask import abort
 from flask import request
-from dataclasses import dataclass
 from functools import wraps
-
-
-@dataclass
-class JSONPropError(Exception):
-    error: str
-    def __init__(self,message):
-        super().__init__(message)
-        self.error = "'" + message + "' propriedade em falta no JSON ou valor NULL"
-    def __str__(self):
-        return str(self.error)
-
-@dataclass
-class JSONTypeError(Exception):
-    error: str
-    def __init__(self,typeof,key):
-        super().__init__(typeof)
-        self.error = "Tipo de propriedade '" + key + "' inválida, " + str(typeof) + " esperado"
-    def __str__(self):
-        return str(self.error)
-
-@dataclass
-class JSONSizeError(Exception):
-    error: str
-    def __init__(self,key,size):
-        super().__init__(key)
-        self.error = "Propriedade '" + key + "' nao tem o tamanho minimo de " + str(size)
-    def __str__(self):
-        return str(self.error)
-
+from errors import *
 
 
 
@@ -58,14 +27,14 @@ def CheckJson(properties = []):
                     str(prop[0])
                     type(prop[1])
             except:
-                abort(500) #Verificar se argumentos no properties existe
+                abort(ERRO_INTERNO) #Verificar se argumentos no properties existe
 
 
             try:
                 body = request.get_json()
                 keys_body = body.keys() #Buscar keys
             except:
-                abort(422) #Sem corpo JSON mas este é preciso
+                abort(ERRO_JSON_MISSING) #Sem corpo JSON mas este é preciso
 
 
             #('key',type,size(optional))

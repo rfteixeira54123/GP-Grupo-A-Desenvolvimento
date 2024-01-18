@@ -23,25 +23,19 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="api\errors.py" />
     <Compile Include="api\json_checker.py" />
     <Compile Include="api\main.py" />
-    <Compile Include="auth\auth.py" />
+    <Compile Include="api\auth.py" />
     <Compile Include="GP_API.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="api\" />
-    <Folder Include="auth\" />
-    <Folder Include="auth\__pycache__\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".env" />
-    <Content Include="auth\__pycache__\auth.cpython-311.pyc" />
-    <Content Include="auth\__pycache__\auth.cpython-312.pyc" />
     <Content Include="requirements.txt" />
     <Content Include="vercel.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <InterpreterReference Include="Global|PythonCore|3.12" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="venv\">
