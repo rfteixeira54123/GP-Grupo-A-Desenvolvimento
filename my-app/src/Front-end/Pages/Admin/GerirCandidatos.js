@@ -2,11 +2,9 @@ import { TableCandidatos } from "../../Componentes/Table";
 import Button from "../../Componentes/Button";
 import * as constants from "../../constants";
 
-// import useGet from "../HTTPTest/GET";
-//import Candidato from "../Objetos/ClassCandidato";
-//import GereCandidatos from "../Objetos/GereCandidatos";
-//import useGet from "../HTTPTest/GET";
-
+import Candidato from "../../../Back-end/Objetos/ClassCandidato";
+import GereCandidatos from "../../../Back-end/Objetos/GereCandidatos";
+import useGet from "../../../Back-end/HTTP/GET";
 import React, { useState, useEffect } from "react";
 
 const styleWindow = {
@@ -42,26 +40,31 @@ const styleContainer = {
 // Recebe props:
 //  array: objetos do tipo Candidato
 const Page = () => {
+  //##########################################################################
+  //Atualizações -> Implementação do pedido GET
   const [candidatos, setCandidatos] = useState([]);
-  //const [gereCandidatos] = useState(new GereCandidatos());
-  // const { handleSubmit, status, message } = useGet({
-  //   FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/listar",
-  // });
+  const [gereCandidatos] = useState(new GereCandidatos());
+  const { handleSubmit, status, message } = useGet({
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/listar",
+  });
 
-  // useEffect(() => {
-  //   handleSubmit();
-  // });
+  useEffect(() => {
+    handleSubmit();
+  });
 
-  // useEffect(() => {
-  //   if (status === "success") {
-  //     const candidatosList = message.map((candidato) => {
-  //       const novoCandidato = new Candidato(candidato);
-  //       gereCandidatos.inserirCandidato(novoCandidato);
-  //       return novoCandidato;
-  //     });
-  //     setCandidatos(candidatosList);
-  //   }
-  // }, [status, message, gereCandidatos]);
+  useEffect(() => {
+    if (status === "success") {
+      const candidatosList = message.map((candidato) => {
+        const novoCandidato = new Candidato(candidato);
+        gereCandidatos.inserirCandidato(novoCandidato);
+        return novoCandidato;
+      });
+      setCandidatos(candidatosList);
+    }
+  }, [status, message, gereCandidatos]);
+
+  // Fim das atualizações
+  //##########################################################################
 
   const [showButtons, setShowButtons] = useState(false);
 

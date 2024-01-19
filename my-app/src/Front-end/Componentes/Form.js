@@ -14,6 +14,9 @@ const styleForm = {
   alignItems: "center",
 };
 
+//##########################################################################
+//Atualizações -> Implementação do pedido POST
+
 const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,6 +52,8 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
   //   FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/login",
   // });
 
+  // Fim das atualizações
+  //##########################################################################
   return (
     <Form style={styleForm}>
       <h3 style={{ color: contants.color.white }} className="mb-4">
