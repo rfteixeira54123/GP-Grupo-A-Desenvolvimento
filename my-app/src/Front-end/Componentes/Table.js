@@ -4,7 +4,6 @@ import { AiFillDelete } from "react-icons/ai";
 import { MdOutlineEdit } from "react-icons/md";
 
 import CheckBox from "../Componentes/CheckBox";
-import FirstCheckBox from "../Componentes/FirstCheckBox";
 import CheckBoxEstado from "../Componentes/CheckBoxEstado";
 import * as constants from "../constants";
 
@@ -76,6 +75,12 @@ export const TableEleicoes = (props) => {
     props.handleCheckboxChange(updatedCheckboxes);
   };
 
+  const [show, setShow] = useState(false);
+
+  const handleTooltip = (aShow) => {
+    setShow(aShow);
+  };
+
 
   return (
     <>
@@ -83,10 +88,31 @@ export const TableEleicoes = (props) => {
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={{
+            <th onMouseEnter={()=>handleTooltip(true)}
+              onMouseLeave={()=>handleTooltip(false)}
+              style={{
                 border: "1px "+constants.color.secondary+" solid", 
                 textAlign: "center",
-              }}><FirstCheckBox  onChange={() => handleChange(-1)}/></th>
+              }}>
+                <div style={{
+                  display: show ? "block" : "none",
+                  position: "absolute",
+                  top: "1.4rem",
+                  left: "1.4rem",
+                  border: "1px solid"+constants.color.secondary,
+                  borderRadius: "4px",
+                  backgroundColor: constants.color.white90,
+                  color: constants.color.secondary,
+                  fontSize: "12px",
+                  fontWeight: 500, 
+                  paddingInline: "10px",
+                  paddingBlock: "2px",
+                  zIndex: 5,
+                }}>
+                    Selecione todos os utilizadores.
+                  </div>
+                  <CheckBox onChange={() => handleChange(-1)}/>
+              </th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Tipo</th>
               <th style={styleHeaderText}>Início</th>
@@ -117,16 +143,61 @@ export const TableEleicoes = (props) => {
 // Recebe props:
 //  array: objetos do tipo Candidato
 export const TableCandidatos = (props) => {
+
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+
+  const handleChange = (checkboxId) => {
+    let updatedCheckboxes = [];
+
+    // Atualiza a lista de checkBoxes selecionados
+    if(!selectedCheckboxes.includes(checkboxId)){
+      updatedCheckboxes = [...selectedCheckboxes, checkboxId];
+    } else {
+      updatedCheckboxes = selectedCheckboxes.filter((id) => id !== checkboxId);
+    }
+
+    setSelectedCheckboxes(updatedCheckboxes);
+    props.handleCheckboxChange(updatedCheckboxes);
+  };
+
+  const [show, setShow] = useState(false);
+
+  const handleTooltip = (aShow) => {
+    setShow(aShow);
+  };
+
+
   return (
     <>
       <div style={styleContainerTable}>
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={{
+            <th onMouseEnter={()=>handleTooltip(true)}
+              onMouseLeave={()=>handleTooltip(false)}
+              style={{
                 border: "1px "+constants.color.secondary+" solid", 
                 textAlign: "center",
-              }}><FirstCheckBox /></th>
+              }}>
+                <div style={{
+                  display: show ? "block" : "none",
+                  position: "absolute",
+                  top: "1.4rem",
+                  left: "1.4rem",
+                  border: "1px solid"+constants.color.secondary,
+                  borderRadius: "4px",
+                  backgroundColor: constants.color.white90,
+                  color: constants.color.secondary,
+                  fontSize: "12px",
+                  fontWeight: 500, 
+                  paddingInline: "10px",
+                  paddingBlock: "2px",
+                  zIndex: 5,
+                }}>
+                    Selecione todos os utilizadores.
+                  </div>
+                  <CheckBox onChange={() => handleChange(-1)}/>
+              </th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Tipo</th>
               <th style={{...styleHeaderText, fontSize:12}}>Editar</th>
@@ -170,6 +241,12 @@ export const TableUtilizadores = (props) => {
     props.handleCheckboxChange(updatedCheckboxes);
   };
 
+  const [show, setShow] = useState(false);
+
+  const handleTooltip = (aShow) => {
+    setShow(aShow);
+  };
+
 
   return (
     <>
@@ -177,10 +254,31 @@ export const TableUtilizadores = (props) => {
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={{
+              <th onMouseEnter={()=>handleTooltip(true)}
+              onMouseLeave={()=>handleTooltip(false)}
+              style={{
                 border: "1px "+constants.color.secondary+" solid", 
                 textAlign: "center",
-              }}><FirstCheckBox onChange={() => handleChange(-1)}/></th>
+              }}>
+                <div style={{
+                  display: show ? "block" : "none",
+                  position: "absolute",
+                  top: "1.4rem",
+                  left: "1.4rem",
+                  border: "1px solid"+constants.color.secondary,
+                  borderRadius: "4px",
+                  backgroundColor: constants.color.white90,
+                  color: constants.color.secondary,
+                  fontSize: "12px",
+                  fontWeight: 500, 
+                  paddingInline: "10px",
+                  paddingBlock: "2px",
+                  zIndex: 5,
+                }}>
+                    Selecione todos os utilizadores.
+                  </div>
+                  <CheckBox onChange={() => handleChange(-1)}/>
+              </th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Email</th>
               <th style={styleHeaderText}>Nº ID</th>
@@ -213,16 +311,61 @@ export const TableUtilizadores = (props) => {
 // Recebe props:
 //  array: objetos do tipo Evento
 export const TableEventos = (props) => {
+
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+
+  const handleChange = (checkboxId) => {
+    let updatedCheckboxes = [];
+
+    // Atualiza a lista de checkBoxes selecionados
+    if(!selectedCheckboxes.includes(checkboxId)){
+      updatedCheckboxes = [...selectedCheckboxes, checkboxId];
+    } else {
+      updatedCheckboxes = selectedCheckboxes.filter((id) => id !== checkboxId);
+    }
+
+    setSelectedCheckboxes(updatedCheckboxes);
+    props.handleCheckboxChange(updatedCheckboxes);
+  };
+
+  const [show, setShow] = useState(false);
+
+  const handleTooltip = (aShow) => {
+    setShow(aShow);
+  };
+
+
   return (
     <>
       <div style={styleContainerTable}>
         <Table bsPrefix style={{width:"100%", borderCollapse: 'collapse'}}>
           <thead style={styleHeader}>
             <tr>
-              <th style={{
+            <th onMouseEnter={()=>handleTooltip(true)}
+              onMouseLeave={()=>handleTooltip(false)}
+              style={{
                 border: "1px "+constants.color.secondary+" solid", 
                 textAlign: "center",
-              }}><FirstCheckBox /></th>
+              }}>
+                <div style={{
+                  display: show ? "block" : "none",
+                  position: "absolute",
+                  top: "1.4rem",
+                  left: "1.4rem",
+                  border: "1px solid"+constants.color.secondary,
+                  borderRadius: "4px",
+                  backgroundColor: constants.color.white90,
+                  color: constants.color.secondary,
+                  fontSize: "12px",
+                  fontWeight: 500, 
+                  paddingInline: "10px",
+                  paddingBlock: "2px",
+                  zIndex: 5,
+                }}>
+                    Selecione todos os utilizadores.
+                  </div>
+                  <CheckBox onChange={() => handleChange(-1)}/>
+              </th>
               <th style={styleHeaderText}>Nome</th>
               <th style={styleHeaderText}>Início</th>
               <th style={{...styleHeaderText, fontSize:12}}>Editar</th>

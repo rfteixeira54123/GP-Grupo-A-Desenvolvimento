@@ -66,7 +66,7 @@ const Perfil = (props) => {
           </div>
           <HiMenu size={32} color={constants.color.secondary} />
         </div>
-        <Btn id="PerfilBtn1" label="Alterar palavra-passe" link="/" />
+        {/* <Btn id="PerfilBtn1" label="Alterar palavra-passe" link="/" /> */}
         <Btn id="PerfilBtn2" label="Sair" link="/" />
       </div>
     );
