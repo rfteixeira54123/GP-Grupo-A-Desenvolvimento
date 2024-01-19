@@ -2,7 +2,6 @@ import { useState } from "react";
 import {Table} from 'react-bootstrap';
 import { AiFillDelete } from "react-icons/ai";
 import { MdOutlineEdit } from "react-icons/md";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import CheckBox from "../Componentes/CheckBox";
 import CheckBoxEstado from "../Componentes/CheckBoxEstado";
