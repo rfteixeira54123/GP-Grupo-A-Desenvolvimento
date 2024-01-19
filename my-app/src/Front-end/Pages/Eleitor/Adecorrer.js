@@ -1,6 +1,5 @@
 import * as constants from "../../constants";
 import ItemEleicoes from "../../Componentes/ItemEleicoes";
-import { useState } from "react";
 
 const styleTitle = {
   color: constants.color.secondary,
@@ -34,24 +33,13 @@ const styleContainer = {
 };
 
 const array = [
-  { id_eleicao: 110, nome: "Presidente" },
+  { id_eleicao: 110, nome: "Presidente", data_inicio: "20/11/2023 às 08:00h", data_fim: "24/11/2023 às 20:00h" },
   // { name: "Presidente", linkVotar: "vote", linkInfo: "" },
   // { name: "Presidente", linkVotar: "vote", linkInfo: "" },
 ];
 
 //  Recebe handle para ação do botão de informações de uma eleição
 const Adecorrer = ({ handle }) => {
-  let [page, setPage] = useState(0);
-  let [eleicao, setEleicao] = useState(null);
-
-  const handleInfo = (newPage, obj) => {
-    setPage(newPage);
-    setEleicao(obj);
-    console.log(newPage);
-    console.log(JSON.stringify(obj));
-    handle(2);
-  };
-
   return (
     <div style={styleWindow}>
       <div style={styleTitle}>ELEIÇÕES A DECORRER</div>
@@ -63,7 +51,7 @@ const Adecorrer = ({ handle }) => {
             <ItemEleicoes
               key={"ELeicao" + index}
               name={obj.nome}
-              handleInfo={() => handleInfo(1, obj)}
+              handleInfo={() => handle(2, obj)}
               linkVotar={"vote"/*/" + obj.id_eleicao*/}
             />
           ))

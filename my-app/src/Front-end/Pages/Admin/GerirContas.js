@@ -42,7 +42,7 @@ const Page = (props) => {
   const [showButtons, setShowButtons] = useState(false);
 
   const updateShowButtons = (array) => {
-    console.log(array);
+    // console.log(array);
     setShowButtons(array.length > 1 || array.includes(-1));
     handleRenderButtons();
   };

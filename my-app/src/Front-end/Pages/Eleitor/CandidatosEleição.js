@@ -1,4 +1,4 @@
-import { useState } from "react";
+import Carousel from "react-bootstrap/Carousel";
 // import "./style.css";
 
 import * as constants from "../../constants";
@@ -33,7 +33,6 @@ const styleContainer = {
   display: "flex",
   alignItems: "start-flex",
   flexDirection: "column",
-  gap: "1rem",
 };
 
 const styleTop = {
@@ -65,73 +64,158 @@ const styleTime = {
   letterSpacing: 0,
 };
 
-const Dados = () => {
+// Recebe:
+//  getEleicao: eleição a exibir
+const Dados = ({ getEleicao }) => {
+  //Receber array de candidatos de acordo com o id da eleição.
+  const array = [
+    {
+      id_candidato: 11,
+      nome: "AAAAA",
+      tipo: "Lista",
+      descricao:
+        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend",
+      responsavel: "Nulla vitae elit libero, a pharetra augue mollis interdum.",
+      foto: "cvcb",
+    },
+    {
+      id_candidato: 12,
+      nome: "AAAA2",
+      tipo: "Lista",
+      descricao:
+        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend",
+      responsavel: "Nulla vitae elit libero, a pharetra augue mollis interdum.",
+      foto: "",
+    },
+    {
+      id_candidato: 13,
+      nome: "AAAA3",
+      tipo: "Lista",
+      descricao:
+        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend",
+      responsavel: "Nulla vitae elit libero, a pharetra augue mollis interdum.",
+      foto: "bcvb",
+    },
+    {
+      id_candidato: 14,
+      nome: "AAAA5",
+      tipo: "Lista",
+      descricao:
+        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend",
+      responsavel: "Nulla vitae elit libero, a pharetra augue mollis interdum.",
+      foto: "",
+    },
+    {
+      id_candidato: 16,
+      nome: "AAAAA",
+      tipo: "Lista",
+      descricao:
+        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifendmagnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend ",
+      responsavel: "Nulla vitae elit libero, a pharetra augue mollis interdum.",
+      foto: "",
+    },
+  ];
+
   return (
     <>
       <div style={styleWindow}>
         <div style={styleTitle}>ELEIÇÕES A DECORRER</div>
         <div style={styleTop}>
-          <div style={styleName}>Eleições de Listas 23/24</div>
+          <div style={styleName}>Eleição {getEleicao.nome}</div>
           <div style={styleTime}>
-            Início: 20/11/2023 às 08:00h
+            Início: {getEleicao.data_inicio}
             <br />
-            Fim: 24/11/2023 às 20:00h
+            Fim: {getEleicao.data_fim}
           </div>
         </div>
         <div style={styleContainer}>
           <div style={{ color: constants.color.secondary, fontWeight: 600 }}>
             CANDIDATOS
           </div>
-          <div></div>
+          <Carousel
+            interval={null}
+            data-bs-theme="dark"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            {array.map((obj, index) => (
+              <Carousel.Item
+                data-bs-theme="primary"
+                key={"Candidato" + index}
+                style={{ color: constants.color.secondary }}
+              >
+                <div
+                  style={{
+                    width: "calc(100% - 14rem)",
+                  }}
+                >
+                  <h3 style={{ textAlign: "center" }}>
+                    {obj.tipo} {obj.nome}
+                  </h3>
+                  <p
+                    style={{
+                      backgroundColor: constants.color.white70,
+                      borderRadius: "4px",
+                      boxShadow: constants.shadow.md,
+                      overflowY: "auto",
+                      padding: "0.5rem",
+                      fontSize: "14px",
+                      height: "400px",
+                      colorScheme: "auto",
+                      textAlign: "justify",
+                    }}
+                  >
+                    <strong style={{ fontStyle: "italic" }}>
+                      Responsáveis:
+                    </strong>
+                    <br />
+                    {obj.responsavel}
+                    <br />
+                    <br />
+                    <strong style={{ fontStyle: "italic" }}>Objetivos:</strong>
+                    <br />
+                    {obj.descricao}
+                    <br />
+                  </p>
+                </div>
+                <div
+                  style={{
+                    backgroundColor: constants.color.primary_light,
+                    border: "1px solid",
+                    borderColor: constants.color.secondary,
+                    borderRadius: "1rem",
+                    width: "13rem",
+                    height: "13rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                  }}
+                >
+                  {obj.foto ? (
+                    <img alt="candidato" src={obj.foto} />
+                  ) : (
+                    <div
+                      style={{
+                        color: constants.color.white,
+                        fontStyle: "italic",
+                        fontWeight: 300,
+                        textShadow: "2px 2px 2px #00000040",
+                      }}
+                    >
+                      FOTO
+                    </div>
+                  )}
+                </div>
+              </Carousel.Item>
+            ))}
+          </Carousel>
         </div>
       </div>
-      {/* <div className="pgina">
-        <div className="overlap">
-          <div className="group">
-            <div className="frame">
-              <div className="text-wrapper">Eleições de Listas 23/24</div>
-              <p className="in-cio-s">
-                Início: 20/11/2023 às 08:00h
-                <br />
-                Fim: 24/11/2023 às 20:00h
-              </p>
-            </div>
-          </div>
-          <div className="candidatos">CANDIDATOS</div>
-          <div className="candidato">
-            <div className="foto">
-              <div className="overlap-group">
-                <img className="star" alt="Star" src="star-1.svg" />
-                <div className="div">FOTO</div>
-              </div>
-            </div>
-            <div className="objetivo">
-              <div className="objetivos-dolor-sit-wrapper">
-                <p className="objetivos-dolor-sit">
-                  Objetivos:
-                  <br />
-                  magnis dis parturient montes, nascetur ridiculus mus. Donec
-                  quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
-                  Nulla consequat massa quis enim. Donec pede justo, fringilla
-                  vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus
-                  ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis
-                  eu pede mollis pretium. Integer tincidunt. Cras dapibus.
-                  Vivamus elementum semper nisi. Aenean vulputate eleifend
-                  tellus.
-                  <br />
-                  <br />
-                  Responsáveis:
-                  <br />
-                  tempus. Donec vitae sapien ut libero venenatis faucibus.
-                  Nullam quis ante. Etiam sit amet orci eget eros faucibus
-                </p>
-              </div>
-            </div>
-            <div className="text-wrapper-2">Lista L</div>
-            <Passar className="passar-instance" />
-          </div>
-        </div>
-      </div> */}
     </>
   );
 };

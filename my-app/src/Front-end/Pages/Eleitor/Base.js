@@ -25,9 +25,11 @@ const styleWindow = {
 //  user: {nome, numId}: dados do utilizador
 const Page = ({ user }) => {
   let [state, setState] = useState(0);
+  let [eleicao, setEleicao] = useState(null);
 
-  const handleState = (page) => {
+  const handleState = (page, aEleicao) => {
     setState(page);
+    setEleicao(aEleicao);
   }
 
   const content = (page) => {
@@ -44,7 +46,7 @@ const Page = ({ user }) => {
       case 1:
         return <Passadas />;
       case 2:
-        return <CandidatosEleição />
+        return <CandidatosEleição getEleicao={eleicao} />
     }
   };
 

@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Outlet />}>
           <Route index element={<Login />} />
-          <Route path="home" element={<Home option={true}/>} />
+          <Route path="home" element={<Home />} />
           <Route path="ad" element={<Admin />} />
           <Route path="el" element={<Eleitor />} />
           <Route path="home/vote" element={<Votacao />} />
