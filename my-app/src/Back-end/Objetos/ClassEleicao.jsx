@@ -57,7 +57,7 @@ class Eleicao extends React.Component {
   }
 
   encontrarEleitor(id) {
-    return lista_eleitores_presenca.filter((e) => e.id_conta === id);
+    return this.lista_eleitores_presenca.filter((e) => e.id_conta === id);
   }
 
   // encontrarCandidatos(id){

@@ -6,16 +6,16 @@ class GereEleicao {
   }
 
   eleicoesAntes(data) {
-    return this.eleicoes.filter((e) => c.data < data);
+    return this.eleicoes.filter((e) => e.data < data);
   }
 
   encontrarEleicao(id) {
-    if (this.eleicoes.filter((e) => e.id_eleicao == id) != null) return true;
+    if (this.eleicoes.filter((e) => e.id_eleicao === id) != null) return true;
     return false;
   }
 
   getEleicao(id) {
-    return this.eleicoes.filter((e) => e.id_eleicao == id);
+    return this.eleicoes.filter((e) => e.id_eleicao === id);
   }
 
   getListagemEleicoes() {
@@ -25,7 +25,7 @@ class GereEleicao {
   votou(id) {
     if (
       this.eleicoes.filter(
-        (e) => e.lista_eleitores_presenca.filter((el) => el.id_conta) == id
+        (e) => e.lista_eleitores_presenca.filter((el) => el.id_conta) === id
       )
     )
       return true;
@@ -34,12 +34,12 @@ class GereEleicao {
 
   votar(id_eleitor, id_eleicao, id_candidato) {
     const eleicaoSelecionada = this.eleicoes.find(
-      (e) => e.id_eleicao == id_eleicao
+      (e) => e.id_eleicao === id_eleicao
     );
     if (eleicaoSelecionada)
       if (eleicaoSelecionada.lista_eleitores_presenca.includes(id_eleitor)) {
         const candidatoSelecionado = eleicaoSelecionada.gestorCandidatos.find(
-          (c) => c.id_candidato == id_candidato
+          (c) => c.id_candidato === id_candidato
         );
         if (candidatoSelecionado) {
           candidatoSelecionado.votos += 1;
@@ -52,7 +52,7 @@ class GereEleicao {
   listagemEleicoesMes(mes) {
     return this.eleicoes.filter((e) => {
       const data = new Date(e.data);
-      return data.getMonth() + 1 == mes;
+      return data.getMonth() + 1 === mes;
     });
   }
 
@@ -61,7 +61,7 @@ class GereEleicao {
   }
 
   editarEleicao(id, eleicao) {
-    const novaeleicao = this.eleicoes.find((e) => e.id_eleicao == id);
+    const novaeleicao = this.eleicoes.find((e) => e.id_eleicao === id);
 
     if (novaeleicao) {
       Object.assign(novaeleicao, eleicao);
@@ -71,7 +71,7 @@ class GereEleicao {
   }
 
   adicionarCandidato(id_eleicao, candidato) {
-    const novaeleicao = this.eleicoes.find((e) => e.id_eleicao == id_eleicao);
+    const novaeleicao = this.eleicoes.find((e) => e.id_eleicao === id_eleicao);
     if (novaeleicao) {
       novaeleicao.gestorCandidatos.adicionarCandidato(candidato);
       return true;

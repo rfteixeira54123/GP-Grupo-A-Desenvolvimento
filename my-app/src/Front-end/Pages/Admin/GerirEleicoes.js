@@ -6,7 +6,7 @@ import Filter from "../../Componentes/Filter";
 import * as constants from "../../constants";
 
 import Candidato from "../../../Back-end/Objetos/ClassCandidato";
-import GereCandidatos from "../../../Back-end/Objetos/GereCandidatos";
+import GereCandidatos from "../../../Back-end/GereClasses/GereCandidatos";
 import Eleicao from "../../../Back-end/Objetos/ClassEleicao";
 import GereEleicao from "../../../Back-end/GereClasses/GereEleicoes";
 import useGet from "../../../Back-end/HTTP/GET";
@@ -45,6 +45,28 @@ const styleContainer = {
 //  array: objetos do tipo Eleicao
 const Page = () => {
   const [showButtons, setShowButtons] = useState(false);
+  
+  const updateShowButtons = (array) => {
+    // console.log(array);
+    setShowButtons(array.length > 1 || array.includes(-1));
+    handleRenderButtons();
+  };
+
+  const [forceRenderTable, setForceRenderTable] = useState(false);
+
+  const handleOptionClick = () => {
+    setForceRenderTable((prevState) => !prevState);
+  };
+
+  const [forceRenderButtons, setForceRenderButtons] = useState(false);
+
+  const handleRenderButtons = () => {
+    setForceRenderButtons((prevState) => !prevState);
+  };
+
+  const formatarData = (data) => {
+    return data+"";
+  };
 
   //##########################################################################
   //Atualizações -> Implementação do pedido GET
@@ -82,23 +104,7 @@ const Page = () => {
 
   // Fim das atualizações
   //##########################################################################
-  const updateShowButtons = (array) => {
-    // console.log(array);
-    setShowButtons(array.length > 1 || array.includes(-1));
-    handleRenderButtons();
-  };
 
-  const [forceRenderTable, setForceRenderTable] = useState(false);
-
-  const handleOptionClick = () => {
-    setForceRenderTable((prevState) => !prevState);
-  };
-
-  const [forceRenderButtons, setForceRenderButtons] = useState(false);
-
-  const handleRenderButtons = () => {
-    setForceRenderButtons((prevState) => !prevState);
-  };
 
   return (
     <div style={styleWindow}>

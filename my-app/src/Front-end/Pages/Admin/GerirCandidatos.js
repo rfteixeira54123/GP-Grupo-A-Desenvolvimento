@@ -3,7 +3,7 @@ import Button from "../../Componentes/Button";
 import * as constants from "../../constants";
 
 import Candidato from "../../../Back-end/Objetos/ClassCandidato";
-import GereCandidatos from "../../../Back-end/Objetos/GereCandidatos";
+import {GereCandidatos} from "../../../Back-end/GereClasses/GereCandidatos";
 import useGet from "../../../Back-end/HTTP/GET";
 import React, { useState, useEffect } from "react";
 
