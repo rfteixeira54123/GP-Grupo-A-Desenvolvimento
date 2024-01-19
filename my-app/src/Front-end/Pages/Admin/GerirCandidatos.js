@@ -22,7 +22,7 @@ const Page = () => {
   const [candidatos, setCandidatos] = useState([]);
   //const [gereCandidatos] = useState(new GereCandidatos());
   // const { handleSubmit, status, message } = useGet({
-  //   FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/xxx/xxx",
+  //   FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/listar",
   // });
 
   // useEffect(() => {

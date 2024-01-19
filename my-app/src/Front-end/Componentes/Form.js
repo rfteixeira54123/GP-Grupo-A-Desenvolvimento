@@ -46,7 +46,7 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
   //   message,
   // } = usePost({
   //   Data: { email, password },
-  //   FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/user/login",
+  //   FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/login",
   // });
 
   return (
