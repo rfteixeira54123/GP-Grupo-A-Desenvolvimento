@@ -8,7 +8,7 @@ import * as constants from "../../constants";
 import Candidato from "../../../Back-end/Objetos/ClassCandidato";
 import GereCandidatos from "../../../Back-end/GereClasses/GereCandidatos";
 import Eleicao from "../../../Back-end/Objetos/ClassEleicao";
-import GereEleicao from "../../../Back-end/GereClasses/GereEleicoes";
+import { GereEleicao } from "../../../Back-end/GereClasses/GereEleicoes";
 import useGet from "../../../Back-end/HTTP/GET";
 
 const styleWindow = {
@@ -45,7 +45,7 @@ const styleContainer = {
 //  array: objetos do tipo Eleicao
 const Page = () => {
   const [showButtons, setShowButtons] = useState(false);
-  
+
   const updateShowButtons = (array) => {
     // console.log(array);
     setShowButtons(array.length > 1 || array.includes(-1));
@@ -65,14 +65,14 @@ const Page = () => {
   };
 
   const formatarData = (data) => {
-    return data+"";
+    return data + "";
   };
 
   //##########################################################################
   //Atualizações -> Implementação do pedido GET
 
   const [eleicoes, setEleicoes] = useState([]);
-  const [GereEleicao] = useState(new GereEleicao());
+  const [gereEleicao] = useState(new GereEleicao());
   const { handleSubmit, status, message } = useGet({
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/listar",
   });
@@ -85,7 +85,7 @@ const Page = () => {
     if (status === "success") {
       const eleicaoList = message.map((eleicao) => {
         const novaEleicao = new Eleicao(eleicao);
-        GereEleicao.criarEleicao(novaEleicao);
+        gereEleicao.criarEleicao(novaEleicao);
 
         //Formatar a eleição para aparecer no formato correto
         const eleicaoFormatada = {
@@ -105,10 +105,9 @@ const Page = () => {
   // Fim das atualizações
   //##########################################################################
 
-
   return (
     <div style={styleWindow}>
-      <div style={styleTitle}>GESTÃO DE CONTAS</div>
+      <div style={styleTitle}>GESTÃO DE ELEIÇÕES</div>
       <div style={styleContainer}>
         <Filter id={1} handle={() => handleOptionClick()} />
         <div
@@ -122,141 +121,6 @@ const Page = () => {
           <TableEleicoes
             handleCheckboxChange={updateShowButtons}
             array={eleicoes}
-            // array={[
-            //   {
-            //     id_eleicao: 0,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Diretor",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 1,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "AE",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 2,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Presidente",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 3,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "AE",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 4,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "AE",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 5,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Presidente",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 6,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "AE",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 7,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Presidente",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 8,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Diretor",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 9,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Diretor",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 10,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "AE",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 11,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Presidente",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 12,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Diretor",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 13,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "AE",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 14,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "AE",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 15,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Presidente",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 16,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "AE",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 17,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Presidente",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            //   {
-            //     id_eleicao: 18,
-            //     nome: "Nome da eleição",
-            //     cargo_disputa: "Diretor",
-            //     data_inicio: "10/10/2023 às 07:00",
-            //     data_fim: "20/12/2023 às 20:00",
-            //   },
-            // ]}
           />
         </div>
         <div
@@ -273,10 +137,10 @@ const Page = () => {
         >
           <div style={{ gridColumn: 1 }}></div>
           <div style={{ gridColumn: 2 }}>
-            <Button id="a" label="Adicionar Eleição" />
+            <Button label="Adicionar Eleição" />
           </div>
           <div style={{ gridColumn: 3 }}>
-            <Button id="a" label="Remover Selecionados" show={showButtons} />
+            <Button label="Remover Selecionados" show={showButtons} />
           </div>
         </div>
       </div>
@@ -285,3 +149,25 @@ const Page = () => {
 };
 
 export default Page;
+
+// const array = [
+//   {id_eleicao:0, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:1, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:2, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:3, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:4, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:5, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:6, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:7, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:8, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:9, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:10, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:11, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:12, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:13, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:14, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:15, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:16, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:17, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:18, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"}
+// ];

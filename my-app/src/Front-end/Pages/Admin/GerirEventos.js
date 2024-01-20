@@ -63,15 +63,7 @@ const Page = () => {
         >
           <TableEventos 
             handleCheckboxChange={updateShowButtons}
-            array={[
-              {id_evento: 0, nome: "ANome do Evento ", data: "22/10/2023 às 15:30"},
-              {id_evento: 1, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
-              {id_evento: 2, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
-              {id_evento: 3, nome: "BNome do Evento ", data: "22/10/2023 às 15:30"},
-              {id_evento: 4, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
-              {id_evento: 5, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
-              {id_evento: 6, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
-            ]}/>
+            array={[]}/>
         </div>
         <div
           key={
@@ -97,5 +89,15 @@ const Page = () => {
     </div>
   );
 };
+
+// const array = [
+//   {id_evento: 0, nome: "ANome do Evento ", data: "22/10/2023 às 15:30"},
+//   {id_evento: 1, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
+//   {id_evento: 2, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
+//   {id_evento: 3, nome: "BNome do Evento ", data: "22/10/2023 às 15:30"},
+//   {id_evento: 4, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
+//   {id_evento: 5, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
+//   {id_evento: 6, nome: "Nome do Evento ", data: "22/10/2023 às 15:30"},
+// ];
 
 export default Page;
