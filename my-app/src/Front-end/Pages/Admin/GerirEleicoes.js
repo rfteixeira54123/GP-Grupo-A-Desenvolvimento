@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { TableEleicoes } from "../../Componentes/Table";
 import Button from "../../Componentes/Button";
 import Filter from "../../Componentes/Filter";
+import RemoverEleicao from "./RemoverEleicao";
+import FormEleicao from "./FormEleicao";
 import * as constants from "../../constants";
 
 import Candidato from "../../../Back-end/Objetos/ClassCandidato";
@@ -39,35 +41,12 @@ const styleContainer = {
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
+  position: "relative",
 };
 
 // Recebe props:
 //  array: objetos do tipo Eleicao
 const Page = () => {
-  const [showButtons, setShowButtons] = useState(false);
-
-  const updateShowButtons = (array) => {
-    // console.log(array);
-    setShowButtons(array.length > 1 || array.includes(-1));
-    handleRenderButtons();
-  };
-
-  const [forceRenderTable, setForceRenderTable] = useState(false);
-
-  const handleOptionClick = () => {
-    setForceRenderTable((prevState) => !prevState);
-  };
-
-  const [forceRenderButtons, setForceRenderButtons] = useState(false);
-
-  const handleRenderButtons = () => {
-    setForceRenderButtons((prevState) => !prevState);
-  };
-
-  const formatarData = (data) => {
-    return data + "";
-  };
-
   //##########################################################################
   //Atualizações -> Implementação do pedido GET
 
@@ -105,6 +84,61 @@ const Page = () => {
   // Fim das atualizações
   //##########################################################################
 
+  const [showButtons, setShowButtons] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [toEdit, setToEdit] = useState(null);
+
+  const updateShowButtons = (array) => {
+    if (array.includes(-1)) {
+      setSelected(eleicoes);
+    } else {
+      let updateSelecionados = [];
+      array.map((index) => updateSelecionados.push(eleicoes[index]));
+      setSelected(updateSelecionados);
+    }
+
+    // console.log(array);
+    setShowButtons(array.length > 1 || array.includes(-1));
+    setForceRenderButtons((prevState) => !prevState);
+  };
+
+  const [forceRenderTable, setForceRenderTable] = useState(false);
+
+  const handleOptionClick = () => {
+    setForceRenderTable((prevState) => !prevState);
+  };
+
+  const [forceRenderButtons, setForceRenderButtons] = useState(false);
+  const [statePopup, setStatePopup] = useState(0);
+
+  const decidePopup = () => {
+    switch (statePopup) {
+      case 1:
+        return <FormEleicao handleCancelar={() => setStatePopup(0)} />;
+      case 2:
+        return <RemoverEleicao choice={selected} handleCancelar={() => setStatePopup(0)}/>;
+      case 3:
+        return <FormEleicao obj={toEdit} handleCancelar={() => setStatePopup(0)} />;
+      default:
+        return <></>;
+    }
+  };
+
+  const handleDelete = (obj) => {
+    setSelected([obj]);
+    setStatePopup(2);
+  }
+
+  const handleEdit = (obj) => {
+    setToEdit(obj);
+    setStatePopup(3);
+  }
+
+  const formatarData = (data) => {
+    return data + "";
+  };
+
+
   return (
     <div style={styleWindow}>
       <div style={styleTitle}>GESTÃO DE ELEIÇÕES</div>
@@ -121,6 +155,8 @@ const Page = () => {
           <TableEleicoes
             handleCheckboxChange={updateShowButtons}
             array={eleicoes}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
           />
         </div>
         <div
@@ -137,11 +173,26 @@ const Page = () => {
         >
           <div style={{ gridColumn: 1 }}></div>
           <div style={{ gridColumn: 2 }}>
-            <Button label="Adicionar Eleição" />
+            <Button label="Adicionar Eleição" handle={() => setStatePopup(1)} />
           </div>
           <div style={{ gridColumn: 3 }}>
-            <Button label="Remover Selecionados" show={showButtons} />
+            <Button label="Remover Selecionados" show={showButtons} handle={() => setStatePopup(2)} />
           </div>
+        </div>
+        <div
+          style={{
+            display: statePopup === 0 ? "none" : "flex",
+            backgroundColor: constants.color.white70,
+            position: "absolute",
+            bottom: -4,
+            left: -4,
+            width: "101%",
+            height: "101%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {decidePopup(statePopup)}
         </div>
       </div>
     </div>
@@ -151,9 +202,9 @@ const Page = () => {
 export default Page;
 
 // const array = [
-//   {id_eleicao:0, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:1, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:2, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
+//   {id_eleicao:0, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"2017-06-01T08:30", data_fim:"2017-08-01T08:30"},
+//   {id_eleicao:1, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"2017-06-01T08:30", data_fim:"2017-08-01T08:30"},
+//   {id_eleicao:2, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"2017-06-01T08:30", data_fim:"2017-08-01T08:30"},
 //   {id_eleicao:3, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
 //   {id_eleicao:4, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
 //   {id_eleicao:5, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},

@@ -34,11 +34,11 @@ const styleContainer = {
 };
 
 // Recebe:
-//  choice: array de ids de candidatos selecionados
+//  choice: array de ids de eleicoes selecionadas
 //  handleCancelar: método para fechar o popup
 const Info = ({ choice, handleCancelar }) => {
   const handleConfirmar = () => {
-    //Fazer função para remover candidatos recebidos no array choice
+    //Fazer função para remover eleicoes recebidos no array choice
   };
 
   return (
@@ -46,7 +46,7 @@ const Info = ({ choice, handleCancelar }) => {
       <div style={styleContainer}>
         {choice.length > 1 ? (
           <>
-            <div style={styleTop}>Remover candidatos</div>
+            <div style={styleTop}>Remover eleições</div>
             <div
               style={{
                 color: constants.color.secondary,
@@ -55,7 +55,7 @@ const Info = ({ choice, handleCancelar }) => {
               }}
             >
               {" "}
-              Tem a certeza que deseja remover todos os {choice.length} candidatos selecionados
+              Tem a certeza que deseja remover todos as {choice.length} eleições selecionadas
               ?
             </div>
             <div
@@ -75,7 +75,7 @@ const Info = ({ choice, handleCancelar }) => {
           </>
         ) : (
           <>
-            <div style={styleTop}>Remover candidato</div>
+            <div style={styleTop}>Remover eleição</div>
             <div
               style={{
                 color: constants.color.secondary,
@@ -83,24 +83,11 @@ const Info = ({ choice, handleCancelar }) => {
                 marginBlock: "1rem",
               }}
             >
-              Tem a certeza que deseja remover o candidato ?
+              Tem a certeza que deseja remover a eleição ?
               <br />Nome: {choice[0].nome}
-              <br />Tipo: {choice[0].tipo}
-            </div>
-            <div
-              style={{
-                backgroundColor: constants.color.primary_light,
-                border: "1px solid",
-                borderColor: constants.color.secondary,
-                borderRadius: "1rem",
-                width: "13rem",
-                height: "13rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img alt="candidato" src={choice[0].foto} />
+              <br />Tipo: {choice[0].cargo_disputa}
+              <br />Início: {choice[0].data_inicio}
+              <br />Fim: {choice[0].data_fim}
             </div>
             <div
               style={{
