@@ -11,6 +11,7 @@ const styleWindow = {
   alignItems: "center",
   flexDirection: "column",
   width: "100%",
+  minWidth: "fit-content",
   height: "100vh",
   padding: "1.5rem",
 };

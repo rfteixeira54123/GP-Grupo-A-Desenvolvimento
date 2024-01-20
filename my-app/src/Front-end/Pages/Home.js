@@ -4,7 +4,7 @@ import Eleitor from "./Eleitor/Base";
 
 const Home = () =>{
 
-    // Decide se exibe páginas de eleitor ou administrador.
+    // Decide se exibe páginas de eleitor (true) ou administrador (false).
     let option = false;
 
     if(option)

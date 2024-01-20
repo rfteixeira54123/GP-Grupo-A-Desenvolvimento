@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const stylePerfil = {
   background: constants.color.white60,
-  position: "absolute",
+  position: "fixed",
   top: 0,
   right: 0,
   borderRadius: "0 0 0 1rem",

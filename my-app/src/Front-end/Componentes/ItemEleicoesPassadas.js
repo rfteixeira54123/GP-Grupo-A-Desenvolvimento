@@ -23,6 +23,7 @@ const Lista = (props) => {
     boxShadow: hovering ? constants.shadow.bg : constants.shadow.md,
     transition: "box-shadow 0.3s ease",
     width: "95%",
+    minWidth: "fit-content",
     height: "60px",
     minHeight: "60px",
     display: "flex",

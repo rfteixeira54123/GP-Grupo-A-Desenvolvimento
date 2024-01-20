@@ -25,7 +25,8 @@ const styleContainer = {
   borderRadius: "25px",
   overflowY: "auto",
   height: "12rem",
-  width: "42rem",
+  maxWidth: "42rem",
+  width: "80%",
   minWidth: "fit-content",
   display: "flex",
   flexDirection: "column",
@@ -66,7 +67,7 @@ const List = () => {
             marginTop: "1.5rem",
           }}
         >
-          <Button id="" label="Termminar sessão" />
+          <Button id="" label="Terminar sessão" />
         </Link>
       </div>
     </>
