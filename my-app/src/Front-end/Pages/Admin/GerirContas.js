@@ -166,13 +166,13 @@ const Page = (props) => {
           }}
         >
           <div style={{gridColumn: 1}}>
-            <Button id="a" label="Desativar Selecionados" show={showButtons} />
+            <Button label="Desativar Selecionados" show={showButtons} />
           </div>
           <div style={{gridColumn: 2}}>
-            <Button id="a" label="Adicionar Conta" />
+            <Button label="Adicionar Conta" />
           </div>
           <div style={{gridColumn: 3}}>
-            <Button id="a" label="Remover Selecionados" show={showButtons} />
+            <Button label="Remover Selecionados" show={showButtons} />
           </div>
         </div>
       </div>

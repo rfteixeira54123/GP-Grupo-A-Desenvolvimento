@@ -3,22 +3,18 @@ import { useState } from "react";
 import * as constants from "../constants";
 
 // Recebe props:
-//  id: identificador do botão
 //  label: texto do botão
 //  show: booleano mostra ou não o botão
-const Btn = (props) => {
+//  handle: função do botão
+const Btn = ({label, show, handle }) => {
   const [hovering, setHovering] = useState(false);
 
   const handleMouseEnter = () => {
-    if (!props.state) {
       setHovering(true);
-    }
   };
 
   const handleMouseLeave = () => {
-    if (!props.state) {
       setHovering(false);
-    }
   };
 
   const buttonStyle = {
@@ -33,7 +29,7 @@ const Btn = (props) => {
     borderRadius: "25px",
     margin: 5,
     wordWrap: "break-word",
-    display: props.show? "flex" : "none",
+    display: show ? "flex" : "none",
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
@@ -52,12 +48,12 @@ const Btn = (props) => {
   return (
     <>
       <button
-        id={props.id}
         style={buttonStyle}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={handle}
       >
-        <div style={labelStyle}>{props.label}</div>
+        <div style={labelStyle}>{label}</div>
       </button>
     </>
   );

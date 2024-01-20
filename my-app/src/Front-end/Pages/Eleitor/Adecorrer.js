@@ -34,8 +34,6 @@ const styleContainer = {
 
 const array = [
   { id_eleicao: 110, nome: "Presidente", data_inicio: "20/11/2023 às 08:00h", data_fim: "24/11/2023 às 20:00h" },
-  // { name: "Presidente", linkVotar: "vote", linkInfo: "" },
-  // { name: "Presidente", linkVotar: "vote", linkInfo: "" },
 ];
 
 //  Recebe handle para ação do botão de informações de uma eleição

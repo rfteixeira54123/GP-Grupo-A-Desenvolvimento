@@ -80,4 +80,4 @@ class GereEleicao {
   }
 }
 
-export { Eleicao, GereContas };
+export { Eleicao, GereEleicao };

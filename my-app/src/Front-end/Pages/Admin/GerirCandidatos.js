@@ -1,9 +1,11 @@
 import { TableCandidatos } from "../../Componentes/Table";
 import Button from "../../Componentes/Button";
+import RemoverCandidato from "./RemoverCandidato";
+import FormCandidato from "./FormCandidato";
 import * as constants from "../../constants";
 
 import Candidato from "../../../Back-end/Objetos/ClassCandidato";
-import {GereCandidatos} from "../../../Back-end/GereClasses/GereCandidatos";
+import { GereCandidatos } from "../../../Back-end/GereClasses/GereCandidatos";
 import useGet from "../../../Back-end/HTTP/GET";
 import React, { useState, useEffect } from "react";
 
@@ -35,6 +37,7 @@ const styleContainer = {
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
+  position: "relative",
 };
 
 // Recebe props:
@@ -42,6 +45,7 @@ const styleContainer = {
 const Page = () => {
   //##########################################################################
   //Atualizações -> Implementação do pedido GET
+
   const [candidatos, setCandidatos] = useState([]);
   const [gereCandidatos] = useState(new GereCandidatos());
   const { handleSubmit, status, message } = useGet({
@@ -67,18 +71,49 @@ const Page = () => {
   //##########################################################################
 
   const [showButtons, setShowButtons] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [toEdit, setToEdit] = useState(null);
 
   const updateShowButtons = (array) => {
-    // console.log(array);
+    if (array.includes(-1)) {
+      setSelected(candidatos);
+    } else {
+      let updateSelecionados = [];
+      array.map((index) => updateSelecionados.push(candidatos[index]));
+      setSelected(updateSelecionados);
+    }
+
+    console.log(array);
     setShowButtons(array.length > 1 || array.includes(-1));
-    handleRenderButtons();
+    setForceRenderButtons((prevState) => !prevState);
   };
 
   const [forceRenderButtons, setForceRenderButtons] = useState(false);
 
-  const handleRenderButtons = () => {
-    setForceRenderButtons((prevState) => !prevState);
+  const [statePopup, setStatePopup] = useState(0);
+
+  const decidePopup = () => {
+    switch (statePopup) {
+      case 1:
+        return <FormCandidato handleCancelar={() => setStatePopup(0)} />;
+      case 2:
+        return <RemoverCandidato choice={selected} handleCancelar={() => setStatePopup(0)}/>;
+      case 3:
+        return <FormCandidato obj={toEdit} handleCancelar={() => setStatePopup(0)} />;
+      default:
+        return <></>;
+    }
   };
+
+  const handleDelete = (obj) => {
+    setSelected([obj]);
+    setStatePopup(2);
+  }
+
+  const handleEdit = (obj) => {
+    setToEdit(obj);
+    setStatePopup(3);
+  }
 
   return (
     <div style={styleWindow}>
@@ -86,7 +121,7 @@ const Page = () => {
       <div style={styleContainer}>
         <div
           style={{
-            width: "96%",
+            width: "80%",
             height: "inherit",
             maxHeight: "72vh",
             marginTop: "1rem",
@@ -95,6 +130,8 @@ const Page = () => {
           <TableCandidatos
             handleCheckboxChange={updateShowButtons}
             array={candidatos}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
           />
         </div>
         <div
@@ -111,11 +148,33 @@ const Page = () => {
         >
           <div style={{ gridColumn: 1 }}></div>
           <div style={{ gridColumn: 2 }}>
-            <Button id="a" label="Adicionar Candidato" />
+            <Button
+              label="Adicionar Candidato"
+              handle={() => setStatePopup(1)}
+            />
           </div>
           <div style={{ gridColumn: 3 }}>
-            <Button id="a" label="Remover Selecionados" show={showButtons} />
+            <Button
+              label="Remover Selecionados"
+              show={showButtons}
+              handle={() => setStatePopup(2)}
+            />
           </div>
+        </div>
+        <div
+          style={{
+            display: statePopup === 0 ? "none" : "flex",
+            backgroundColor: constants.color.white70,
+            position: "absolute",
+            bottom: -4,
+            left: -4,
+            width: "101%",
+            height: "101%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {decidePopup(statePopup)}
         </div>
       </div>
     </div>
@@ -123,3 +182,12 @@ const Page = () => {
 };
 
 export default Page;
+
+// const array = [
+//   { id_candidato: 0, nome: "Nome do Candidato", tipo: "Lista", descricao: "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifendmagnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend " },
+//   { id_candidato: 1, nome: "Nome do Candidato", tipo: "Lista" },
+//   { id_candidato: 2, nome: "Nome do Candidato", tipo: "Presidente" },
+//   { id_candidato: 3, nome: "Nome do Candidato", tipo: "Lista" },
+//   { id_candidato: 4, nome: "Nome do Candidato", tipo: "Diretor" },
+//   { id_candidato: 5, nome: "Nome do Candidato", tipo: "Lista" },
+// ];

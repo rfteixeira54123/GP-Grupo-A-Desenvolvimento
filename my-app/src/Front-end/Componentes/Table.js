@@ -57,6 +57,9 @@ const styleCell = {
 
 // Recebe props:
 //  array: objetos do tipo Eleicao
+//  handleCheckboxChange: método que lida com a seleção dos checkboxes.
+//  handleDelete: método chamado ao clique do botões de remover.
+//  handleEdit: método chamado ao clique do botões de editar.
 export const TableEleicoes = (props) => {
 
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
@@ -122,17 +125,30 @@ export const TableEleicoes = (props) => {
             </tr>
           </thead>
           <tbody style={{overflowY: "auto"}}>
-            {props.array.map((obj, index) => (
-              <tr key={"RowEleicao"+index} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
-                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox onChange={() => handleChange(obj.id_eleicao)}/></td>
-                <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
-                <td style={styleCell}>{obj.cargo_disputa}</td>
-                <td style={styleCell}>{obj.data_inicio}</td>
-                <td style={styleCell}>{obj.data_fim}</td>
-                <td style={styleCell}><MdOutlineEdit size={25} /></td>
-                <td style={styleCell}><AiFillDelete size={22} /></td>
+            {(props.array.length > 0) ?
+              props.array.map((obj, index) => (
+                <tr key={"RowEleicao"+index} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
+                  <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox onChange={() => handleChange(obj.id_eleicao)}/></td>
+                  <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
+                  <td style={styleCell}>{obj.cargo_disputa}</td>
+                  <td style={styleCell}>{obj.data_inicio}</td>
+                  <td style={styleCell}>{obj.data_fim}</td>
+                  <td style={styleCell} onClick={() => props.handleEdit(obj)} ><MdOutlineEdit size={25} /></td>
+                  <td style={styleCell} onClick={() => props.handleDelete(obj)}><AiFillDelete size={22} /></td>
+                </tr>
+              ))  : 
+              <tr>
+                <td colSpan={7} 
+                style={{
+                  textAlign: "center",
+                  paddingBlock: "2rem",
+                  color: constants.color.secondary,
+                }}
+                >
+                  Não há eleições a exibir.
+                </td>
               </tr>
-            ))}
+           }
           </tbody>
         </Table>
       </div>
@@ -142,6 +158,9 @@ export const TableEleicoes = (props) => {
 
 // Recebe props:
 //  array: objetos do tipo Candidato
+//  handleCheckboxChange: método que lida com a seleção dos checkboxes.
+//  handleDelete: método chamado ao clique do botões de remover.
+//  handleEdit: método chamado ao clique do botões de editar.
 export const TableCandidatos = (props) => {
 
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
@@ -205,15 +224,28 @@ export const TableCandidatos = (props) => {
             </tr>
           </thead>
           <tbody style={{overflowY: "auto"}}>
-            {props.array.map((obj, index) => (
-              <tr key={"RowCandidato"+obj.id_candidato} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
-                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox /></td>
-                <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
-                <td style={styleCell}>{obj.tipo}</td>
-                <td style={styleCell}><MdOutlineEdit size={25} /></td>
-                <td style={styleCell}><AiFillDelete size={22} /></td>
+            {(props.array.length > 0) ?
+              props.array.map((obj, index) => (
+                <tr key={"RowCandidato"+obj.id_candidato} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
+                  <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox onChange={() => handleChange(obj.id_candidato)} /></td>
+                  <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
+                  <td style={styleCell}>{obj.tipo}</td>
+                  <td style={styleCell} onClick={() => props.handleEdit(obj)} ><MdOutlineEdit size={25} /></td>
+                  <td style={styleCell} onClick={() => props.handleDelete(obj)} ><AiFillDelete size={22} /></td>
+                </tr>
+              ))  : 
+              <tr>
+                <td colSpan={7} 
+                style={{
+                  textAlign: "center",
+                  paddingBlock: "2rem",
+                  color: constants.color.secondary,
+                }}
+                >
+                  Não há candidatos a exibir.
+                </td>
               </tr>
-            ))}
+           }
           </tbody>
         </Table>
       </div>
@@ -223,6 +255,9 @@ export const TableCandidatos = (props) => {
 
 // Recebe props:
 //  array: objetos do tipo Utilizador
+//  handleCheckboxChange: método que lida com a seleção dos checkboxes.
+//  handleDelete: método chamado ao clique do botões de remover.
+//  handleEdit: método chamado ao clique do botões de editar.
 export const TableUtilizadores = (props) => {
 
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
@@ -289,18 +324,31 @@ export const TableUtilizadores = (props) => {
             </tr>
           </thead>
           <tbody style={{overflowY: "auto"}}>
-            {props.array.map((user, index) => (
-              <tr key={"RowConta"+user.id_conta} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
-                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox onChange={() => handleChange(user.id_conta)}/></td>
-                <td style={{...styleCell, textAlign: "start"}}>{user.nome}</td>
-                <td style={{...styleCell, textAlign: "start"}}>{user.email}</td>
-                <td style={styleCell}>{user.numero_id}</td>
-                <td style={styleCell}>{user.tipo}</td>
-                <td style={styleCell}><CheckBoxEstado state={user.estado} /></td>
-                <td style={styleCell}><MdOutlineEdit size={25} /></td>
-                <td style={styleCell}><AiFillDelete size={22} /></td>
+            {(props.array.length > 0) ?
+              props.array.map((user, index) => (
+                <tr key={"RowConta"+user.id_conta} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
+                  <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox onChange={() => handleChange(user.id_conta)}/></td>
+                  <td style={{...styleCell, textAlign: "start"}}>{user.nome}</td>
+                  <td style={{...styleCell, textAlign: "start"}}>{user.email}</td>
+                  <td style={styleCell}>{user.numero_id}</td>
+                  <td style={styleCell}>{user.tipo}</td>
+                  <td style={styleCell}><CheckBoxEstado state={user.estado} /></td>
+                  <td style={styleCell} onClick={() => props.handleEdit(user)} ><MdOutlineEdit size={25} /></td>
+                  <td style={styleCell} onClick={() => props.handleDelete(user)}><AiFillDelete size={22} /></td>
+                </tr>
+              ))  : 
+              <tr>
+                <td colSpan={7} 
+                style={{
+                  textAlign: "center",
+                  paddingBlock: "2rem",
+                  color: constants.color.secondary,
+                }}
+                >
+                  Não há contas a exibir.
+                </td>
               </tr>
-            ))}
+           }
           </tbody>
         </Table>
       </div>
@@ -310,6 +358,9 @@ export const TableUtilizadores = (props) => {
 
 // Recebe props:
 //  array: objetos do tipo Evento
+//  handleCheckboxChange: método que lida com a seleção dos checkboxes.
+//  handleDelete: método chamado ao clique do botões de remover.
+//  handleEdit: método chamado ao clique do botões de editar.
 export const TableEventos = (props) => {
 
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
@@ -373,15 +424,28 @@ export const TableEventos = (props) => {
             </tr>
           </thead>
           <tbody style={{overflowY: "auto"}}>
-            {props.array.map((obj, index) => (
-              <tr key={"RowEvento"+obj.id_evento} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
-                <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox /></td>
-                <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
-                <td style={styleCell}>{obj.data}</td>
-                <td style={styleCell}><MdOutlineEdit size={25} /></td>
-                <td style={styleCell}><AiFillDelete size={22} /></td>
+            {(props.array.length > 0) ?
+              props.array.map((obj, index) => (
+                <tr key={"RowEvento"+obj.id_evento} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
+                  <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox onChange={() => handleChange(obj.id_evento)} /></td>
+                  <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
+                  <td style={styleCell}>{obj.data}</td>
+                  <td style={styleCell} onClick={() => props.handleEdit(obj)} ><MdOutlineEdit size={25} /></td>
+                  <td style={styleCell} onClick={() => props.handleDelete(obj)}><AiFillDelete size={22} /></td>
+                </tr>
+              ))  : 
+              <tr>
+                <td colSpan={7} 
+                style={{
+                  textAlign: "center",
+                  paddingBlock: "2rem",
+                  color: constants.color.secondary,
+                }}
+                >
+                  Não há eventos a exibir.
+                </td>
               </tr>
-            ))}
+           }
           </tbody>
         </Table>
       </div>
