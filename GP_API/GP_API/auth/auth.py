@@ -1,5 +1,5 @@
 import os
-from flask import request, abort
+from flask import request
 import jwt
 from functools import wraps
 from dotenv import load_dotenv
@@ -50,18 +50,18 @@ def Authentication(access = None):
             try:
                 token = request.headers.get('Authorization') #Buscar token se este existir
             except:
-                abort(ERRO_AUTENTICACAO_FALTA)
+                raise AuthMissing()
             if token == None:
-                abort(ERRO_AUTENTICACAO_FALTA)
+                raise AuthMissing()
             try:
                 data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
             except:
-                abort(ERRO_AUTENTICACAO_INVALIDA)
+                raise AuthInvalid()
 
             #Verificar se expirou
             expiration_time = datetime.datetime.strptime(data["expiration"], "%Y-%m-%dT%H:%M:%S.%f")
             if datetime.datetime.now() > expiration_time:
-                abort(ERRO_AUTENTICACAO_EXPIRE)
+                raise AuthExpire()
 
             anyaccess = 3 #Erro default sera "Acesso negado"
 
@@ -79,8 +79,7 @@ def Authentication(access = None):
             
             
             if anyaccess != 0:
-                abort(ERRO_ACESSO_NEGADO) 
-
+                raise AuthDenied()
             val = func(*args, **kwargs)
             return val
 

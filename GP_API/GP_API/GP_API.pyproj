@@ -30,6 +30,7 @@
     <Compile Include="auth\auth.py" />
     <Compile Include="errors\errors.py" />
     <Compile Include="GP_API.py" />
+    <Compile Include="jsoncheck\json_checker.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="api\" />
@@ -37,11 +38,14 @@
     <Folder Include="auth\__pycache__\" />
     <Folder Include="errors\" />
     <Folder Include="errors\__pycache__\" />
+    <Folder Include="jsoncheck\" />
+    <Folder Include="jsoncheck\__pycache__\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".env" />
     <Content Include="auth\__pycache__\auth.cpython-311.pyc" />
     <Content Include="errors\__pycache__\errors.cpython-311.pyc" />
+    <Content Include="jsoncheck\__pycache__\json_checker.cpython-311.pyc" />
     <Content Include="requirements.txt" />
     <Content Include="vercel.json" />
   </ItemGroup>

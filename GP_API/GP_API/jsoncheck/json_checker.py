@@ -34,7 +34,7 @@ def CheckJson(properties = []):
                 body = request.get_json()
                 keys_body = body.keys() #Buscar keys
             except:
-                abort(ERRO_JSON_MISSING) #Sem corpo JSON mas este é preciso
+                raise JSONMissing() #Sem corpo JSON mas este é preciso
 
 
             #('key',type,size(optional))

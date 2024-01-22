@@ -1,3 +1,4 @@
+import json
 from errors.errors import *
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -40,37 +41,45 @@ def getconnectionDB():
 
 #getconnectionDB().close()
 
+@app.errorhanlder(InputError)
+def error_common(error):
+    return jsonify({"Error": error}), ERRO_INSERIR_DADOS
+
 @app.errorhandler(ERRO_INTERNO)
 def error_501(error):
     return jsonify({"Error":'Erro de servidor Interno'}),ERRO_INTERNO
 
 @app.errorhandler(ERRO_NAO_IMPLEMENTADO)
-def error_501(error):
+def error_500(error):
     return jsonify({"Error":'Endpoint nÃ£o implementado'}),ERRO_NAO_IMPLEMENTADO
 
 @app.errorhandler(ERRO_CONTENT_TYPE)
 def error_415(error):
     return jsonify({"Error":"Content-type nÃ£o definido para 'application/json'. A ignorar pedido"}),ERRO_CONTENT_TYPE
 
-@app.errorhandler(ERRO_JSON_MISSING)
+@app.errorhandler(JSONMissing)
 def error_422(error):
-    return jsonify({"Error":'JSON em falta'}),ERRO_JSON_MISSING
+    return jsonify({"Error": error}),ERRO_JSON_MISSING
 
-@app.errorhandler(ERRO_AUTENTICACAO_FALTA)
+@app.errorhandler(AuthMissing)
 def error_no_token(error):
-    return jsonify({"Error": "Um token (Authorization) nao foi dado num endpoint com restricao de acesso"}),ERRO_AUTENTICACAO_FALTA
+    return jsonify({"Error": error}),ERRO_AUTENTICACAO_FALTA
 
-@app.errorhandler(ERRO_AUTENTICACAO)
+@app.errorhandler(AuthCred)
 def error_hanlder(error):
-    return jsonify({"Error": "Uma conta nao foi encotrada com estas credenciais"}),ERRO_AUTENTICACAO
+    return jsonify({"Error": error}),ERRO_AUTENTICACAO
 
-@app.errorhandler(ERRO_AUTENTICACAO_INVALIDA)
+@app.errorhandler(AuthInvalid)
 def erro_autenticacao_invalida(error):
-    return jsonify({"Error": "O token e invalido"}),ERRO_AUTENTICACAO_INVALIDA
+    return jsonify({"Error": error}),ERRO_AUTENTICACAO_INVALIDA
 
-@app.errorhandler(ERRO_AUTENTICACAO_EXPIRE)
+@app.errorhandler(AuthExpire)
 def erro_autenticacao_invalida(error):
-    return jsonify({"Error": "O token expirou"}),ERRO_AUTENTICACAO_EXPIRE
+    return jsonify({"Error": error}),ERRO_AUTENTICACAO_EXPIRE
+
+@app.errorhandler(AuthDenied)
+def erro_autenticacao_denied(error):
+    return jsonify({"Error": error}),ERRO_ACESSO_NEGADO
     
 @app.errorhandler(JSONPropError)
 def error_handler(error):
@@ -108,7 +117,7 @@ def pedido_recuperacao():
     if request.data:
         body = request.get_json()
     else:
-        abort(ERRO_JSON_MISSING)
+        raise JSONMissing()
 
     result_status = ERRO_NAO_IMPLEMENTADO
 
@@ -124,7 +133,7 @@ def pedido_recupercao_confirm(token):
     
 
 @app.post("/login")
-@CheckJson(properties = [("Nome",str,8),
+@CheckJson(properties = [("Email",str,8),
                          ("PalavraPasse",str,8)])
 def login():
 
@@ -204,21 +213,21 @@ def lista_contas():
 def inserir_conta():
 
     body = request.get_json()
-
-
-    result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
     cursor = connection.cursor(cursor_factory=RealDictCursor) #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta é de aluno)
-    cursor.execute("SELECT * FROM inserir_conta(%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],body["PalavraPasse"],str(body["estado"]),body["acessibilidade"],body["TipoConta"]))
+    cursor.execute("SELECT * FROM inserir_conta(%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],body["PalavraPasse"],body["estado"],body["acessibilidade"],body["TipoConta"]))
     
-    print(cursor.fetchall()[0])
-    
+    connection.commit()
+    cursor.close()
+    connection.close()
 
+    result = cursor.fetchall()[0]['inserir_conta']
+    if result == True:
+        return "OK"
+    else:
+        raise InputError("Erro ao inserir conta")
     
-    if result_status != 200: #200 = OK
-        abort(result_status)
-    return "OK"
         
 
 
@@ -245,7 +254,7 @@ def editar_conta():
 
     if data["Access"] != Access.ADMIN: #Se nao for administrador, temos que saber se este é o proprio utilizador, ele pode editar --SÓ-- a sua password
         if data["userID"] != body["ID_Conta"]:
-            abort(ERRO_ACESSO_NEGADO)
+            raise AuthDenied()
 
         connection = getconnectionDB()
         cursor = connection.cursor()
