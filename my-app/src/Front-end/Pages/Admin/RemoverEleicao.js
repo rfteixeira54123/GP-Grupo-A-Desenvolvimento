@@ -38,6 +38,8 @@ const styleContainer = {
 //  handleCancelar: método para fechar o popup
 const Info = ({ choice, handleCancelar }) => {
   const handleConfirmar = () => {
+    // O que é o ID_LISTA_CANDIDATOS na API ?
+    // o endpoint apenas suporta remover 1 candidato por cada vez
     //Fazer função para remover eleicoes recebidos no array choice
   };
 
@@ -55,8 +57,8 @@ const Info = ({ choice, handleCancelar }) => {
               }}
             >
               {" "}
-              Tem a certeza que deseja remover todos as {choice.length} eleições selecionadas
-              ?
+              Tem a certeza que deseja remover todos as {choice.length} eleições
+              selecionadas ?
             </div>
             <div
               style={{
@@ -84,10 +86,14 @@ const Info = ({ choice, handleCancelar }) => {
               }}
             >
               Tem a certeza que deseja remover a eleição ?
-              <br />Nome: {choice[0].nome}
-              <br />Tipo: {choice[0].cargo_disputa}
-              <br />Início: {choice[0].data_inicio}
-              <br />Fim: {choice[0].data_fim}
+              <br />
+              Nome: {choice[0].nome}
+              <br />
+              Tipo: {choice[0].cargo_disputa}
+              <br />
+              Início: {choice[0].data_inicio}
+              <br />
+              Fim: {choice[0].data_fim}
             </div>
             <div
               style={{

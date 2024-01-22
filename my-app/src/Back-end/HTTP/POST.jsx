@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-function usePost({ Data, FORM_ENDPOINT }) {
+function UsePost({ Data, FORM_ENDPOINT }) {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
+  const [res, setRes] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setStatus("loading");
     setMessage("");
 
@@ -15,13 +15,13 @@ function usePost({ Data, FORM_ENDPOINT }) {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: JSON.parse(localStorage.getItem("Token")),
+        Authorization: localStorage.getItem("Token"),
       },
       body: JSON.stringify(Data),
     })
       .then((response) => {
         if (response.status === 200) {
-          setMessage("successo");
+          return response.json();
         } else if (response.status === 403) {
           setMessage("nao autorizado");
         } else if (response.status === 500) {
@@ -34,25 +34,23 @@ function usePost({ Data, FORM_ENDPOINT }) {
           setMessage("json em falta");
         } else if (response.status === 403) {
           setMessage("nao tem permissao");
-        } else if (response.status === 422) {
-          setMessage("entidade nao processavel");
+        } else if (response.status === 422 || response.status === 425) {
+          setMessage("nao tem tamanho suficiente");
         } else {
           setMessage("erro");
         }
-        console.table(response);
-        return response.json();
+        return null;
       })
-      .then(() => {
-        setMessage("OK");
-        setStatus("success");
+      .then((data) => {
+        console.table(data);
+        if (data.token) localStorage.setItem("Token", data.token);
       })
       .catch((err) => {
         setMessage(err.toString());
         setStatus("error");
       });
   };
-
-  return { handleSubmit, status, message };
+  return { handlePostSubmit: handleSubmit, status, message, res };
 }
 
-export default usePost;
+export default UsePost;

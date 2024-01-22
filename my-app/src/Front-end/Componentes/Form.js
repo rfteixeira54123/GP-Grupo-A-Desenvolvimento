@@ -7,7 +7,7 @@ import React, { useState } from "react";
 
 import * as contants from "../constants";
 import Button from "./FormBtn";
-//import usePost from "../HTTPTest/POST";
+import UsePost from "../../Back-end/HTTP/POST";
 
 const styleForm = {
   width: "100%",
@@ -20,56 +20,33 @@ const styleForm = {
 //Atualizações -> Implementação do pedido POST
 
 const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-
-  const handleEmailChange = (hec) => {
-    const newEmail = hec.target.value;
-    setEmail(newEmail);
-    if (onEmailChange) {
-      onEmailChange(newEmail);
-    }
-  };
-
-  const handlePasswordChange = (hpc) => {
-    const newPassword = hpc.target.value;
-    setPassword(newPassword);
-    if (onPasswordChange) {
-      onPasswordChange(newPassword);
-    }
-  };
-
-  const handleSubmit = () => {
-    navigate('/home'); // alterar a posição onde chamar a home da app.
-    if (onSubmit) {
-      onSubmit(email, password);
-      // navigate('/home');
-    }
-  };
-
-  // const {
-  //   handleSubmit: handleLoginSubmit,
-  //   status,
-  //   message,
-  // } = usePost({
-  //   Data: { email, password },
-  //   FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/login",
-  // });
-
-  // Fim das atualizações
-  //##########################################################################
-
+  const [Nome, setNome] = useState("");
+  const [PalavraPasse, setPalavraPasse] = useState("");
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
 
-  const verifyCampos = () => {
-    if (!password || !email) {
+  const { handlePostSubmit } = UsePost({
+    Data: { Nome: Nome, PalavraPasse: PalavraPasse },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/login",
+  });
+
+  const handleEmailChange = (e) => {
+    setNome(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPalavraPasse(e.target.value);
+  };
+
+  const verifyCampos = (e) => {
+    e.preventDefault();
+
+    if (!PalavraPasse || !Nome) {
       setMessage("Todos os campos devem ser preenchidos.");
       setShow(true);
     } else {
       setShow(false);
-      handleSubmit();
+      handlePostSubmit();
     }
   };
 
@@ -81,15 +58,15 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
         </h3>
         <FloatingLabel
           controlId="floatingInput"
-          label="Email"
+          label="Nome"
           className="w-100 mb-3"
         >
           <Form.Control
-            type="email"
+            type="Nome"
             placeholder="name@example.com"
-            value={email}
+            value={Nome}
             onChange={handleEmailChange}
-            autoComplete="email"
+            autoComplete="Nome"
           />
         </FloatingLabel>
         <FloatingLabel
@@ -98,11 +75,11 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
           className="w-100 mb-4"
         >
           <Form.Control
-            type="password"
+            type="PalavraPasse"
             placeholder="Palavra-passe"
-            value={password}
+            value={PalavraPasse}
             onChange={handlePasswordChange}
-            autoComplete="current-password"
+            autoComplete="current-PalavraPasse"
           />
         </FloatingLabel>
         {show ? (
