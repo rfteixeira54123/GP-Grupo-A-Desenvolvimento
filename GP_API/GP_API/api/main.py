@@ -124,7 +124,7 @@ def pedido_recupercao_confirm(token):
 
 @app.post("/login")
 @CheckJson(properties = [("Nome",str,8),
-                         ("Palavra-Passe",str,8)])
+                         ("PalavraPasse",str,8)])
 def login():
 
     body = request.get_json()
