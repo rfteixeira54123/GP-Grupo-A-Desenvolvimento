@@ -15,7 +15,7 @@ function useGet({ FORM_ENDPOINT }) {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: "token", //alterei para string pois não reconhece a variável 'token'.
+        Authorization: JSON.parse(localStorage.getItem("Token")), //alterei para string pois não reconhece a variável 'token'.
       },
     })
       .then((response) => {

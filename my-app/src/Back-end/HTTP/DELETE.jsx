@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function useDelete({ Data, token, FORM_ENDPOINT }) {
+function useDelete({ Data, FORM_ENDPOINT }) {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
 
@@ -15,7 +15,7 @@ function useDelete({ Data, token, FORM_ENDPOINT }) {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: token,
+        Authorization: JSON.parse(localStorage.getItem("Token")),
       },
       body: JSON.stringify(Data),
     })

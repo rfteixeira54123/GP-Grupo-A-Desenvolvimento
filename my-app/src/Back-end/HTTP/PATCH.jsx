@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function usePatch({ Data, token, FORM_ENDPOINT }) {
+function usePatch({ Data, FORM_ENDPOINT }) {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
 
@@ -15,7 +15,7 @@ function usePatch({ Data, token, FORM_ENDPOINT }) {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: token,
+        Authorization: JSON.parse(localStorage.getItem("Token")),
       },
       body: JSON.stringify(Data),
     })
@@ -56,4 +56,4 @@ function usePatch({ Data, token, FORM_ENDPOINT }) {
   return { handleSubmit, status, message };
 }
 
-export default usePost;
+export default usePatch;
