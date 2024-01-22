@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>GP_API</Name>
     <RootNamespace>GP_API</RootNamespace>
-    <InterpreterId>MSBuild|venv|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>Global|PythonCore|3.11</InterpreterId>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -27,13 +27,21 @@
     <Compile Include="api\json_checker.py" />
     <Compile Include="api\main.py" />
     <Compile Include="api\auth.py" />
+    <Compile Include="auth\auth.py" />
+    <Compile Include="errors\errors.py" />
     <Compile Include="GP_API.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="api\" />
+    <Folder Include="auth\" />
+    <Folder Include="auth\__pycache__\" />
+    <Folder Include="errors\" />
+    <Folder Include="errors\__pycache__\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".env" />
+    <Content Include="auth\__pycache__\auth.cpython-311.pyc" />
+    <Content Include="errors\__pycache__\errors.cpython-311.pyc" />
     <Content Include="requirements.txt" />
     <Content Include="vercel.json" />
   </ItemGroup>
@@ -47,6 +55,9 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.11" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

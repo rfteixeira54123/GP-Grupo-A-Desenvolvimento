@@ -1,20 +1,20 @@
 {
 	"rewrites":[
-        {
-         "source": "/api/(.*)",
-         "destination": "/api/auth.py"
+      {
+         "source": "/auth/(.*)",
+         "destination": "/auth/auth.py"
+      },
+      {
+         "source": "/errors/(.*)",
+         "destination": "/errors/errors.py"
+      },
+      {
+         "source": "/jsoncheck/(.*)",
+         "destination": "/jsoncheck/json_checker.py"
       },
       {
          "source": "/(.*)",
          "destination": "/api/main.py"
-      },
-      {
-         "source": "/api/(.*)",
-         "destination": "/api/errors.py"
-      },
-      {
-         "source": "/api/(.*)",
-         "destination": "/api/json_checker.py"
       }
 	]
 }

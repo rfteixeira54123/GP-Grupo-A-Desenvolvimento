@@ -1,14 +1,15 @@
-from errors import *
+from errors.errors import *
 import psycopg2
+from psycopg2.extras import RealDictCursor
 from flask import Flask,request,jsonify,abort
 from flask_cors import CORS
-import auth as auth
-from auth import refresh_token, error_type
+import auth.auth as auth
+from auth.auth import refresh_token, error_type
 import os
 from dataclasses import dataclass
 import jwt
 import datetime
-from json_checker import CheckJson
+from jsoncheck.json_checker import CheckJson
 
 
 
@@ -55,21 +56,21 @@ def error_415(error):
 def error_422(error):
     return jsonify({"Error":'JSON em falta'}),ERRO_JSON_MISSING
 
-@app.errorhandler(AuthFalta)
+@app.errorhandler(ERRO_AUTENTICACAO_FALTA)
 def error_no_token(error):
-    return jsonify({"Error": error}),ERRO_AUTENTICACAO_FALTA
+    return jsonify({"Error": "Um token (Authorization) nao foi dado num endpoint com restricao de acesso"}),ERRO_AUTENTICACAO_FALTA
 
-@app.errorhandler(AuthErroLogin)
+@app.errorhandler(ERRO_AUTENTICACAO)
 def error_hanlder(error):
-    return jsonify({"Error": error}),ERRO_AUTENTICACAO
+    return jsonify({"Error": "Uma conta nao foi encotrada com estas credenciais"}),ERRO_AUTENTICACAO
 
-@app.errorhandler(AuthInvalido)
+@app.errorhandler(ERRO_AUTENTICACAO_INVALIDA)
 def erro_autenticacao_invalida(error):
-    return jsonify({"Error": error}),ERRO_AUTENTICACAO_INVALIDA
+    return jsonify({"Error": "O token e invalido"}),ERRO_AUTENTICACAO_INVALIDA
 
-@app.errorhandler(AuthExpire)
+@app.errorhandler(ERRO_AUTENTICACAO_EXPIRE)
 def erro_autenticacao_invalida(error):
-    return jsonify({"Error": error}),ERRO_AUTENTICACAO_EXPIRE
+    return jsonify({"Error": "O token expirou"}),ERRO_AUTENTICACAO_EXPIRE
     
 @app.errorhandler(JSONPropError)
 def error_handler(error):
@@ -124,7 +125,7 @@ def pedido_recupercao_confirm(token):
 
 @app.post("/login")
 @CheckJson(properties = [("Nome",str,8),
-                         ("Palavra-Passe",str,8)])
+                         ("PalavraPasse",str,8)])
 def login():
 
     body = request.get_json()
@@ -195,9 +196,10 @@ def lista_contas():
 @auth.Authentication(access=[Access.ADMIN])
 @CheckJson(properties = [("Nome",str,8),
                          ("Email",str,3),
-                         ("Palavra-Passe",str,8),
+                         ("PalavraPasse",str,8),
                          ("estado",bool),
-                         ("acessibilidade",bool)
+                         ("acessibilidade",bool),
+                         ("TipoConta",str)
                          ])
 def inserir_conta():
 
@@ -207,13 +209,16 @@ def inserir_conta():
     result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
-    cursor = connection.cursor() #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta é de aluno)
-    cursor.callproc("InserirConta",(body["Nome"],body["Email"],body["Palavra-Passe"],body["estado"],body["acessibilidade"]))
+    cursor = connection.cursor(cursor_factory=RealDictCursor) #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta é de aluno)
+    cursor.execute("SELECT * FROM inserir_conta(%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],body["PalavraPasse"],str(body["estado"]),body["acessibilidade"],body["TipoConta"]))
+    
+    print(cursor.fetchall()[0])
     
 
     
     if result_status != 200: #200 = OK
         abort(result_status)
+    return "OK"
         
 
 
@@ -439,25 +444,17 @@ def adicionar_candidato_eleicao():
 
 @app.get("/candidato/listar")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
+@CheckJson(properties=("ID_Eleicao",int)
+           )
 def listar_candidato():    
-    
+    body = request.get_json()
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("listarGestorCandidatos") #Precisamos de saber quantos gestores candidatos existem
     
-    
-    
-    Ids_Listas = [0,1,2,4]
+    cursor.callproc("listarCandidatos",(str(body["ID_Eleicao"]),)) #Buscar os candidatos de cada gestor de candidatos diferente
 
-    #TODO <- Mudar isto, talvez criar multiplas conexões com a base de dados é degradante para a API, talvez o que queremos é listar candidatos de um gestor só
-    #Se fizermos isto preciso entao de fazer outro endpoint que devolve os IDs da lista de candidatos para depois podermos selecionar este
-
-    for _id in Ids_Listas:
-        cursor = connection.cursor()
-        cursor.callproc("listarCandidatos",(_id,)) #Buscar os candidatos de cada gestor de candidatos diferente
-
-        for item in cursor.fetchall():
-            print(item)
+    for item in cursor.fetchall():
+        print(item)
 
         
     
