@@ -41,7 +41,7 @@ def getconnectionDB():
 
 #getconnectionDB().close()
 
-@app.errorhanlder(InputError)
+@app.errorhandler(InputError)
 def error_common(error):
     return jsonify({"Error": error}), ERRO_INSERIR_DADOS
 
@@ -214,15 +214,21 @@ def inserir_conta():
 
     body = request.get_json()
     
+    if body["TipoConta"] != "Administrador" and body["TipoConta"] != "Aluno":
+        raise InputError("Tipo de conta invalido")
+        
+        
+    
     connection = getconnectionDB()
     cursor = connection.cursor(cursor_factory=RealDictCursor) #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta é de aluno)
     cursor.execute("SELECT * FROM inserir_conta(%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],body["PalavraPasse"],body["estado"],body["acessibilidade"],body["TipoConta"]))
+    result = cursor.fetchall()[0]['inserir_conta']
     
     connection.commit()
     cursor.close()
     connection.close()
 
-    result = cursor.fetchall()[0]['inserir_conta']
+    
     if result == True:
         return "OK"
     else:
