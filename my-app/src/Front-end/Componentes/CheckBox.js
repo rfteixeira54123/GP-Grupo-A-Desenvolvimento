@@ -4,8 +4,8 @@ import { BiCheckboxSquare } from "react-icons/bi";
 
 import * as constants from "../constants";
 
-const Check = ({onChange}) => {
-  const [select, setSelect] = useState(false);
+const Check = ({onChange, state}) => {
+  const [select, setSelect] = useState(state);
 
   const handleClick = () => {
     setSelect(!select);
@@ -32,6 +32,10 @@ const Check = ({onChange}) => {
       />
     );
   }
+};
+
+Check.propsDefault = {
+  state: false,
 };
 
 export default Check;
