@@ -6,6 +6,7 @@ function UseGet({ Data, FORM_ENDPOINT }) {
   const [res, setRes] = useState("");
 
   const handleSubmit = () => {
+    console.log("Entra no pedido GET");
     setStatus("loading");
     setMessage("");
 
@@ -43,9 +44,12 @@ function UseGet({ Data, FORM_ENDPOINT }) {
       })
       .then((data) => {
         console.table(data);
+        setRes(data);
+      })
+      .catch((error) => {
+        console.error("Erro durante o pedido GET:", error);
       });
   };
-  console.log("Entra no pedido de logout");
   return { handleGetSubmit: handleSubmit, status, message, res };
 }
 
