@@ -55,8 +55,7 @@ const Perfil = (props) => {
   const handleLogout = () => {
     console.log("Entra no logout");
     handleGetSubmit();
-    navigate("/");
-    // localStorage.removeItem("Token");
+    localStorage.removeItem("Token");
   };
 
   if (hovering) {
@@ -83,7 +82,7 @@ const Perfil = (props) => {
           <HiMenu size={32} color={constants.color.secondary} />
         </div>
         {/* <Btn id="PerfilBtn1" label="Alterar palavra-passe" link="/" /> */}
-        <Btn id="PerfilBtn2" label="Sair" handle={handleLogout} />
+        <Btn id="PerfilBtn2" label="Sair" handle={handleLogout} link="/" />
       </div>
     );
   } else {
