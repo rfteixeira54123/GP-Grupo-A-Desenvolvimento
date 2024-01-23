@@ -19,9 +19,9 @@ const styleForm = {
 //##########################################################################
 //Atualizações -> Implementação do pedido POST
 
-const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
-  const [Email, setEmail] = useState("");
-  const [PalavraPasse, setPalavraPasse] = useState("");
+const FormLogin = () => {
+  const [Email, setEmail] = useState(localStorage.getItem("email"));
+  const [PalavraPasse, setPalavraPasse] = useState(localStorage.getItem("pass"));
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -52,6 +52,8 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
         .then((data) => {
           // Handle success or access data from the response if needed
           if (localStorage.getItem("Token")) {
+            localStorage.setItem("email", Email);
+            localStorage.setItem("pass", PalavraPasse);
             // Assuming navigate is a function for navigating to another page
             navigate("/home");
           }
@@ -67,7 +69,7 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
 
   return (
     <>
-      <Form style={styleForm} onSubmit={verifyCampos}>
+      <Form style={styleForm}>
         <h3 style={{ color: contants.color.white }} className="mb-4">
           Bem-vindo
         </h3>
@@ -79,7 +81,7 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
           <Form.Control
             type="email"
             placeholder="name@example.com"
-            value={Email}
+            defaultValue={Email}
             onChange={handleEmailChange}
             autoComplete="Email"
           />
@@ -90,11 +92,11 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
           className="w-100 mb-4"
         >
           <Form.Control
-            type="PalavraPasse"
+            type="password"
             placeholder="Palavra-passe"
-            value={PalavraPasse}
+            defaultValue={PalavraPasse}
             onChange={handlePasswordChange}
-            autoComplete="current-PalavraPasse"
+            autoComplete="current-password"
           />
         </FloatingLabel>
         {show ? (
