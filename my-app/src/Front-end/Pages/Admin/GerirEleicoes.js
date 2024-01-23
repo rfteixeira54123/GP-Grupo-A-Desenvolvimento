@@ -53,6 +53,7 @@ const Page = () => {
   const [showButtons, setShowButtons] = useState(false);
   const [selected, setSelected] = useState([]);
   const [toEdit, setToEdit] = useState(null);
+  const [toDelete, setToDelete] = useState(null);
   const [forceRenderButtons, setForceRenderButtons] = useState(false);
   const [statePopup, setStatePopup] = useState(0);
   const [forceRenderTable, setForceRenderTable] = useState(false);
@@ -82,6 +83,7 @@ const Page = () => {
       }));
       console.log(res);
       setEleicoes(eleicaoList);
+      handleOptionClick();
     }
   }, [res]);
 
@@ -104,8 +106,8 @@ const Page = () => {
   };
 
   const handleDelete = (obj) => {
-    setSelected([obj]);
-    setStatePopup(2);
+    setToDelete(obj)
+    setStatePopup(4);
   };
 
   const handleEdit = (obj) => {
@@ -131,6 +133,13 @@ const Page = () => {
       case 3:
         return (
           <FormEleicao obj={toEdit} handleCancelar={() => setStatePopup(0)} />
+        );
+      case 4:
+        return (
+          <RemoverEleicao
+            choice={[toDelete]}
+            handleCancelar={() => setStatePopup(0)}
+          />
         );
       default:
         return <></>;
@@ -192,7 +201,7 @@ const Page = () => {
             justifyContent: "center",
           }}
         >
-          {decidePopup(statePopup)}
+          {decidePopup()}
         </div>
       </div>
     </div>

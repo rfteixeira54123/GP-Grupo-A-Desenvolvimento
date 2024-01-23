@@ -40,6 +40,14 @@ const styleContainer = {
   position: "relative",
 };
 
+const styleBtnsForm = {
+  width: "96%",
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  justifyItems: "center",
+  paddingBlock: "1.5rem",
+};
+
 // Recebe props:
 //  array: objetos do tipo Candidato
 const Page = () => {
@@ -73,6 +81,9 @@ const Page = () => {
   const [showButtons, setShowButtons] = useState(false);
   const [selected, setSelected] = useState([]);
   const [toEdit, setToEdit] = useState(null);
+  const [toDelete, setToDelete] = useState(null);
+  const [forceRenderButtons, setForceRenderButtons] = useState(false);
+  const [statePopup, setStatePopup] = useState(0);
 
   const updateShowButtons = (array) => {
     if (array.includes(-1)) {
@@ -88,9 +99,15 @@ const Page = () => {
     setForceRenderButtons((prevState) => !prevState);
   };
 
-  const [forceRenderButtons, setForceRenderButtons] = useState(false);
+  const handleDelete = (obj) => {
+    setToDelete(obj);
+    setStatePopup(4);
+  }
 
-  const [statePopup, setStatePopup] = useState(0);
+  const handleEdit = (obj) => {
+    setToEdit(obj);
+    setStatePopup(3);
+  }
 
   const decidePopup = () => {
     switch (statePopup) {
@@ -100,20 +117,24 @@ const Page = () => {
         return <RemoverCandidato choice={selected} handleCancelar={() => setStatePopup(0)}/>;
       case 3:
         return <FormCandidato obj={toEdit} handleCancelar={() => setStatePopup(0)} />;
+      case 4:
+        return <RemoverCandidato choice={[toDelete]} handleCancelar={() => setStatePopup(0)}/>;
       default:
         return <></>;
     }
   };
 
-  const handleDelete = (obj) => {
-    setSelected([obj]);
-    setStatePopup(2);
-  }
-
-  const handleEdit = (obj) => {
-    setToEdit(obj);
-    setStatePopup(3);
-  }
+  const stylePopUp = {
+    display: statePopup === 0 ? "none" : "flex",
+    backgroundColor: constants.color.white70,
+    position: "absolute",
+    bottom: -4,
+    left: -4,
+    width: "101%",
+    height: "101%",
+    alignItems: "center",
+    justifyContent: "center",
+  };
 
   return (
     <div style={styleWindow}>
@@ -134,17 +155,8 @@ const Page = () => {
             handleEdit={handleEdit}
           />
         </div>
-        <div
-          key={
-            forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons"
-          }
-          style={{
-            width: "96%",
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            justifyItems: "center",
-            paddingBlock: "1.5rem",
-          }}
+        <div key={ forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons" }
+          style={styleBtnsForm}
         >
           <div style={{ gridColumn: 1 }}></div>
           <div style={{ gridColumn: 2 }}>
@@ -161,19 +173,7 @@ const Page = () => {
             />
           </div>
         </div>
-        <div
-          style={{
-            display: statePopup === 0 ? "none" : "flex",
-            backgroundColor: constants.color.white70,
-            position: "absolute",
-            bottom: -4,
-            left: -4,
-            width: "101%",
-            height: "101%",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <div style={stylePopUp}>
           {decidePopup(statePopup)}
         </div>
       </div>

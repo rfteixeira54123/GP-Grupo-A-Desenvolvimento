@@ -80,30 +80,26 @@ const styleLI = {
   gap: "1rem",
 };
 
+const styleBtnFloat = {
+  position: "absolute",
+  bottom: "15px",
+  right: "15px",
+  paddingInline: "15px",
+  direction: "rtl",
+  width: "inherit",
+};
+
 // Recebe:
 //  obj: eleicao a editar (opcional) se for pra editar tem id_eleicao
 //  handleCancelar: método para fechar o popup
 const FormC = ({ obj, handleCancelar }) => {
   //Fazer get para buscar candidatos da eleição.
-  const [candidatos, setCandidatos] = useState([
-    {
-      id_candidato: 0,
-      nome: "Nome do Candidato",
-      tipo: "Lista",
-      descricao:
-        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifendmagnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend ",
-    },
-    { id_candidato: 1, nome: "Nome do Candidato1", tipo: "Lista" },
-    { id_candidato: 2, nome: "Nome do Candidato2", tipo: "Presidente" },
-    { id_candidato: 3, nome: "Nome do Candidato3", tipo: "Lista" },
-    { id_candidato: 4, nome: "Nome do Candidato4", tipo: "Diretor" },
-    { id_candidato: 5, nome: "Nome do Candidato5", tipo: "Lista" },
-  ]);
+  const [candidatos, setCandidatos] = useState([]); //Atualizar com o array de candidatos da eleição.
 
-  const [Tipo, setTipo] = useState("");
-  const [Nome, setNome] = useState("");
-  const [Inicio, setInicio] = useState("");
-  const [Fim, setFim] = useState("");
+  const [Tipo, setTipo] = useState(obj.cargo_disputa);
+  const [Nome, setNome] = useState(obj.nome);
+  const [Inicio, setInicio] = useState(obj.data_inicio);
+  const [Fim, setFim] = useState(obj.data_fim);
 
   const handleTipo = (e) => {
     setTipo(e.target.value);
@@ -151,8 +147,7 @@ const FormC = ({ obj, handleCancelar }) => {
 
   const handleAdicionarCandidato = (choices) => {
     //Fazer função para adicionar candidato
-    console.log("adicionar");
-    console.table(choices);
+    // console.table(choices);
     setCandidatos(choices);
   };
 
@@ -171,6 +166,16 @@ const FormC = ({ obj, handleCancelar }) => {
       default:
         return <></>;
     }
+  };
+
+  const stylePopUp = {
+    display: statePopup === 0 ? "none" : "flex",
+    backgroundColor: constants.color.white70,
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   // atualiza o array de candidatos da eleicao
@@ -194,8 +199,7 @@ const FormC = ({ obj, handleCancelar }) => {
               <Form.Label>Nome: </Form.Label>
               <Form.Control
                 type="text"
-                defaultValue={obj.nome}
-                value={Nome}
+                defaultValue={Nome}
                 onChange={handleNome}
               />
             </Form.Group>
@@ -205,8 +209,7 @@ const FormC = ({ obj, handleCancelar }) => {
               <Form.Label>Tipo: </Form.Label>
               <Form.Control
                 type="text"
-                defaultValue={obj.cargo_disputa}
-                value={Tipo}
+                defaultValue={Tipo}
                 onChange={handleTipo}
               />
             </Form.Group>
@@ -217,9 +220,8 @@ const FormC = ({ obj, handleCancelar }) => {
             <Form.Group className="mb-3">
               <Form.Label>Início: </Form.Label>
               <Form.Control
-                type="datetime-local"
-                defaultValue={obj.data_inicio}
-                value={Inicio}
+                type="date"
+                defaultValue={Inicio} // formatar para AAAA-MM-DD
                 onChange={handleInicio}
               />
             </Form.Group>
@@ -229,65 +231,29 @@ const FormC = ({ obj, handleCancelar }) => {
               <Form.Label>Fim: </Form.Label>
               <Form.Control
                 type="date"
-                defaultValue={obj.data_fim}
-                value={Fim}
+                defaultValue={Fim} // formatar para AAAA-MM-DD
                 onChange={handleFim}
               />
             </Form.Group>
           </Col>
         </Row>
       </Form>
-      <div
-        style={{
-          ...styleContainer,
-          maxWidth: "40rem",
-          // maxHeight: "inherit",
-          overflowY: "hidden",
-        }}
-      >
-        <div
-          style={{
-            ...styleTop,
-            fontWeight: 600,
-            paddingBlock: "4px",
-            fontSize: "15px",
-          }}
-        >
-          Candidatos
-        </div>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            marginBlock: "1rem",
-          }}
-        >
-          <ul
-            style={{
-              overflowY: "auto",
-              height: "calc(100% - 6rem)",
-              width: "100%",
-              paddingInline: "3rem",
-            }}
-          >
+      <div style={{ ...styleContainer, maxWidth: "40rem", overflowY: "hidden" }}>
+        <div style={styleTopInside}>Candidatos</div>
+        <div style={styleContainerInside}>
+          <ul style={styleUL}>
             {candidatos.map((obj, index) => (
-              <li key={"candidato" + index}>{obj.nome}</li>
+              <li key={"candidato" + index}>
+                <div style={styleLI}>
+                  <div>{obj.nome}</div>
+                  <TiDelete title="Remover candidato" color={constants.color.red_light} 
+                  size={30} onClick={() => handleRemoveCandidato(index)}/>
+                </div>
+              </li>
             ))}
           </ul>
         </div>
-        <div
-          style={{
-            position: "absolute",
-            bottom: "15px",
-            right: "15px",
-            paddingInline: "15px",
-            direction: "rtl",
-            width: "inherit",
-          }}
-        >
+        <div style={styleBtnFloat}>
           <Button
             label="Adicionar Candidatos"
             handle={() => setStatePopup(1)}
@@ -301,19 +267,7 @@ const FormC = ({ obj, handleCancelar }) => {
           handle={obj.id_eleicao ? handleEditar : handleAdicionar}
         />
       </div>
-      <div
-        style={{
-          display: statePopup === 0 ? "none" : "flex",
-          backgroundColor: constants.color.white70,
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {decidePopup(statePopup)}
-      </div>
+      <div style={stylePopUp}>{decidePopup()}</div>
     </div>
   );
 };

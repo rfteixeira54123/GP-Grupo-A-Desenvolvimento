@@ -107,7 +107,7 @@ const Info = ({ choice, handleCancelar, variant }) => {
               <Button label="Cancelar" handle={handleCancelar} />
               <Button
                 label="Confirmar"
-                handle={variant ? handleConfirmarDesativar : handleConfirmarDesativar}
+                handle={variant ? handleConfirmarDesativar : handleConfirmarRemover}
                 danger={true}
                 disabled={true}
               />
