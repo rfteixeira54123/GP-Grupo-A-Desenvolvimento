@@ -1,57 +1,52 @@
 import { useState } from "react";
 
-function useGet({ FORM_ENDPOINT }) {
+function UseGet({ Data, FORM_ENDPOINT }) {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
+  const [res, setRes] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setStatus("loading");
     setMessage("");
 
-    fetch(FORM_ENDPOINT, {
+    return fetch(FORM_ENDPOINT, {
       method: "GET",
       mode: "cors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: JSON.parse(localStorage.getItem("Token")), //alterei para string pois não reconhece a variável 'token'.
+        Authorization: localStorage.getItem("Token"),
       },
     })
       .then((response) => {
         if (response.status === 200) {
-          setMessage("successo");
+          return response.json();
+        } else if (response.status === 401) {
+          throw "não autorizado";
         } else if (response.status === 403) {
-          setMessage("nao autorizado");
+          throw "nao autorizado";
         } else if (response.status === 500) {
-          setMessage("server error");
+          throw "server error";
         } else if (response.status === 501) {
-          setMessage("nao implementado");
+          throw "nao implementado";
         } else if (response.status === 415) {
-          setMessage("nao definido");
+          throw "nao definido";
         } else if (response.status === 422) {
-          setMessage("json em falta");
+          throw "nao tem tamanho suficiente";
         } else if (response.status === 403) {
-          setMessage("nao tem permissao");
-        } else if (response.status === 422) {
-          setMessage("entidade nao processavel");
+          throw "nao tem permissao";
+        } else if (response.status === 425) {
+          throw "nao tem tamanho suficiente";
         } else {
-          setMessage("erro");
+          throw "erro";
         }
-        console.table(response);
-        return response.json();
       })
-      .then(() => {
-        setMessage("OK");
-        setStatus("success");
-      })
-      .catch((err) => {
-        setMessage(err.toString());
-        setStatus("error");
+      .then((data) => {
+        console.table(data);
       });
   };
-
-  return { handleSubmit, status, message };
+  console.log("Entra no pedido de logout");
+  return { handleGetSubmit: handleSubmit, status, message, res };
 }
 
-export default useGet;
+export default UseGet;

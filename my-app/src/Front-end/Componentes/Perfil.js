@@ -2,6 +2,8 @@ import { HiMenu } from "react-icons/hi";
 import * as constants from "../constants";
 import Btn from "./ButtonTopMenu";
 import { useState } from "react";
+import UseGet from "../../Back-end/HTTP/GET";
+import { useNavigate } from "react-router-dom";
 
 const stylePerfil = {
   background: constants.color.white60,
@@ -39,8 +41,22 @@ const styleNome = {
 const Perfil = (props) => {
   const [hovering, setHovering] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleClick = () => {
     setHovering(!hovering);
+  };
+
+  const { handleGetSubmit, status, msg, res } = UseGet({
+    Data: null,
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/logout",
+  });
+
+  const handleLogout = () => {
+    console.log("Entra no logout");
+    handleGetSubmit();
+    navigate("/");
+    localStorage.removeItem("Token");
   };
 
   if (hovering) {
@@ -67,7 +83,7 @@ const Perfil = (props) => {
           <HiMenu size={32} color={constants.color.secondary} />
         </div>
         {/* <Btn id="PerfilBtn1" label="Alterar palavra-passe" link="/" /> */}
-        <Btn id="PerfilBtn2" label="Sair" link="/" />
+        <Btn id="PerfilBtn2" label="Sair" handle={handleLogout} />
       </div>
     );
   } else {
