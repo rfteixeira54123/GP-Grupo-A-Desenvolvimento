@@ -228,7 +228,7 @@ const FormC = ({ obj, handleCancelar }) => {
             <Form.Group className="mb-3">
               <Form.Label>Fim: </Form.Label>
               <Form.Control
-                type="datetime-local"
+                type="date"
                 defaultValue={obj.data_fim}
                 value={Fim}
                 onChange={handleFim}

@@ -21,7 +21,9 @@ const styleForm = {
 
 const FormLogin = () => {
   const [Email, setEmail] = useState(localStorage.getItem("email"));
-  const [PalavraPasse, setPalavraPasse] = useState(localStorage.getItem("pass"));
+  const [PalavraPasse, setPalavraPasse] = useState(
+    localStorage.getItem("pass")
+  );
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
 
