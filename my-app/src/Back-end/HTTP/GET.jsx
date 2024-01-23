@@ -6,7 +6,6 @@ function UseGet({ Data, FORM_ENDPOINT }) {
   const [res, setRes] = useState("");
 
   const handleSubmit = () => {
-    console.log("Entra no pedido GET");
     setStatus("loading");
     setMessage("");
 
@@ -43,7 +42,6 @@ function UseGet({ Data, FORM_ENDPOINT }) {
         }
       })
       .then((data) => {
-        console.table(data);
         setRes(data);
       })
       .catch((error) => {

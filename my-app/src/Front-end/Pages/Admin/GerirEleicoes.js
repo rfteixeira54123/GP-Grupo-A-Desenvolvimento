@@ -49,7 +49,7 @@ const styleContainer = {
 const Page = () => {
   //##########################################################################
   //Atualizações -> Implementação do pedido GET
-
+  const [flag, setFlag] = useState(true);
   const [showButtons, setShowButtons] = useState(false);
   const [selected, setSelected] = useState([]);
   const [toEdit, setToEdit] = useState(null);
@@ -65,27 +65,21 @@ const Page = () => {
   });
 
   useEffect(() => {
-    handleGetSubmit();
+    if (flag) {
+      handleGetSubmit();
+      setFlag(false);
+    }
   });
 
   useEffect(() => {
-    console.log(res);
-    if (Array.isArray(res)) {
-      const eleicaoList = res.map((eleicao) => {
-        // const eleicaoList = res.map((eleicao) => {
-        //   const novaEleicao = new Eleicao(eleicao);
-        //   gereEleicao.criarEleicao(novaEleicao);
-        //   //Formatar a eleição para aparecer no formato correto
-        //   const eleicaoFormatada = {
-        //     id_eleicao: eleicao.id_eleicao,
-        //     nome: eleicao.nome,
-        //     cargo_disputa: eleicao.cargo_disputa,
-        //     data_inicio: formatarData(eleicao.data_inicio),
-        //     data_fim: formatarData(eleicao.data_fim),
-        //   };
-        //   return eleicaoFormatada;
-        // });
-      });
+    if (res && res.Eleicoes && Array.isArray(res.Eleicoes)) {
+      const eleicaoList = res.Eleicoes.map((eleicao) => ({
+        id_eleicao: eleicao.ID_Eleicao,
+        nome: eleicao.Nome,
+        cargo_disputa: eleicao.Cargo_Disputa,
+        data_inicio: eleicao.Data_Inicio,
+        data_fim: eleicao.Data_Fim,
+      }));
 
       setEleicoes(eleicaoList);
     }
