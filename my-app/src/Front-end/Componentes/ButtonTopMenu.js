@@ -3,7 +3,6 @@ import * as constants from "../constants";
 import { useState } from "react";
 
 // Recebe props:
-//  id: identificador do botão
 //  label: texto do botão
 //  link: rota que mostra a nova página ao clique do botão.
 const Btn = (props) => {
@@ -51,7 +50,6 @@ const Btn = (props) => {
     <>
       <Link to={props.link} style={{ textDecoration: "none" }}>
         <button
-          id={props.id}
           style={buttonStyle}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}

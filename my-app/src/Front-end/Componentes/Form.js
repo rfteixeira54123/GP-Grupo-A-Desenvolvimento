@@ -7,7 +7,7 @@ import React, { useState } from "react";
 
 import * as contants from "../constants";
 import Button from "./FormBtn";
-import UsePost from "../../Back-end/HTTP/POST";
+import UsePost from "../../Back-end/HTTP/myPOST";
 
 const styleForm = {
   width: "100%",
@@ -20,18 +20,19 @@ const styleForm = {
 //Atualizações -> Implementação do pedido POST
 
 const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
-  const [Nome, setNome] = useState("");
+  const [Email, setEmail] = useState("");
   const [PalavraPasse, setPalavraPasse] = useState("");
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
-  const { handlePostSubmit } = UsePost({
-    Data: { Nome: Nome, PalavraPasse: PalavraPasse },
+  const { handlePostSubmit, status, msg, res } = UsePost({
+    Data: { Email: Email, PalavraPasse: PalavraPasse },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/login",
   });
 
   const handleEmailChange = (e) => {
-    setNome(e.target.value);
+    setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -41,12 +42,25 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
   const verifyCampos = (e) => {
     e.preventDefault();
 
-    if (!PalavraPasse || !Nome) {
+    if (!PalavraPasse || !Email) {
       setMessage("Todos os campos devem ser preenchidos.");
       setShow(true);
     } else {
       setShow(false);
-      handlePostSubmit();
+      handlePostSubmit()
+        .then((data)=>{
+          // Handle success or access data from the response if needed
+          if (localStorage.getItem("Token")) {
+            // Assuming navigate is a function for navigating to another page
+            navigate("/home");
+          }
+        })
+        .catch((error) => {
+          // Handle error
+          // console.error("Error in handlePostSubmit:", error);
+          setMessage(error);
+          setShow(true);
+        });
     }
   };
 
@@ -58,15 +72,15 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
         </h3>
         <FloatingLabel
           controlId="floatingInput"
-          label="Nome"
+          label="Email"
           className="w-100 mb-3"
         >
           <Form.Control
-            type="Nome"
+            type="email"
             placeholder="name@example.com"
-            value={Nome}
+            value={Email}
             onChange={handleEmailChange}
-            autoComplete="Nome"
+            autoComplete="Email"
           />
         </FloatingLabel>
         <FloatingLabel
@@ -114,7 +128,7 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
           ""
         )}
       </Form>
-      <Button id="" label="Entrar" handle={verifyCampos} disable />
+      <Button label="Entrar" handle={verifyCampos} />
     </>
   );
 };

@@ -57,7 +57,6 @@ const Btn = (props) => {
       <>
         <Link to={props.link} style={{ textDecoration: "none" }}>
           <button
-            id={props.id}
             style={buttonStyle}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -72,7 +71,6 @@ const Btn = (props) => {
     return (
       <>
         <button
-          id={props.id}
           style={buttonStyle}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
