@@ -158,9 +158,7 @@ const Page = () => {
           />
         </div>
         <div
-          key={
-            forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons"
-          }
+          key={forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons"}
           style={{
             width: "96%",
             display: "grid",

@@ -235,7 +235,7 @@ export const TableCandidatos = (props) => {
                 </tr>
               ))  : 
               <tr>
-                <td colSpan={7} 
+                <td colSpan={5} 
                 style={{
                   textAlign: "center",
                   paddingBlock: "2rem",
@@ -258,6 +258,7 @@ export const TableCandidatos = (props) => {
 //  handleCheckboxChange: método que lida com a seleção dos checkboxes.
 //  handleDelete: método chamado ao clique do botões de remover.
 //  handleEdit: método chamado ao clique do botões de editar.
+//  handleEnable: método chamado ao clique do checkbox de estado.
 export const TableUtilizadores = (props) => {
 
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
@@ -332,13 +333,13 @@ export const TableUtilizadores = (props) => {
                   <td style={{...styleCell, textAlign: "start"}}>{user.email}</td>
                   <td style={styleCell}>{user.numero_id}</td>
                   <td style={styleCell}>{user.tipo}</td>
-                  <td style={styleCell}><CheckBoxEstado state={user.estado} /></td>
+                  <td style={styleCell} onClick={() => props.handleEnable(user)} ><CheckBoxEstado state={user.estado} /></td>
                   <td style={styleCell} onClick={() => props.handleEdit(user)} ><MdOutlineEdit size={25} /></td>
                   <td style={styleCell} onClick={() => props.handleDelete(user)}><AiFillDelete size={22} /></td>
                 </tr>
               ))  : 
               <tr>
-                <td colSpan={7} 
+                <td colSpan={8} 
                 style={{
                   textAlign: "center",
                   paddingBlock: "2rem",
@@ -435,7 +436,7 @@ export const TableEventos = (props) => {
                 </tr>
               ))  : 
               <tr>
-                <td colSpan={7} 
+                <td colSpan={5} 
                 style={{
                   textAlign: "center",
                   paddingBlock: "2rem",

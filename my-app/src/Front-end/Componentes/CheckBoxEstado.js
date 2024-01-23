@@ -25,7 +25,7 @@ const Check = (props) => {
   if (!select) {
     return (
       <>
-        <div style={style} onClick={handleClick}>
+        <div style={style}>
           <BiCheckbox size="1.7rem" color={constants.color.secondary} />
           <span style={styleText}>Ativar</span>
         </div>
@@ -34,7 +34,7 @@ const Check = (props) => {
   } else {
     return (
       <>
-        <div style={style} onClick={handleClick}>
+        <div style={style}>
           <BiCheckboxChecked size="1.7rem" color={constants.color.secondary} />
           <span style={styleText}>Desativar</span>
         </div>
