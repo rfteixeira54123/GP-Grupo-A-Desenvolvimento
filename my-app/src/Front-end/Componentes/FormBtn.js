@@ -19,12 +19,11 @@ const buttonStyle = {
 };
 
 // Recebe props:
-//  id: identificador do botão
 //  label: texto do botão
 //  handle: ação do botão
 const Button = (props) => {
   return (
-    <button id={props.id} style={buttonStyle} onClick={props.handle}>
+    <button style={buttonStyle} onClick={props.handle}>
       {props.label}
     </button>
   );
