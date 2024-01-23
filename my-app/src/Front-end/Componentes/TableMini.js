@@ -69,7 +69,7 @@ const Mini = ({ candidatos, selecionados, handleCheckboxChange }) => {
       </thead>
       <tbody>
         {candidatos.map((obj, index) => (
-          <tr>
+          <tr key={"CandiSelect"+index}>
             <td style={{ ...styleCell, padding: "0px", paddingInline: "0px" }}>
               <CheckBox
                 state={selecionados.includes(obj.id_candidato)}

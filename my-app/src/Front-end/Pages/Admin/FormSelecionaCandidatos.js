@@ -39,6 +39,7 @@ const styleContainer = {
 // Recebe:
 //  selecionados: array de ids dos candidatos selecionados
 //  handleCancelar: método para fechar o popup
+//  handleAdicionar: método para atualizar os candidatos selecionados
 const FormC = ({ selecionados, handleCancelar, handleAdicionar }) => {
   // Fazer GET candidatos da aplicação com base no tipo
   const [candidatos, setCandidatos] = useState([
@@ -70,7 +71,7 @@ const FormC = ({ selecionados, handleCancelar, handleAdicionar }) => {
     { id_candidato: 59, nome: "Nome do Candidato5", tipo: "Lista" },
   ]);
 
-  const [choices, setChoices] = useState([]);
+  const [choices, setChoices] = useState(selecionados);
 
   const updateCandidatos = (array) => {
     setChoices(array);
