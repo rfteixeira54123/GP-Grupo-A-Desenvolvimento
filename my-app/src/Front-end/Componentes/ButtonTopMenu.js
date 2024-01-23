@@ -53,6 +53,7 @@ const Btn = (props) => {
           style={buttonStyle}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          onClick={props.handle}
         >
           <div style={labelStyle}>{props.label}</div>
         </button>

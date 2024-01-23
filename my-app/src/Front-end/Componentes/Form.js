@@ -7,7 +7,7 @@ import React, { useState } from "react";
 
 import * as contants from "../constants";
 import Button from "./FormBtn";
-import UsePost from "../../Back-end/HTTP/myPOST";
+import UsePost from "../../Back-end/HTTP/POST";
 
 const styleForm = {
   width: "100%",
@@ -24,6 +24,7 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
   const [PalavraPasse, setPalavraPasse] = useState("");
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
 
   const { handlePostSubmit, status, msg, res } = UsePost({
@@ -48,7 +49,7 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
     } else {
       setShow(false);
       handlePostSubmit()
-        .then((data)=>{
+        .then((data) => {
           // Handle success or access data from the response if needed
           if (localStorage.getItem("Token")) {
             // Assuming navigate is a function for navigating to another page
