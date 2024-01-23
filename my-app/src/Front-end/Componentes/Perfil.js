@@ -56,7 +56,7 @@ const Perfil = (props) => {
     console.log("Entra no logout");
     handleGetSubmit();
     navigate("/");
-    localStorage.removeItem("Token");
+    // localStorage.removeItem("Token");
   };
 
   if (hovering) {

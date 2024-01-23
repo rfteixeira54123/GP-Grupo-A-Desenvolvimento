@@ -50,43 +50,46 @@ const Page = () => {
   //##########################################################################
   //Atualizações -> Implementação do pedido GET
 
+  const [showButtons, setShowButtons] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [toEdit, setToEdit] = useState(null);
+  const [forceRenderButtons, setForceRenderButtons] = useState(false);
+  const [statePopup, setStatePopup] = useState(0);
+  const [forceRenderTable, setForceRenderTable] = useState(false);
+
   const [eleicoes, setEleicoes] = useState([]);
   const [gereEleicao] = useState(new GereEleicao());
-  const { handleSubmit, status, message } = useGet({
+
+  const { handleGetSubmit, status, message, res } = useGet({
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/listar",
   });
 
   useEffect(() => {
-    handleSubmit();
+    handleGetSubmit();
   });
 
   useEffect(() => {
-    if (status === "success") {
-      const eleicaoList = message.map((eleicao) => {
-        const novaEleicao = new Eleicao(eleicao);
-        gereEleicao.criarEleicao(novaEleicao);
-
-        //Formatar a eleição para aparecer no formato correto
-        const eleicaoFormatada = {
-          id_eleicao: eleicao.id_eleicao,
-          nome: eleicao.nome,
-          cargo_disputa: eleicao.cargo_disputa,
-          data_inicio: formatarData(eleicao.data_inicio),
-          data_fim: formatarData(eleicao.data_fim),
-        };
-
-        return eleicaoFormatada;
+    console.log(res);
+    if (Array.isArray(res)) {
+      const eleicaoList = res.map((eleicao) => {
+        // const eleicaoList = res.map((eleicao) => {
+        //   const novaEleicao = new Eleicao(eleicao);
+        //   gereEleicao.criarEleicao(novaEleicao);
+        //   //Formatar a eleição para aparecer no formato correto
+        //   const eleicaoFormatada = {
+        //     id_eleicao: eleicao.id_eleicao,
+        //     nome: eleicao.nome,
+        //     cargo_disputa: eleicao.cargo_disputa,
+        //     data_inicio: formatarData(eleicao.data_inicio),
+        //     data_fim: formatarData(eleicao.data_fim),
+        //   };
+        //   return eleicaoFormatada;
+        // });
       });
+
       setEleicoes(eleicaoList);
     }
-  });
-
-  // Fim das atualizações
-  //##########################################################################
-
-  const [showButtons, setShowButtons] = useState(false);
-  const [selected, setSelected] = useState([]);
-  const [toEdit, setToEdit] = useState(null);
+  }, [res]);
 
   const updateShowButtons = (array) => {
     if (array.includes(-1)) {
@@ -102,42 +105,43 @@ const Page = () => {
     setForceRenderButtons((prevState) => !prevState);
   };
 
-  const [forceRenderTable, setForceRenderTable] = useState(false);
-
   const handleOptionClick = () => {
     setForceRenderTable((prevState) => !prevState);
   };
 
-  const [forceRenderButtons, setForceRenderButtons] = useState(false);
-  const [statePopup, setStatePopup] = useState(0);
+  const handleDelete = (obj) => {
+    setSelected([obj]);
+    setStatePopup(2);
+  };
+
+  const handleEdit = (obj) => {
+    setToEdit(obj);
+    setStatePopup(3);
+  };
+
+  const formatarData = (data) => {
+    return data + "";
+  };
 
   const decidePopup = () => {
     switch (statePopup) {
       case 1:
         return <FormEleicao handleCancelar={() => setStatePopup(0)} />;
       case 2:
-        return <RemoverEleicao choice={selected} handleCancelar={() => setStatePopup(0)}/>;
+        return (
+          <RemoverEleicao
+            choice={selected}
+            handleCancelar={() => setStatePopup(0)}
+          />
+        );
       case 3:
-        return <FormEleicao obj={toEdit} handleCancelar={() => setStatePopup(0)} />;
+        return (
+          <FormEleicao obj={toEdit} handleCancelar={() => setStatePopup(0)} />
+        );
       default:
         return <></>;
     }
   };
-
-  const handleDelete = (obj) => {
-    setSelected([obj]);
-    setStatePopup(2);
-  }
-
-  const handleEdit = (obj) => {
-    setToEdit(obj);
-    setStatePopup(3);
-  }
-
-  const formatarData = (data) => {
-    return data + "";
-  };
-
 
   return (
     <div style={styleWindow}>
@@ -176,7 +180,11 @@ const Page = () => {
             <Button label="Adicionar Eleição" handle={() => setStatePopup(1)} />
           </div>
           <div style={{ gridColumn: 3 }}>
-            <Button label="Remover Selecionados" show={showButtons} handle={() => setStatePopup(2)} />
+            <Button
+              label="Remover Selecionados"
+              show={showButtons}
+              handle={() => setStatePopup(2)}
+            />
           </div>
         </div>
         <div
