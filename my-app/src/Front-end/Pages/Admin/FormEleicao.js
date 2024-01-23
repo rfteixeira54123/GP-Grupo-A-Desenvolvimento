@@ -5,6 +5,8 @@ import Row from "react-bootstrap/Row";
 import * as constants from "../../constants";
 import Button from "../../Componentes/ButtonSmall";
 import { useState } from "react";
+import UsePost from "../../../Back-end/HTTP/POST";
+import { format } from "date-fns";
 
 const styleTop = {
   backgroundColor: constants.color.primary,
@@ -43,17 +45,52 @@ const styleContainer = {
 //  handleCancelar: método para fechar o popup
 const FormC = ({ obj, handleCancelar }) => {
   const [candidatos, setCandidatos] = useState([
-      { id_candidato: 0, nome: "Nome do Candidato", tipo: "Lista", descricao: "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifendmagnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend " },
-      { id_candidato: 1, nome: "Nome do Candidato1", tipo: "Lista" },
-      { id_candidato: 2, nome: "Nome do Candidato2", tipo: "Presidente" },
-      { id_candidato: 3, nome: "Nome do Candidato3", tipo: "Lista" },
-      { id_candidato: 4, nome: "Nome do Candidato4", tipo: "Diretor" },
-      { id_candidato: 5, nome: "Nome do Candidato5", tipo: "Lista" },]);
+    {
+      id_candidato: 0,
+      nome: "Nome do Candidato",
+      tipo: "Lista",
+      descricao:
+        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifendmagnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend ",
+    },
+    { id_candidato: 1, nome: "Nome do Candidato1", tipo: "Lista" },
+    { id_candidato: 2, nome: "Nome do Candidato2", tipo: "Presidente" },
+    { id_candidato: 3, nome: "Nome do Candidato3", tipo: "Lista" },
+    { id_candidato: 4, nome: "Nome do Candidato4", tipo: "Diretor" },
+    { id_candidato: 5, nome: "Nome do Candidato5", tipo: "Lista" },
+  ]);
+
+  const [Tipo, setTipo] = useState("");
+  const [Nome, setNome] = useState("");
+  const [Inicio, setInicio] = useState("");
+  const [Fim, setFim] = useState("");
+
+  const handleTipo = (e) => {
+    setTipo(e.target.value);
+  };
+  const handleNome = (e) => {
+    setNome(e.target.value);
+  };
+  const handleInicio = (e) => {
+    setInicio(e.target.value);
+  };
+  const handleFim = (e) => {
+    setFim(e.target.value);
+  };
 
   const handleAdicionar = () => {
-    //Fazer função para adicionar eleicao
-    console.log("adicionar");
+    console.log("Insere Eleicao");
+    handlePostSubmit();
   };
+
+  const { handlePostSubmit, status, msg, res } = UsePost({
+    Data: {
+      Nome: Nome,
+      Tipo: Tipo,
+      Data_Inicio: Inicio,
+      Data_Fim: Fim,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/inserir",
+  });
 
   const handleEditar = () => {
     //Fazer função para editar eleicao
@@ -85,13 +122,23 @@ const FormC = ({ obj, handleCancelar }) => {
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>Nome: </Form.Label>
-              <Form.Control type="text" defaultValue={obj.nome} />
+              <Form.Control
+                type="text"
+                defaultValue={obj.nome}
+                value={Nome}
+                onChange={handleNome}
+              />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>Tipo: </Form.Label>
-              <Form.Control type="text" defaultValue={obj.cargo_disputa} />
+              <Form.Control
+                type="text"
+                defaultValue={obj.cargo_disputa}
+                value={Tipo}
+                onChange={handleTipo}
+              />
             </Form.Group>
           </Col>
         </Row>
@@ -102,13 +149,20 @@ const FormC = ({ obj, handleCancelar }) => {
               <Form.Control
                 type="datetime-local"
                 defaultValue={obj.data_inicio}
+                value={Inicio}
+                onChange={handleInicio}
               />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>Fim: </Form.Label>
-              <Form.Control type="datetime-local" defaultValue={obj.data_fim} />
+              <Form.Control
+                type="datetime-local"
+                defaultValue={obj.data_fim}
+                value={Fim}
+                onChange={handleFim}
+              />
             </Form.Group>
           </Col>
         </Row>
@@ -149,9 +203,9 @@ const FormC = ({ obj, handleCancelar }) => {
               paddingInline: "3rem",
             }}
           >
-            {candidatos.map((obj, index) => 
-              <li key={"candidato"+index}>{obj.nome}</li>
-            )}
+            {candidatos.map((obj, index) => (
+              <li key={"candidato" + index}>{obj.nome}</li>
+            ))}
           </ul>
           <Button label="Adicionar Candidatos" handle={handleAddCandidatos} />
         </div>

@@ -74,13 +74,13 @@ const Page = () => {
   useEffect(() => {
     if (res && res.Eleicoes && Array.isArray(res.Eleicoes)) {
       const eleicaoList = res.Eleicoes.map((eleicao) => ({
-        id_eleicao: eleicao.ID_Eleicao,
-        nome: eleicao.Nome,
-        cargo_disputa: eleicao.Cargo_Disputa,
-        data_inicio: eleicao.Data_Inicio,
-        data_fim: eleicao.Data_Fim,
+        id_eleicao: eleicao.id_eleicao,
+        nome: eleicao.nome,
+        cargo_disputa: eleicao.cargo_disputa,
+        data_inicio: eleicao.data_inicio,
+        data_fim: eleicao.data_fim,
       }));
-
+      console.log(res);
       setEleicoes(eleicaoList);
     }
   }, [res]);
