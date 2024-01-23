@@ -25,6 +25,8 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
 
+  const navigate = useNavigate();
+
   const { handlePostSubmit } = UsePost({
     Data: { Nome: Nome, PalavraPasse: PalavraPasse },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/login",
@@ -47,6 +49,9 @@ const FormLogin = ({ onEmailChange, onPasswordChange, onSubmit }) => {
     } else {
       setShow(false);
       handlePostSubmit();
+      if (localStorage.getItem("Token")) {
+        navigate("/home");
+      }
     }
   };
 
