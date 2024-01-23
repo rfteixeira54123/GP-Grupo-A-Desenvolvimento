@@ -22,8 +22,8 @@ ERRO_INSERIR_DADOS = 400 #Erro comum ao inserir dados
 
 @dataclass
 class Access(IntEnum):
-    ADMIN: int = auto() #Acesso a administradores
-    ALUNO: int = auto() #Acesso a alunos
+    ADMIN: int = 0 #Acesso a administradores
+    ALUNO: int = 1 #Acesso a alunos
 
 
 @dataclass

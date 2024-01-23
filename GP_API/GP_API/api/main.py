@@ -5,7 +5,7 @@ from psycopg2.extras import RealDictCursor
 from flask import Flask,request,jsonify,abort
 from flask_cors import CORS
 import auth.auth as auth
-from auth.auth import refresh_token, error_type
+from auth.auth import refresh_token, error_type,acess_type
 import os
 from dataclasses import dataclass
 import jwt
@@ -19,9 +19,12 @@ from jsoncheck.json_checker import CheckJson
 app = Flask(__name__)
 '''
 TODO
-BlackList de Tokens (Anular sessões de tokens com uma lista de tokens invalidos)
-Implementacao Base de dados + Nota no "/candidato/listar"
+Listar TODOS os candidatos
+Implementacao Base de dados
 Testar com dados de teste
+
+--OPTIONAL--
+BlackList de Tokens (Anular sessões de tokens com uma lista de tokens invalidos)
 Sistema Email Flask
 '''
 CORS(app)
@@ -143,13 +146,28 @@ def login():
 
     #ERRO_AUTENTICACAO se nao encontrar utilizador
 
+    conn = getconnectionDB()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute("SELECT * FROM encontrar_conta_por_email_e_password(%s,%s)",(body["Email"],body["PalavraPasse"]))
 
-    token = jwt.encode({'userID' : 0,
-                        'userName': 'ContaAluno',
+    try:
+        result = cursor.fetchall()[0]
+    except:
+        cursor.close()
+        conn.close()
+        raise AuthCred()
+
+    tipoconta = acess_type(result['tipo'])
+
+    token = jwt.encode({'userID' : result['id_conta'],
+                        'userName': result['nome'],
                         'Access':Access.ADMIN,
                         'expiration': (datetime.datetime.utcnow() + datetime.timedelta(hours=1)).isoformat()},
                        os.environ["SECRET_KEY"])
-
+    
+    cursor.close()
+    conn.close()
+    
     if result_status != 200:
         abort(result_status)
 
@@ -161,12 +179,11 @@ def login():
 @app.get("/logout")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def logout():
-    body = request.get_json()
     result_status = 200
     if result_status != 200:
         abort(result_status)
 
-    return "OK" #NOT IMPLEMENTED
+    return jsonify("OK"), result_status #NOT IMPLEMENTED
 
 ##
 ## -- 
@@ -221,8 +238,8 @@ def inserir_conta():
     
     connection = getconnectionDB()
     cursor = connection.cursor(cursor_factory=RealDictCursor) #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta é de aluno)
-    cursor.execute("SELECT * FROM inserir_conta(%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],body["PalavraPasse"],body["estado"],body["acessibilidade"],body["TipoConta"]))
-    result = cursor.fetchall()[0]['inserir_conta']
+    cursor.execute("SELECT * FROM inserir_utilizador(%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],body["PalavraPasse"],body["estado"],body["acessibilidade"],body["TipoConta"]))
+    result = cursor.fetchall()[0]['inserir_utilizador']
     
     connection.commit()
     cursor.close()
@@ -319,35 +336,28 @@ def detalhes_conta():
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def lista_eleicao():
     connection = getconnectionDB()
-    cursor = connection.cursor()
-    cursor.callproc("ListarEleicoes")
-
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
+    cursor.execute("SELECT * FROM listar_eleicoes()")
+    result = {"Eleicoes": []}
     for eleicao in cursor.fetchall():
-        print(eleicao)
+        result["Eleicoes"].append(eleicao)
+        '''
+        result["Eleicoes"].append(
+            {
+            "ID_Eleicao": eleicao["id_eleicao"],
+            "Nome": eleicao["nome"],
+            "Data_Inicio" : eleicao["data_inicio"].strftime("%Y-%m-%d"),
+            "Data_Fim" : eleicao["data_fim"].strftime("%Y-%m-%d"),
+            "Descricao" : eleicao["descricao"],
+            "Cargo_Disputa": eleicao["cargo_disputa"],
+            "Estado": eleicao["estado"]
+            }) 
+        50% mais rapido sem isto
+        '''
+        
 
     
-    return {"Eleicoes":
-            [
-                {"ID_Eleicao":1,
-                 "Nome":'Nome',
-                 "Data_Inicio":'12/12/2023',
-                 "Data_Fim":'12/12/2023',
-                 "Eleitores_presenca":[1,2], #Lista de presencas
-                 "Descricao":'Desc',
-                 "Cargo_Disputa":'Cargo',
-                 "Estado":True,
-                 "Candidatos":
-                 [
-                     {"ID_Candidato":1,
-                      "Nome":'Nome',
-                      "Tipo":'Tipo',
-                      "Descricao":'Desc',
-                      "Votos":0
-                      }
-                 ] #Lista de candidatos
-                }
-            ] #Lista de eleiÃ§Ãµes
-           }
+    return result
 
 @app.post("/eleicao/votar")
 @auth.Authentication(access=[Access.ALUNO])
@@ -378,27 +388,57 @@ def votar_eleicao():
         
 
 
-@app.post("/eleicao/criar")
+@app.post("/eleicao/inserir")
 @auth.Authentication(access=[Access.ADMIN])
 @CheckJson(properties = [("Nome",str,5),
                          ("Data_Inicio",str),
-                         ("Descricao",str),
+                         ("Data_Fim",str),
                          ("Cargo_Disputa",str,2)
                          ])
-def criar_eleicao():
+def inserir_eleicao():
     
 
     body = request.get_json()
 
         
-    result_status = ERRO_NAO_IMPLEMENTADO
+    result_status = 200
+
+
+    data_inicio = body["Data_Inicio"]
+    data_fim = body["Data_Fim"]
+
+    try:
+        data_inicio = datetime.datetime.strptime(data_inicio,"%Y-%m-%d")
+        data_fim = datetime.datetime.strptime(data_fim,"%Y-%m-%d")
+    except:
+        raise InputError("Datas Inválidas, formato deve ser o seguinte: YYYY-MM-DD")
+
+    if data_inicio > data_fim:
+        raise InputError("Data de inicio é maior que a data de fim")
+
+    data_inicio = data_inicio.strftime("%Y-%m-%d")
+    data_fim = data_fim.strftime("%Y-%m-%d")
+
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("criacaoEleicao",(0,body["Nome"],body["Data_Inicio"],body["Descricao"],body["Cargo_Disputa"])) #Falta a data_fim
+    cursor.execute("SELECT * FROM inserir_eleicao(%s,%s,%s,%s,%s)",(body["Nome"],data_inicio,data_fim,body["Descricao"],body["Cargo_Disputa"]))
+
+    if cursor.fetchall()[0][0] == False:
+        connection.commit()
+        cursor.close()
+        connection.close()
+        raise InputError("Erro ao adicionar eleicao")
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
     
     if result_status != 200:
         abort(result_status)
+
+    return jsonify("OK"),200
         
 
 
@@ -490,7 +530,8 @@ def listar_candidato():
 
 @app.post("/candidato/inserir")
 @auth.Authentication(access=[Access.ADMIN])
-@CheckJson(properties = [("ID_Lista_Candidatos",int)
+@CheckJson(properties = [("Nome",str),
+                         ("Tipo",str)
                          ])
 def inserir_candidato():
 
@@ -502,8 +543,9 @@ def inserir_candidato():
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("inserirCandidato",(body["ID_Lista_Candidatos"],))
-    #Nao existe prcedimento para inserir um novo candidato, isto só faz a associacao a um GestorCandidatos
+    cursor.execute("SELECT * FROM inserir_candidato(%s,%s)",(body["Nome"],body["Tipo"]))
+
+    print(cursor.fetchall()[0])
     
     if result_status != 200:
         abort(result_status)

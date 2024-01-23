@@ -23,6 +23,17 @@ def has_acess(data,access):
     
     return (0 if accounttype == access else 3)
 
+def acess_type(input_):
+    if input_ == 'Aluno' or input_ == 'Eleitor':
+        return Access.ALUNO
+
+    if input_ == 'Administrador':
+        return Access.ADMIN
+
+    return Access.ALUNO
+
+
+
 def error_type(num):
     if num == 1:
         return "Um token (Authorization) nÃ£o foi dado num endpoint com restriÃ§Ã£o de acesso"
