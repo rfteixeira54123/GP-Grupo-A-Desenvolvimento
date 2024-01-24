@@ -8,6 +8,7 @@ const Home = () => {
 
   const handleLogin = () => {
     let option = false;
+
     if (!localStorage.getItem("Token")) return <Login />;
     else if (option) return <Eleitor />;
     else return <Admin />;

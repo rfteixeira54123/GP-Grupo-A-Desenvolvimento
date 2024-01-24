@@ -46,8 +46,12 @@ function UsePost({ Data, FORM_ENDPOINT }) {
         console.table(data);
         setRes(data);
         try {
+          console.log("POST");
           if (data.token) localStorage.setItem("Token", data.token);
         } catch {}
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
   return { handlePostSubmit: handleSubmit, status, message, res };

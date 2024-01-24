@@ -81,7 +81,6 @@ const Page = () => {
         data_inicio: eleicao.data_inicio,
         data_fim: eleicao.data_fim,
       }));
-      console.log(res);
       setEleicoes(eleicaoList);
       handleOptionClick();
     }
@@ -96,7 +95,6 @@ const Page = () => {
       setSelected(updateSelecionados);
     }
 
-    // console.log(array);
     setShowButtons(array.length > 1 || array.includes(-1));
     setForceRenderButtons((prevState) => !prevState);
   };
@@ -106,7 +104,7 @@ const Page = () => {
   };
 
   const handleDelete = (obj) => {
-    setToDelete(obj)
+    setToDelete(obj);
     setStatePopup(4);
   };
 
@@ -167,7 +165,9 @@ const Page = () => {
           />
         </div>
         <div
-          key={forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons"}
+          key={
+            forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons"
+          }
           style={{
             width: "96%",
             display: "grid",

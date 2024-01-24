@@ -55,8 +55,8 @@ const Info = ({ choice, handleCancelar }) => {
               }}
             >
               {" "}
-              Tem a certeza que deseja remover todos os {choice.length} candidatos selecionados
-              ?
+              Tem a certeza que deseja remover todos os {choice.length}{" "}
+              candidatos selecionados ?
             </div>
             <div
               style={{
@@ -84,8 +84,10 @@ const Info = ({ choice, handleCancelar }) => {
               }}
             >
               Tem a certeza que deseja remover o candidato ?
-              <br />Nome: {choice[0].nome}
-              <br />Tipo: {choice[0].tipo}
+              <br />
+              Nome: {choice[0].nome}
+              <br />
+              Tipo: {choice[0].tipo}
             </div>
             <div
               style={{

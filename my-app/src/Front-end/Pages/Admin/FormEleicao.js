@@ -9,6 +9,7 @@ import FormSelecionaCandidatos from "./FormSelecionaCandidatos";
 import { useState } from "react";
 import UsePost from "../../../Back-end/HTTP/POST";
 import { format } from "date-fns";
+import UsePatch from "../../../Back-end/HTTP/PATCH";
 
 const styleTop = {
   backgroundColor: constants.color.primary,
@@ -95,11 +96,11 @@ const styleBtnFloat = {
 const FormC = ({ obj, handleCancelar }) => {
   //Fazer get para buscar candidatos da eleição.
   const [candidatos, setCandidatos] = useState([]); //Atualizar com o array de candidatos da eleição.
-
   const [Tipo, setTipo] = useState(obj.cargo_disputa);
   const [Nome, setNome] = useState(obj.nome);
   const [Inicio, setInicio] = useState(obj.data_inicio);
   const [Fim, setFim] = useState(obj.data_fim);
+  const [idCandidato, setIdCandidato] = useState();
 
   const handleTipo = (e) => {
     setTipo(e.target.value);
@@ -115,11 +116,24 @@ const FormC = ({ obj, handleCancelar }) => {
   };
 
   const handleAdicionar = () => {
-    console.log("Insere Eleicao");
-    handlePostSubmit();
+    handlePostSubmit0();
   };
 
-  const { handlePostSubmit, status, msg, res } = UsePost({
+  const handleEditar = () => {
+    handlePatchSubmit();
+    for (let i = 0; i < candidatos.length; i++) {
+      candidatos[0] = candidatos[i];
+      setIdCandidato(candidatos[0].id_candidato);
+      handlePostSubmit1();
+    }
+  };
+
+  const {
+    handlePostSubmit: handlePostSubmit0,
+    status,
+    msg,
+    res,
+  } = UsePost({
     Data: {
       Nome: Nome,
       Data_Inicio: Inicio,
@@ -129,10 +143,30 @@ const FormC = ({ obj, handleCancelar }) => {
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/inserir",
   });
 
-  const handleEditar = () => {
-    //Fazer função para editar eleicao
-    console.log("editar");
-  };
+  const {
+    handlePostSubmit: handlePostSubmit1,
+    pcstatus,
+    pcmsg,
+    pcres,
+  } = UsePost({
+    Data: {
+      ID_Eleicao: obj.id_eleicao,
+      ID_Candidato: idCandidato,
+    },
+    FORM_ENDPOINT:
+      "https://gp-api-alpha.vercel.app/eleicao/adicionar_candidato",
+  });
+
+  const { handlePatchSubmit, pstatus, pmsg, pres } = UsePatch({
+    Data: {
+      Id_Eleica: obj.id_eleicao,
+      Nome: Nome,
+      Data_Inicio: Inicio,
+      Data_Fim: Fim,
+      Cargo_Disputa: Tipo,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/editar",
+  });
 
   const handleRemoveCandidato = (index) => {
     // Crie uma cópia do array candidatos para não modificar o original diretamente

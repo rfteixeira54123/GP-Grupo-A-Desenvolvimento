@@ -4,6 +4,8 @@ import Form from "react-bootstrap/Form";
 import * as constants from "../../constants";
 import Button from "../../Componentes/ButtonSmall";
 import Table from "../../Componentes/TableMini";
+import UseGet from "../../../Back-end/HTTP/GET";
+import { useEffect } from "react";
 
 const styleTop = {
   backgroundColor: constants.color.primary,
@@ -42,36 +44,31 @@ const styleContainer = {
 //  handleAdicionar: método para atualizar os candidatos selecionados
 const FormC = ({ selecionados, handleCancelar, handleAdicionar }) => {
   // Fazer GET candidatos da aplicação com base no tipo
-  const [candidatos, setCandidatos] = useState([
-    {
-      id_candidato: 0,
-      nome: "Nome do Candidato",
-      tipo: "Lista",
-      descricao:
-        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifendmagnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend ",
-    },
-    { id_candidato: 1, nome: "Nome do Candidato1", tipo: "Lista" },
-    { id_candidato: 2, nome: "Nome do Candidato2", tipo: "Presidente" },
-    { id_candidato: 3, nome: "Nome do Candidato3", tipo: "Lista" },
-    { id_candidato: 4, nome: "Nome do Candidato4", tipo: "Diretor" },
-    { id_candidato: 5, nome: "Nome do Candidato4", tipo: "Diretor" },
-    { id_candidato: 6, nome: "Nome do Candidato5", tipo: "Lista" },
-    { id_candidato: 7, nome: "Nome do Candidato5", tipo: "Lista" },
-    { id_candidato: 8, nome: "Nome do Candidato2", tipo: "Presidente" },
-    { id_candidato: 39, nome: "Nome do Candidato3", tipo: "Lista" },
-    { id_candidato: 40, nome: "Nome do Candidato4", tipo: "Diretor" },
-    { id_candidato: 41, nome: "Nome do Candidato4", tipo: "Diretor" },
-    { id_candidato: 52, nome: "Nome do Candidato5", tipo: "Lista" },
-    { id_candidato: 53, nome: "Nome do Candidato5", tipo: "Lista" },
-    { id_candidato: 255, nome: "Nome do Candidato2", tipo: "Presidente" },
-    { id_candidato: 37, nome: "Nome do Candidato3", tipo: "Lista" },
-    { id_candidato: 45, nome: "Nome do Candidato4", tipo: "Diretor" },
-    { id_candidato: 46, nome: "Nome do Candidato4", tipo: "Diretor" },
-    { id_candidato: 58, nome: "Nome do Candidato5", tipo: "Lista" },
-    { id_candidato: 59, nome: "Nome do Candidato5", tipo: "Lista" },
-  ]);
-
   const [choices, setChoices] = useState(selecionados);
+  const [flag, setFlag] = useState(true);
+
+  const [candidatos, setCandidatos] = useState([]);
+  const { handleGetSubmit, status, message, res } = UseGet({
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/listar",
+  });
+
+  useEffect(() => {
+    if (flag) {
+      handleGetSubmit();
+      setFlag(false);
+    }
+  });
+
+  useEffect(() => {
+    if (res && res.Candidatos && Array.isArray(res.Candidatos)) {
+      const candidatoList = res.Candidatos.map((candidato) => ({
+        id_candidato: candidato.id_candidato,
+        nome: candidato.nome,
+        tipo: candidato.tipo,
+      }));
+      setCandidatos(candidatoList);
+    }
+  }, [res]);
 
   const updateCandidatos = (array) => {
     setChoices(array);
@@ -131,3 +128,30 @@ const FormC = ({ selecionados, handleCancelar, handleAdicionar }) => {
 FormC.defaultProps = {};
 
 export default FormC;
+
+// {
+//   id_candidato: 0,
+//   nome: "Nome do Candidato",
+//   tipo: "Lista",
+//   descricao:
+//     "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifendmagnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend ",
+// },
+// { id_candidato: 1, nome: "Nome do Candidato1", tipo: "Lista" },
+// { id_candidato: 2, nome: "Nome do Candidato2", tipo: "Presidente" },
+// { id_candidato: 3, nome: "Nome do Candidato3", tipo: "Lista" },
+// { id_candidato: 4, nome: "Nome do Candidato4", tipo: "Diretor" },
+// { id_candidato: 5, nome: "Nome do Candidato4", tipo: "Diretor" },
+// { id_candidato: 6, nome: "Nome do Candidato5", tipo: "Lista" },
+// { id_candidato: 7, nome: "Nome do Candidato5", tipo: "Lista" },
+// { id_candidato: 8, nome: "Nome do Candidato2", tipo: "Presidente" },
+// { id_candidato: 39, nome: "Nome do Candidato3", tipo: "Lista" },
+// { id_candidato: 40, nome: "Nome do Candidato4", tipo: "Diretor" },
+// { id_candidato: 41, nome: "Nome do Candidato4", tipo: "Diretor" },
+// { id_candidato: 52, nome: "Nome do Candidato5", tipo: "Lista" },
+// { id_candidato: 53, nome: "Nome do Candidato5", tipo: "Lista" },
+// { id_candidato: 255, nome: "Nome do Candidato2", tipo: "Presidente" },
+// { id_candidato: 37, nome: "Nome do Candidato3", tipo: "Lista" },
+// { id_candidato: 45, nome: "Nome do Candidato4", tipo: "Diretor" },
+// { id_candidato: 46, nome: "Nome do Candidato4", tipo: "Diretor" },
+// { id_candidato: 58, nome: "Nome do Candidato5", tipo: "Lista" },
+// { id_candidato: 59, nome: "Nome do Candidato5", tipo: "Lista" },

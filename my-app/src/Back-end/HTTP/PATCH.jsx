@@ -1,59 +1,59 @@
 import { useState } from "react";
 
-function usePatch({ Data, FORM_ENDPOINT }) {
+function UsePatch({ Data, FORM_ENDPOINT }) {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
+  const [res, setRes] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setStatus("loading");
     setMessage("");
 
-    fetch(FORM_ENDPOINT, {
+    return fetch(FORM_ENDPOINT, {
       method: "PATCH",
       mode: "cors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: JSON.parse(localStorage.getItem("Token")),
+        Authorization: localStorage.getItem("Token") || "",
       },
       body: JSON.stringify(Data),
     })
       .then((response) => {
         if (response.status === 200) {
-          setMessage("successo");
+          return response.json();
+        } else if (response.status === 401) {
+          throw "não autorizado";
         } else if (response.status === 403) {
-          setMessage("nao autorizado");
+          throw "nao autorizado";
         } else if (response.status === 500) {
-          setMessage("server error");
+          throw "server error";
         } else if (response.status === 501) {
-          setMessage("nao implementado");
+          throw "nao implementado";
         } else if (response.status === 415) {
-          setMessage("nao definido");
+          throw "nao definido";
         } else if (response.status === 422) {
-          setMessage("json em falta");
+          throw "nao tem tamanho suficiente";
         } else if (response.status === 403) {
-          setMessage("nao tem permissao");
-        } else if (response.status === 422) {
-          setMessage("entidade nao processavel");
+          throw "nao tem permissao";
+        } else if (response.status === 425) {
+          throw "nao tem tamanho suficiente";
         } else {
-          setMessage("erro");
+          throw "erro";
         }
-
-        console.table(response);
-        return response.json();
       })
-      .then(() => {
-        setMessage("OK");
-        setStatus("success");
+      .then((data) => {
+        console.table(data);
+        setRes(data);
+        try {
+          console.log("PATCH");
+        } catch {}
       })
-      .catch((err) => {
-        setMessage(err.toString());
-        setStatus("error");
+      .catch((error) => {
+        console.log(error);
       });
   };
-
-  return { handleSubmit, status, message };
+  return { handlePatchSubmit: handleSubmit, status, message, res };
 }
 
-export default usePatch;
+export default UsePatch;

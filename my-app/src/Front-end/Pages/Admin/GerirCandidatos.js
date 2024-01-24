@@ -53,27 +53,31 @@ const styleBtnsForm = {
 const Page = () => {
   //##########################################################################
   //Atualizações -> Implementação do pedido GET
+  const [flag, setFlag] = useState(true);
 
   const [candidatos, setCandidatos] = useState([]);
   const [gereCandidatos] = useState(new GereCandidatos());
-  const { handleSubmit, status, message } = useGet({
+  const { handleGetSubmit, status, message, res } = useGet({
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/listar",
   });
 
   useEffect(() => {
-    handleSubmit();
+    if (flag) {
+      handleGetSubmit();
+      setFlag(false);
+    }
   });
 
   useEffect(() => {
-    if (status === "success") {
-      const candidatosList = message.map((candidato) => {
-        const novoCandidato = new Candidato(candidato);
-        gereCandidatos.inserirCandidato(novoCandidato);
-        return novoCandidato;
-      });
-      setCandidatos(candidatosList);
+    if (res && res.Candidatos && Array.isArray(res.Candidatos)) {
+      const candidatoList = res.Candidatos.map((candidato) => ({
+        id_candidato: candidato.id_candidato,
+        nome: candidato.nome,
+        tipo: candidato.tipo,
+      }));
+      setCandidatos(candidatoList);
     }
-  }, [status, message, gereCandidatos]);
+  }, [res]);
 
   // Fim das atualizações
   //##########################################################################
@@ -94,7 +98,6 @@ const Page = () => {
       setSelected(updateSelecionados);
     }
 
-    // console.log(array);
     setShowButtons(array.length > 1 || array.includes(-1));
     setForceRenderButtons((prevState) => !prevState);
   };
@@ -102,23 +105,35 @@ const Page = () => {
   const handleDelete = (obj) => {
     setToDelete(obj);
     setStatePopup(4);
-  }
+  };
 
   const handleEdit = (obj) => {
     setToEdit(obj);
     setStatePopup(3);
-  }
+  };
 
   const decidePopup = () => {
     switch (statePopup) {
       case 1:
         return <FormCandidato handleCancelar={() => setStatePopup(0)} />;
       case 2:
-        return <RemoverCandidato choice={selected} handleCancelar={() => setStatePopup(0)}/>;
+        return (
+          <RemoverCandidato
+            choice={selected}
+            handleCancelar={() => setStatePopup(0)}
+          />
+        );
       case 3:
-        return <FormCandidato obj={toEdit} handleCancelar={() => setStatePopup(0)} />;
+        return (
+          <FormCandidato obj={toEdit} handleCancelar={() => setStatePopup(0)} />
+        );
       case 4:
-        return <RemoverCandidato choice={[toDelete]} handleCancelar={() => setStatePopup(0)}/>;
+        return (
+          <RemoverCandidato
+            choice={[toDelete]}
+            handleCancelar={() => setStatePopup(0)}
+          />
+        );
       default:
         return <></>;
     }
@@ -155,7 +170,10 @@ const Page = () => {
             handleEdit={handleEdit}
           />
         </div>
-        <div key={ forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons" }
+        <div
+          key={
+            forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons"
+          }
           style={styleBtnsForm}
         >
           <div style={{ gridColumn: 1 }}></div>
@@ -173,9 +191,7 @@ const Page = () => {
             />
           </div>
         </div>
-        <div style={stylePopUp}>
-          {decidePopup(statePopup)}
-        </div>
+        <div style={stylePopUp}>{decidePopup(statePopup)}</div>
       </div>
     </div>
   );
