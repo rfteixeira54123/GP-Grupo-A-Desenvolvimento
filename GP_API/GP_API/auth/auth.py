@@ -47,7 +47,9 @@ def error_type(num):
 def refresh_token(data):
 
     newtoken = jwt.encode({'userID' : data['userID'],
+                           'Identificador': data['Identificador'],
                            'userName': data['userName'],
+                           'acessibilidade': data['acessibilidade'],
                            'Access': data['Access'],
                            'expiration': (datetime.datetime.utcnow() + datetime.timedelta(hours=1)).isoformat()},
                           os.environ["SECRET_KEY"])

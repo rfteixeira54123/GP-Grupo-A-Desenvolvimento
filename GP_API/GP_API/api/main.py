@@ -24,7 +24,7 @@ Implementacao Base de dados
 Testar com dados de teste
 
 --OPTIONAL--
-BlackList de Tokens (Anular sessões de tokens com uma lista de tokens invalidos)
+BlackList de Tokens (Anular sessÃµes de tokens com uma lista de tokens invalidos)
 Sistema Email Flask
 '''
 CORS(app)
@@ -54,11 +54,11 @@ def error_501(error):
 
 @app.errorhandler(ERRO_NAO_IMPLEMENTADO)
 def error_500(error):
-    return jsonify({"Error":'Endpoint nÃ£o implementado'}),ERRO_NAO_IMPLEMENTADO
+    return jsonify({"Error":'Endpoint nÃÂ£o implementado'}),ERRO_NAO_IMPLEMENTADO
 
 @app.errorhandler(ERRO_CONTENT_TYPE)
 def error_415(error):
-    return jsonify({"Error":"Content-type nÃ£o definido para 'application/json'. A ignorar pedido"}),ERRO_CONTENT_TYPE
+    return jsonify({"Error":"Content-type nÃÂ£o definido para 'application/json'. A ignorar pedido"}),ERRO_CONTENT_TYPE
 
 @app.errorhandler(JSONMissing)
 def error_422(error):
@@ -158,10 +158,16 @@ def login():
         raise AuthCred()
 
     tipoconta = acess_type(result['tipo'])
+    identificador = result['num_identificacao']
+
+    if identificador == None:
+        identificador = 0
 
     token = jwt.encode({'userID' : result['id_conta'],
+                        'Identificador' : identificador,
                         'userName': result['nome'],
-                        'Access':Access.ADMIN,
+                        'acessibilidade': result['acessibilidade'],
+                        'Access':tipoconta,
                         'expiration': (datetime.datetime.utcnow() + datetime.timedelta(hours=1)).isoformat()},
                        os.environ["SECRET_KEY"])
     
@@ -200,11 +206,22 @@ def logout():
                          ])
 def remover_conta():
     body = request.get_json()
+
+    conn = getconnectionDB()
+    cursor = conn.cursor()
+    #cursor.execute("SELECT")
+
+    conn.commit()
+    cursor.close()
+    conn.close()
     result_status = 200
     if result_status != 200:
         abort(result_status)
 
-    return "OK"#NOT IMPLEMENTED
+    abort(ERRO_NAO_IMPLEMENTADO)#NOT IMPLEMENTED
+
+
+
 
 @app.get("/conta/listar")
 @auth.Authentication(access=[Access.ADMIN])
@@ -223,6 +240,7 @@ def lista_contas():
 @CheckJson(properties = [("Nome",str,8),
                          ("Email",str,3),
                          ("PalavraPasse",str,8),
+                         ("Identificacao",int),
                          ("estado",bool),
                          ("acessibilidade",bool),
                          ("TipoConta",str)
@@ -237,8 +255,8 @@ def inserir_conta():
         
     
     connection = getconnectionDB()
-    cursor = connection.cursor(cursor_factory=RealDictCursor) #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta é de aluno)
-    cursor.execute("SELECT * FROM inserir_utilizador(%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],body["PalavraPasse"],body["estado"],body["acessibilidade"],body["TipoConta"]))
+    cursor = connection.cursor(cursor_factory=RealDictCursor) #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta Ã© de aluno)
+    cursor.execute("SELECT * FROM inserir_utilizador(%s,%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],body["PalavraPasse"],body["Identificacao"],body["estado"],body["acessibilidade"],body["TipoConta"]))
     result = cursor.fetchall()[0]['inserir_utilizador']
     
     connection.commit()
@@ -257,7 +275,7 @@ def inserir_conta():
 
 
 @app.patch("/conta/editar")
-@auth.Authentication(access=[Access.ALUNO,Access.ADMIN]) #Aluno pode editar sua própria password
+@auth.Authentication(access=[Access.ALUNO,Access.ADMIN]) #Aluno pode editar sua prÃ³pria password
 @CheckJson(properties = [("Nome",str,8),
                          ("Email",str,3),
                          ("Palavra-Passe",str,8),
@@ -275,13 +293,13 @@ def editar_conta():
     token = request.headers.get('Authorization')
     data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
 
-    if data["Access"] != Access.ADMIN: #Se nao for administrador, temos que saber se este é o proprio utilizador, ele pode editar --SÓ-- a sua password
+    if data["Access"] != Access.ADMIN: #Se nao for administrador, temos que saber se este Ã© o proprio utilizador, ele pode editar --SÃ-- a sua password
         if data["userID"] != body["ID_Conta"]:
             raise AuthDenied()
 
         connection = getconnectionDB()
         cursor = connection.cursor()
-        cursor.callproc("EditarContaLite",(body["ID_Conta"],body["Acessibilidade"],body["Palavra-Passe"])) #Ideia de procedimento, nao podemos arriscar mudar a conta toda só para mudar estes 2 valores
+        cursor.callproc("EditarContaLite",(body["ID_Conta"],body["Acessibilidade"],body["Palavra-Passe"])) #Ideia de procedimento, nao podemos arriscar mudar a conta toda sÃ³ para mudar estes 2 valores
 
         return "OK"
 
@@ -373,18 +391,20 @@ def votar_eleicao():
     data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
     userID = int(data["userID"])
 
-    #Por alguma razao na procedure de votar já temos os checks lá dentro, entao nao preciso de me preocupar com verificações, só se SUCCESS = TRUE/FALSE
-
-    result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("votar",(0,userID,body["ID_Eleicao"],body["ID_Candidato"]))
+    cursor.execute("SELECT * FROM votar(%s,%s,%s)",(body["ID_Eleicao"],userID,body["ID_Candidato"]))
 
-    print(cursor.fetchone())
+    connection.commit()
+    if cursor.fetchall()[0][0] != True:
+        cursor.close()
+        connection.close()
+
+        raise InputError("Erro ao votar")
+
     
-    if result_status != 200:
-        abort(result_status)
+    return jsonify("OK"),200
         
 
 
@@ -411,10 +431,10 @@ def inserir_eleicao():
         data_inicio = datetime.datetime.strptime(data_inicio,"%Y-%m-%d")
         data_fim = datetime.datetime.strptime(data_fim,"%Y-%m-%d")
     except:
-        raise InputError("Datas Inválidas, formato deve ser o seguinte: YYYY-MM-DD")
+        raise InputError("Datas InvÃ¡lidas, formato deve ser o seguinte: YYYY-MM-DD")
 
     if data_inicio > data_fim:
-        raise InputError("Data de inicio é maior que a data de fim")
+        raise InputError("Data de inicio Ã© maior que a data de fim")
 
     data_inicio = data_inicio.strftime("%Y-%m-%d")
     data_fim = data_fim.strftime("%Y-%m-%d")
@@ -422,15 +442,14 @@ def inserir_eleicao():
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM inserir_eleicao(%s,%s,%s,%s,%s)",(body["Nome"],data_inicio,data_fim,body["Descricao"],body["Cargo_Disputa"]))
-
+    cursor.execute("SELECT * FROM inserir_eleicao(%s,%s,%s,%s,%s)",(body["Nome"],data_inicio,data_fim," ",body["Cargo_Disputa"]))
+    connection.commit()
     if cursor.fetchall()[0][0] == False:
-        connection.commit()
+        
         cursor.close()
         connection.close()
         raise InputError("Erro ao adicionar eleicao")
 
-    connection.commit()
     cursor.close()
     connection.close()
 
@@ -447,91 +466,103 @@ def inserir_eleicao():
 @CheckJson(properties = [("ID_Eleicao",int),
                          ("Nome",str,5),
                          ("Data_Inicio",str),
-                         ("Descricao",str),
+                         ("Data_Fim",str),
                          ("Cargo_Disputa",str,2)
                          ])
 def editar_eleicao():
 
     body = request.get_json()
-
-
-    result_status = ERRO_NAO_IMPLEMENTADO
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("editarEleicao",(0,body["ID_Eleicao"],body["Nome"],body["Data_Inicio"],body["Descricao"],body["Cargo_Disputa"]))
-    
-    if result_status != 200:
-        abort(result_status)
+    cursor.execute("SELECT * FROM editar_eleicao(%s,%s,%s,%s,%s,%s)",(body["ID_Eleicao"],body["Nome"],body["Data_Inicio"],body["Data_Fim"],"",body["Cargo_Disputa"]))
+
+    if cursor.fetchall()[0][0] != True:
+        cursor.close()
+        connection.close()
+        raise InputError("Erro ao editar eleicao")
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
+    return jsonify("OK"), 200
 
 
 
 
 @app.post("/eleicao/adicionar_candidato")
 @auth.Authentication(access=[Access.ADMIN])
-@CheckJson(properties = [("ID_Lista_Candidatos",int),
+@CheckJson(properties = [("ID_Eleicao",int),
                          ("ID_Candidato",int)
                          ])
 def adicionar_candidato_eleicao():
-    if request.data:
-        body = request.get_json()
-    else:
-        abort(ERRO_JSON_MISSING)
 
-    result_status = ERRO_NAO_IMPLEMENTADO
-   
-    
+    body = request.get_json()
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("inserirCandidato",(body["ID_Lista_Candidatos"],body["ID_Candidato"]))
+    cursor.execute("SELECT * FROM adicionar_candidato(%s,%s)",(body["ID_Eleicao"],body["ID_Candidato"]))
     #ID_Lista_Candidatos poderia ser o mesmo que o ID da eleicao para simplificar
-    
-    if result_status != 200:
-        abort(result_status)
+    connection.commit()
+    if cursor.fetchall()[0][0] == False:
+        cursor.close()
+        connection.close()
+        raise InputError("Erro ao adicionar candidato na Eleicao")
+    cursor.close()
+    connection.close()
+    return jsonify("OK"),200
+
     
 
+@app.get("/eleicao<int:id_eleicao>/listar_candidatos")    
+@auth.Authentication(access=[Access.ADMIN,Access.ALUNO])
+def listar_candidatos_eleicao(id_eleicao):
+    connection = getconnectionDB()
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
+    
+    cursor.execute("SELECT * FROM listar_candidatos_eleicao(%s)",(id_eleicao,))
+    result = {"Candidatos" : []}
+    for item in cursor.fetchall():
+        result["Candidatos"].append(item)
+
+    cursor.close()
+    connection.close()
+    
+     
+    return result
 
 
 ##
 ## --
 ##
 
+##
+## CANDIDATOS
+##
 
 @app.get("/candidato/listar")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
-@CheckJson(properties=("ID_Eleicao",int)
-           )
 def listar_candidato():    
-    body = request.get_json()
     connection = getconnectionDB()
-    cursor = connection.cursor()
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
     
-    cursor.callproc("listarCandidatos",(str(body["ID_Eleicao"]),)) #Buscar os candidatos de cada gestor de candidatos diferente
-
+    cursor.execute("SELECT * FROM listar_candidatos()")
+    result = {"Candidatos" : []}
     for item in cursor.fetchall():
-        print(item)
+        result["Candidatos"].append(item)
 
-        
+    cursor.close()
+    connection.close()
     
      
-    return {"Listas":
-            [ {"ID_Lista_Candidatos": 1, #Como vai existir multiplos gestores de candidato, precisamos de identificar quem é quem, isto pode ser mudado para "ID_Eleicao" onde este candidato pertence
-           "Candidatos":
-                 [
-                     {"ID_Candidato":1,
-                      "Nome":'Nome',
-                      "Tipo":'Tipo',
-                      "Descricao":'Desc',
-                      "Votos":0
-                      }
-                 ] #Lista de candidatos
-            }]}
+    return result
             
-
 @app.post("/candidato/inserir")
 @auth.Authentication(access=[Access.ADMIN])
 @CheckJson(properties = [("Nome",str),
-                         ("Tipo",str)
+                         ("Tipo",str),
+                         ("Objetivo",str),
+                         ("Link_Imagem",str)
                          ])
 def inserir_candidato():
 
@@ -543,51 +574,44 @@ def inserir_candidato():
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM inserir_candidato(%s,%s)",(body["Nome"],body["Tipo"]))
+    cursor.execute("SELECT * FROM inserir_candidato(%s,%s,%s,%s)",(body["Nome"],body["Tipo"],body["Objetivo"],body["Link_Imagem"]))
+    connection.commit()
 
-    print(cursor.fetchall()[0])
+    if cursor.fetchall()[0][0] == False:
+        cursor.close()
+        connection.close()
+        raise InputError("Erro ao adicionar Candidato")
+    cursor.close()
+    connection.close()
     
-    if result_status != 200:
-        abort(result_status)
-        
-    
-    
+    return jsonify("OK"),200
 
-    return "OK" #NOT IMPLEMENTED
+
 
 @app.patch("/candidato/editar")
 @auth.Authentication(access=[Access.ADMIN])
 @CheckJson(properties = [("ID_Candidato",int),
-                         ("Nome",str,5),
-                         ("Tipo",str,2),
-                         ("Votos",int)
+                         ("Nome",str),
+                         ("Tipo",str),
+                         ("Objetivo",str),
+                         ("Link_Imagem",str)
                          ])
-def editar_candidato(): #Agora que percebi que estamos literalmente a dar uma backdoor para editar votos... nao sei se isto seria uma boa ideia de implementar assim
+def editar_candidato():
 
     body = request.get_json()
 
-
-
-    result_status = 200
-    
-
-
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("EditarCandidato",(body["ID_Candidato"],body["Nome"],body["Tipo"],body["Votos"]))
-    
+    cursor.execute("CALL editar_candidato(%s,%s,%s,%s,%s)",(body["ID_Candidato"],body["Nome"],body["Tipo"],body["Objetivo"],body["Link_Imagem"]))
+    connection.commit()
+    cursor.close()
+    connection.close()
 
-
-    if result_status != 200:
-        abort(result_status)
-    
-            
-
-    return "OK" #NOT IMPLEMENTED
+    return jsonify("OK"),200
 
 @app.delete("/candidato/remover")
 @auth.Authentication(access=[Access.ADMIN])
-@CheckJson(properties = [("ID_Lista_Candidatos",int),
+@CheckJson(properties = [("ID_Eleicao",int),
                          ("ID_Candidato",int)
                          ])
 def remover_candidato():
@@ -600,13 +624,20 @@ def remover_candidato():
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("removeCandidato",(body["ID_Lista_Candidatos"],body["ID_Candidato"]))
-    #Isto só remove a associacao de um candidato para o seu gestor, ela nao apaga mesmo da base de dados
+    cursor.execute("removeCandidato",(body["ID_Lista_Candidatos"],body["ID_Candidato"]))
+    #Isto sÃ³ remove a associacao de um candidato para o seu gestor, ela nao apaga mesmo da base de dados
 
     if result_status != 200:
         abort(result_status)
 
 
+##
+## --
+##
+
+##
+## EVENTOS 
+## 
 @app.get("/evento/listar")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
 def listar_evento():
@@ -647,6 +678,9 @@ def inserir_evento():
         abort(result_status)
 
 
+##
+## --
+##
 
 @app.route("/test")
 def test():
