@@ -6,6 +6,7 @@ import { useState } from "react";
 import UsePost from "../../../Back-end/HTTP/POST";
 import UsePatch from "../../../Back-end/HTTP/PATCH";
 import { useEffect } from "react";
+
 const styleTop = {
   backgroundColor: constants.color.primary,
   borderBottom: "2px solid " + constants.color.secondary,
@@ -41,11 +42,13 @@ const styleContainer = {
 // Recebe:
 //  obj: candidato a editar (opcional) se for pra editar tem id_candidato
 //  handleCancelar: método para fechar o popup
-const FormC = ({ obj, handleCancelar }) => {
-  const [Nome, setNome] = useState("");
-  const [Tipo, setTipo] = useState("");
-  const [Imagem, setImagem] = useState("");
-  const [Objetivos, setObjetivos] = useState("");
+//  handleAdd: método para fechar o popup após adicionar.
+//  handleEdit: método para fechar o popup após editar.
+const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
+  const [Nome, setNome] = useState(obj.nome);
+  const [Tipo, setTipo] = useState(obj.tipo);
+  const [Imagem, setImagem] = useState(obj.foto);
+  const [Objetivos, setObjetivos] = useState(obj.descricao);
   const [flag, setFlag] = useState(true);
 
   useEffect(() => {
@@ -59,25 +62,32 @@ const FormC = ({ obj, handleCancelar }) => {
   const handleNome = (e) => {
     setNome(e.target.value);
   };
-
   const handleTipo = (e) => {
     setTipo(e.target.value);
   };
-
   const handleImagem = (e) => {
     setImagem(e.target.value);
   };
-
   const handleObjetivos = (e) => {
     setObjetivos(e.target.value);
   };
 
   const handleAdicionar = () => {
-    handlePostSubmit();
+    handlePostSubmit()
+      .then(() => {
+        if(handleAdd) handleAdd({ nome: Nome, tipo: Tipo, foto: Imagem, descricao: Objetivos });
+      });
   };
 
   const handleEditar = () => {
-    handlePatchSubmit();
+    handlePatchSubmit()
+      .then(() => {
+        obj.nome = Nome;
+        obj.tipo = Tipo;
+        obj.descricao = Objetivos;
+        obj.foto = Imagem;
+        if(handleEdit) handleEdit(obj);
+      });
   };
 
   const { handlePostSubmit, status, msg, res } = UsePost({
@@ -118,7 +128,6 @@ const FormC = ({ obj, handleCancelar }) => {
           <Form.Label>Nome: </Form.Label>
           <Form.Control
             type="text"
-            // defaultValue={obj.nome}
             defaultValue={Nome}
             onChange={handleNome}
           />
@@ -127,7 +136,6 @@ const FormC = ({ obj, handleCancelar }) => {
           <Form.Label>Tipo: </Form.Label>
           <Form.Control
             type="text"
-            // defaultValue={obj.tipo}
             defaultValue={Tipo}
             onChange={handleTipo}
           />
@@ -136,7 +144,6 @@ const FormC = ({ obj, handleCancelar }) => {
           <Form.Label>Foto: </Form.Label>
           <Form.Control
             type="file"
-            // defaultValue={obj.foto}
             defaultValue={Imagem}
             onChange={handleImagem}
           />
@@ -146,7 +153,6 @@ const FormC = ({ obj, handleCancelar }) => {
           <Form.Control
             as="textarea"
             rows={3}
-            // defaultValue={obj.descricao}
             defaultValue={Objetivos}
             onChange={handleObjetivos}
           />

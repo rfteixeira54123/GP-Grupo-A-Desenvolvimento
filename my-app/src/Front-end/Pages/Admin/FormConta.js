@@ -38,74 +38,93 @@ const styleContainer = {
 // Recebe:
 //  obj: candidato a editar (opcional) se for pra editar tem id_candidato
 //  handleCancelar: método para fechar o popup
-const FormC = ({ obj, handleCancelar }) => {
+//  handleAdd: método para fechar o popup após adicionar.
+//  handleEdit: método para fechar o popup após editar.
+const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   const handleAdicionar = () => {
     //Fazer função para adicionar candidato
     console.log("adicionar");
+
+    // handlePostSubmit0()
+    //   .then(() => {
+    // if(handleAdd) handleAdd({ nome: Nome, numero_id: ID, email: Email, estado: Estado });
+    // });
   };
 
   const handleEditar = () => {
     //Fazer função para editar candidato
     console.log("editar");
+
+    // handlePostSubmit1()
+    //   .then(() => {
+    //     obj.nome = Nome;
+    //     obj.numero_id = ID;
+    //     obj.email = Email;
+    //     obj.estado = Estado;
+    //     if(handleEdit) handleEdit(obj);
+    //   });
   };
 
   return (
-      <div style={styleContainer}>
-        <div style={styleTop}>{obj.id_conta ? "Editar" : "Adicionar"} conta</div>
-        <Form
-          style={{ 
-            marginTop: "1rem", 
-            color: constants.color.secondary,
-            fontSize: "14px",
-          }}
-        >
-          {obj.id_conta ?
-            <Form.Group className="mb-3">
-              <Form.Label>Estado: </Form.Label>
-              <Form.Select defaultValue={obj.estado}>
-                <option value={true}>Ativo</option>
-                <option value={false}>Inativo</option>
-              </Form.Select>
-            </Form.Group>
-            :
-            <Form.Group className="mb-3">
-              <Form.Label>Tipo: </Form.Label>
-              <Form.Select>
-                <option value="Eleitor">Eleitor</option>
-                <option value="Administrador">Administrador</option>
-              </Form.Select>
-            </Form.Group>
-          }
+    <div style={styleContainer}>
+      <div style={styleTop}>{obj.id_conta ? "Editar" : "Adicionar"} conta</div>
+      <Form
+        style={{
+          marginTop: "1rem",
+          color: constants.color.secondary,
+          fontSize: "14px",
+        }}
+      >
+        {obj.id_conta ? (
           <Form.Group className="mb-3">
-            <Form.Label>Nome: </Form.Label>
-            <Form.Control type="text" defaultValue={obj.nome}/>
+            <Form.Label>Estado: </Form.Label>
+            <Form.Select defaultValue={obj.estado}>
+              <option value={true}>Ativo</option>
+              <option value={false}>Inativo</option>
+            </Form.Select>
           </Form.Group>
+        ) : (
           <Form.Group className="mb-3">
-            <Form.Label>Nº de ID: </Form.Label>
-            <Form.Control type="text"  defaultValue={obj.numero_id}/>
+            <Form.Label>Tipo: </Form.Label>
+            <Form.Select>
+              <option value="Eleitor">Eleitor</option>
+              <option value="Administrador">Administrador</option>
+            </Form.Select>
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Email: </Form.Label>
-            <Form.Control type="email" defaultValue={obj.email}/>
-          </Form.Group>
-        </Form>
-        <div
-          style={{
-            display: "flex",
-            gap: "4rem",
-            marginBlock: "1rem",
-            marginInline: "2rem",
-          }}
-        >
-          <Button label="Cancelar" handle={handleCancelar} />
-          <Button label={obj.id_conta ? "Editar" : "Adicionar"} handle={obj.id_conta ? handleEditar : handleAdicionar} />
-        </div>
+        )}
+        <Form.Group className="mb-3">
+          <Form.Label>Nome: </Form.Label>
+          <Form.Control type="text" defaultValue={obj.nome} />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Nº de ID: </Form.Label>
+          <Form.Control type="text" defaultValue={obj.numero_id} />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Email: </Form.Label>
+          <Form.Control type="email" defaultValue={obj.email} />
+        </Form.Group>
+      </Form>
+      <div
+        style={{
+          display: "flex",
+          gap: "4rem",
+          marginBlock: "1rem",
+          marginInline: "2rem",
+        }}
+      >
+        <Button label="Cancelar" handle={handleCancelar} />
+        <Button
+          label={obj.id_conta ? "Editar" : "Adicionar"}
+          handle={obj.id_conta ? handleEditar : handleAdicionar}
+        />
       </div>
+    </div>
   );
 };
 
 FormC.defaultProps = {
-  obj: {nome: "", descricao: "", tipo: "", foto: "", estado: false},
-}
+  obj: { nome: "", numero_id: "", email: "", estado: false },
+};
 
 export default FormC;

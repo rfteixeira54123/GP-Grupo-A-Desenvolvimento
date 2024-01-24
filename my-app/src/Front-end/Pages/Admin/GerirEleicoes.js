@@ -113,14 +113,41 @@ const Page = () => {
     setStatePopup(3);
   };
 
-  const formatarData = (data) => {
-    return data + "";
+  const handleAdd = (obj) => {
+    let updateEleicoes = [...eleicoes];
+    updateEleicoes.push(obj);
+    setEleicoes(updateEleicoes);
+    handleOptionClick();
+    setStatePopup(0);
+  };
+
+  const handleEdited = (obj) => {
+    let updatedEleicoes = [...eleicoes];
+
+    // Use map para percorrer o array e substituir o objeto correspondente
+    updatedEleicoes = updatedEleicoes.map((eleicao) => {
+      if (eleicao.id_eleicao === obj.id_eleicao) {
+        // Se o id_eleicao for igual, substitua o objeto
+        return obj;
+      }
+      // Caso contrário, mantenha o objeto inalterado
+      return eleicao;
+    });
+
+    setEleicoes(updatedEleicoes);
+    handleOptionClick();
+    setStatePopup(0);
   };
 
   const decidePopup = () => {
     switch (statePopup) {
       case 1:
-        return <FormEleicao handleCancelar={() => setStatePopup(0)} />;
+        return (
+          <FormEleicao
+            handleCancelar={() => setStatePopup(0)}
+            handleAdd={(obj) => handleAdd(obj)}
+          />
+        );
       case 2:
         return (
           <RemoverEleicao
@@ -130,7 +157,11 @@ const Page = () => {
         );
       case 3:
         return (
-          <FormEleicao obj={toEdit} handleCancelar={() => setStatePopup(0)} />
+          <FormEleicao
+            obj={toEdit}
+            handleCancelar={() => setStatePopup(0)}
+            handleEdit={(obj) => handleEdited(obj)}
+          />
         );
       case 4:
         return (

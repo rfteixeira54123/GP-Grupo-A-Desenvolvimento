@@ -2,6 +2,7 @@ import { useState } from "react";
 import {Table} from 'react-bootstrap';
 import { AiFillDelete } from "react-icons/ai";
 import { MdOutlineEdit } from "react-icons/md";
+import { format } from "date-fns";
 
 import CheckBox from "../Componentes/CheckBox";
 import CheckBoxEstado from "../Componentes/CheckBoxEstado";
@@ -131,8 +132,8 @@ export const TableEleicoes = (props) => {
                   <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox onChange={() => handleChange(obj.id_eleicao)}/></td>
                   <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
                   <td style={styleCell}>{obj.cargo_disputa}</td>
-                  <td style={styleCell}>{obj.data_inicio}</td>
-                  <td style={styleCell}>{obj.data_fim}</td>
+                  <td style={styleCell}>{format(obj.data_inicio, "dd/MM/yyyy")}</td>
+                  <td style={styleCell}>{format(obj.data_fim, "dd/MM/yyyy")}</td>
                   <td style={styleCell} onClick={() => props.handleEdit(obj)} ><MdOutlineEdit size={25} /></td>
                   <td style={styleCell} onClick={() => props.handleDelete(obj)}><AiFillDelete size={22} /></td>
                 </tr>
@@ -430,7 +431,7 @@ export const TableEventos = (props) => {
                 <tr key={"RowEvento"+obj.id_evento} style={{background:(index % 2) !== 0 ? constants.color.primary_light : constants.color.white} }>
                   <td style={{...styleCell, padding: "0px", paddingInline: "0px"}}><CheckBox onChange={() => handleChange(obj.id_evento)} /></td>
                   <td style={{...styleCell, textAlign: "start"}}>{obj.nome}</td>
-                  <td style={styleCell}>{obj.data}</td>
+                  <td style={styleCell}>{format(obj.data, "dd/MM/yyyy")}</td>
                   <td style={styleCell} onClick={() => props.handleEdit(obj)} ><MdOutlineEdit size={25} /></td>
                   <td style={styleCell} onClick={() => props.handleDelete(obj)}><AiFillDelete size={22} /></td>
                 </tr>

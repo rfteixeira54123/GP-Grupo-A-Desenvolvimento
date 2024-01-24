@@ -79,7 +79,7 @@ const Page = () => {
         >
           <div style={{ gridColumn: 1 }}></div>
           <div style={{ gridColumn: 2 }}>
-            <Button label="Adicionar Evento" />
+            <Button label="Adicionar Evento" show={false} />
           </div>
           <div style={{ gridColumn: 3 }}>
             <Button label="Remover Selecionados" show={showButtons} />

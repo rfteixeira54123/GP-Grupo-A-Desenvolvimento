@@ -93,7 +93,9 @@ const styleBtnFloat = {
 // Recebe:
 //  obj: eleicao a editar (opcional) se for pra editar tem id_eleicao
 //  handleCancelar: método para fechar o popup
-const FormC = ({ obj, handleCancelar }) => {
+//  handleAdd: método para fechar o popup após adicionar.
+//  handleEdit: método para fechar o popup após editar.
+const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   //Fazer get para buscar candidatos da eleição.
   const [candidatos, setCandidatos] = useState([]); //Atualizar com o array de candidatos da eleição.
   const [Tipo, setTipo] = useState(obj.cargo_disputa);
@@ -116,7 +118,10 @@ const FormC = ({ obj, handleCancelar }) => {
   };
 
   const handleAdicionar = () => {
-    handlePostSubmit0();
+    handlePostSubmit0()
+      .then(() => {
+        if(handleAdd) handleAdd({ nome: Nome, cargo_disputa: Tipo, data_fim: Fim, data_inicio: Inicio });
+      });
   };
 
   const handleEditar = () => {
@@ -124,7 +129,14 @@ const FormC = ({ obj, handleCancelar }) => {
     for (let i = 0; i < candidatos.length; i++) {
       candidatos[0] = candidatos[i];
       setIdCandidato(candidatos[0].id_candidato);
-      handlePostSubmit1();
+      handlePostSubmit1()
+        .then(() => {
+          obj.nome = Nome;
+          obj.cargo_disputa = Tipo;
+          obj.data_inicio = Inicio;
+          obj.data_fim = Fim;
+          if(handleEdit) handleEdit(obj);
+        });
     }
   };
 

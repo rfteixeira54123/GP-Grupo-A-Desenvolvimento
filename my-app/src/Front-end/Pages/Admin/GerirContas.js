@@ -82,52 +82,87 @@ const Page = (props) => {
   const handleEnable = (obj) => {
     setToEnable(obj);
     setStatePopup(6);
-  }
+  };
+
+  const handleAdd = (obj) => {
+    let updateContas = [...contas];
+    updateContas.push(obj);
+    setContas(updateContas);
+    handleOptionClick();
+    setStatePopup(0);
+  };
+
+  const handleEdited = (obj) => {
+    let updateContas = [...contas];
+
+    // Use map para percorrer o array e substituir o objeto correspondente
+    updateContas = updateContas.map((conta) => {
+      if (conta.id_conta === obj.id_conta) {
+        // Se o id_eleicao for igual, substitua o objeto
+        return obj;
+      }
+      // Caso contrário, mantenha o objeto inalterado
+      return conta;
+    });
+
+    setContas(updateContas);
+    handleOptionClick();
+    setStatePopup(0);
+  };
 
   const decidePopup = () => {
     switch (statePopup) {
       case 1:
-        return <FormConta handleCancelar={() => setStatePopup(0)} />;
-      case 4: 
-        return (  <FormConta obj={toEdit} 
-          handleCancelar={() => setStatePopup(0)} /> );
+        return (
+          <FormConta
+            handleCancelar={() => setStatePopup(0)}
+            handleAdd={(obj) => handleAdd(obj)}
+          />
+        );
+      case 4:
+        return (
+          <FormConta
+            obj={toEdit}
+            handleCancelar={() => setStatePopup(0)}
+            handleEdit={(obj) => handleEdited(obj)}
+          />
+        );
       case 2:
-        return ( 
-          <RemoverConta 
+        return (
+          <RemoverConta
             choice={selected}
-            handleCancelar={() => setStatePopup(0)} 
+            handleCancelar={() => setStatePopup(0)}
             variant={false}
-            /> 
+          />
         );
       case 3:
-        return ( 
-          <RemoverConta 
+        return (
+          <RemoverConta
             choice={selected}
-            handleCancelar={() => setStatePopup(0)} 
+            handleCancelar={() => setStatePopup(0)}
             variant={true}
-            /> 
+          />
         );
-        case 5:
-          return ( 
-            <RemoverConta 
-              choice={[toDelete]}
-              handleCancelar={() => setStatePopup(0)} 
-              variant={false}
-              /> 
-          );
-        case 6:
-          return ( 
-            <RemoverConta 
-              choice={[toEnable]}
-              handleCancelar={() => setStatePopup(0)} 
-              variant={true}
-              /> 
-          );
+      case 5:
+        return (
+          <RemoverConta
+            choice={[toDelete]}
+            handleCancelar={() => setStatePopup(0)}
+            variant={false}
+          />
+        );
+      case 6:
+        return (
+          <RemoverConta
+            choice={[toEnable]}
+            handleCancelar={() => setStatePopup(0)}
+            variant={true}
+          />
+        );
       default:
         return <></>;
     }
   };
-
 
   return (
     <div style={styleWindow}>
@@ -136,7 +171,11 @@ const Page = (props) => {
         <Filter id={0} handle={() => handleOptionClick()} />
         <div
           key={forceRenderTable ? "forceRenderTable" : "normalRenderTable"}
-          style={{ width: "96%", height: "inherit", maxHeight: forceRenderTable ? "46vh": "65vh" }}
+          style={{
+            width: "96%",
+            height: "inherit",
+            maxHeight: forceRenderTable ? "46vh" : "65vh",
+          }}
         >
           <TableUtilizadores
             handleCheckboxChange={updateShowButtons}
@@ -147,23 +186,33 @@ const Page = (props) => {
           />
         </div>
         <div
-          key={forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons"}
+          key={
+            forceRenderButtons ? "forceRenderButtons" : "normalRenderButtons"
+          }
           style={{
             width: "96%",
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            justifyItems:  "center",
+            justifyItems: "center",
             paddingBlock: "1.5rem",
           }}
         >
-          <div style={{gridColumn: 1}}>
-            <Button label="Desativar Selecionados" show={showButtons} handle={() => setStatePopup(3)} />
+          <div style={{ gridColumn: 1 }}>
+            <Button
+              label="Desativar Selecionados"
+              show={showButtons}
+              handle={() => setStatePopup(3)}
+            />
           </div>
-          <div style={{gridColumn: 2}}>
-            <Button label="Adicionar Conta"  handle={() => setStatePopup(1)} />
+          <div style={{ gridColumn: 2 }}>
+            <Button label="Adicionar Conta" handle={() => setStatePopup(1)} />
           </div>
-          <div style={{gridColumn: 3}}>
-            <Button label="Remover Selecionados" show={showButtons} handle={() => setStatePopup(2)} />
+          <div style={{ gridColumn: 3 }}>
+            <Button
+              label="Remover Selecionados"
+              show={showButtons}
+              handle={() => setStatePopup(2)}
+            />
           </div>
         </div>
         <div
@@ -187,7 +236,6 @@ const Page = (props) => {
 };
 
 export default Page;
-
 
 // const array = [
 //   {

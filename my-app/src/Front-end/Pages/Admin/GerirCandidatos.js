@@ -88,6 +88,7 @@ const Page = () => {
   const [toDelete, setToDelete] = useState(null);
   const [forceRenderButtons, setForceRenderButtons] = useState(false);
   const [statePopup, setStatePopup] = useState(0);
+  const [forceRenderTable, setForceRenderTable] = useState(false);
 
   const updateShowButtons = (array) => {
     if (array.includes(-1)) {
@@ -102,6 +103,10 @@ const Page = () => {
     setForceRenderButtons((prevState) => !prevState);
   };
 
+  const handleOptionClick = () => {
+    setForceRenderTable((prevState) => !prevState);
+  };
+
   const handleDelete = (obj) => {
     setToDelete(obj);
     setStatePopup(4);
@@ -112,10 +117,43 @@ const Page = () => {
     setStatePopup(3);
   };
 
+  const handleAdd = (obj) => {
+    let updateCandidatos = [...candidatos];
+    updateCandidatos.push(obj);
+    setCandidatos(updateCandidatos);
+    handleOptionClick();
+    setStatePopup(0);
+  };
+
+  const handleEdited = (obj) => {
+    let updateCandidatos = [...candidatos];
+
+    // Use map para percorrer o array e substituir o objeto correspondente
+    updateCandidatos = updateCandidatos.map((candidato) => {
+      if (candidato.id_candidato === obj.id_candidato) {
+        // Se o id_eleicao for igual, substitua o objeto
+        return obj;
+      }
+      // Caso contrário, mantenha o objeto inalterado
+      return candidato;
+    });
+
+    setCandidatos(updateCandidatos);
+    handleOptionClick();
+    setStatePopup(0);
+  };
+
   const decidePopup = () => {
     switch (statePopup) {
       case 1:
-        return <FormCandidato handleCancelar={() => setStatePopup(0)} />;
+        return (
+          <FormCandidato
+            handleCancelar={() => setStatePopup(0)}
+            handleAdd={(obj) => {
+              handleAdd(obj);
+            }}
+          />
+        );
       case 2:
         return (
           <RemoverCandidato
@@ -125,7 +163,11 @@ const Page = () => {
         );
       case 3:
         return (
-          <FormCandidato obj={toEdit} handleCancelar={() => setStatePopup(0)} />
+          <FormCandidato
+            obj={toEdit}
+            handleCancelar={() => setStatePopup(0)}
+            handleEdit={(obj) => handleEdited(obj)}
+          />
         );
       case 4:
         return (
@@ -156,6 +198,7 @@ const Page = () => {
       <div style={styleTitle}>GESTÃO DE CANDIDATOS</div>
       <div style={styleContainer}>
         <div
+          key={forceRenderTable ? "forceRenderTable" : "normalRenderTable"}
           style={{
             width: "80%",
             height: "inherit",
