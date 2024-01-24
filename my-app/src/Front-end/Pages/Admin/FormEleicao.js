@@ -108,10 +108,10 @@ const FormC = ({ obj, handleCancelar }) => {
     setNome(e.target.value);
   };
   const handleInicio = (e) => {
-    setInicio(e.target.value);
+    setInicio(format(e.target.value, "yyyy-MM-dd"));
   };
   const handleFim = (e) => {
-    setFim(e.target.value);
+    setFim(format(e.target.value, "yyyy-MM-dd"));
   };
 
   const handleAdicionar = () => {
@@ -122,9 +122,9 @@ const FormC = ({ obj, handleCancelar }) => {
   const { handlePostSubmit, status, msg, res } = UsePost({
     Data: {
       Nome: Nome,
-      Tipo: Tipo,
       Data_Inicio: Inicio,
       Data_Fim: Fim,
+      Cargo_Disputa: Tipo,
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/inserir",
   });
@@ -238,7 +238,9 @@ const FormC = ({ obj, handleCancelar }) => {
           </Col>
         </Row>
       </Form>
-      <div style={{ ...styleContainer, maxWidth: "40rem", overflowY: "hidden" }}>
+      <div
+        style={{ ...styleContainer, maxWidth: "40rem", overflowY: "hidden" }}
+      >
         <div style={styleTopInside}>Candidatos</div>
         <div style={styleContainerInside}>
           <ul style={styleUL}>
@@ -246,8 +248,12 @@ const FormC = ({ obj, handleCancelar }) => {
               <li key={"candidato" + index}>
                 <div style={styleLI}>
                   <div>{obj.nome}</div>
-                  <TiDelete title="Remover candidato" color={constants.color.red_light} 
-                  size={30} onClick={() => handleRemoveCandidato(index)}/>
+                  <TiDelete
+                    title="Remover candidato"
+                    color={constants.color.red_light}
+                    size={30}
+                    onClick={() => handleRemoveCandidato(index)}
+                  />
                 </div>
               </li>
             ))}
