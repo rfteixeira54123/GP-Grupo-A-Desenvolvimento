@@ -1,6 +1,7 @@
 import * as constants from "../../constants";
 import ListaEleicoes from "../../Componentes/ItemEleicoesPassadas";
-
+import UseGet from "../../../Back-end/HTTP/GET";
+import { useEffect, useState } from "react";
 const styleTitle = {
   color: constants.color.secondary,
   fontSize: "22px",
@@ -32,31 +33,54 @@ const styleContainer = {
   overflowY: "auto",
 };
 
-const array = [
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-  // { name: "Eleição de Presidente de 22/23", linkConsulta: "" },
-];
-
 const Passadas = () => {
+  const [flag, setFlag] = useState(true);
+  const [eleicoes, setEleicoes] = useState([]);
+
+  const { handleGetSubmit, status, message, res } = UseGet({
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/listar",
+  });
+
+  useEffect(() => {
+    if (flag) {
+      handleGetSubmit();
+      setFlag(false);
+    }
+  });
+
+  useEffect(() => {
+    if (res && res.Eleicoes && Array.isArray(res.Eleicoes)) {
+      const eleicaoList = res.Eleicoes.map((eleicao) => ({
+        id_eleicao: eleicao.id_eleicao,
+        name: eleicao.nome,
+        cargo_disputa: eleicao.cargo_disputa,
+        data_inicio: eleicao.data_inicio,
+        data_fim: eleicao.data_fim,
+      }));
+      // setEleicoes(eleicaoList);
+      setEleicoes(eleicoesPassadas(eleicaoList));
+    }
+  }, [res]);
+
+  const eleicoesPassadas = (eleicoes) => {
+    const dataAtual = new Date();
+
+    const eleicoesFiltradas = eleicoes.filter((eleicao) => {
+      const dataFim = new Date(eleicao.data_fim);
+
+      return dataFim < dataAtual;
+    });
+
+    return eleicoesFiltradas;
+  };
   return (
     <div style={styleWindow}>
       <div style={styleTitle}>ELEIÇÕES PASSADAS</div>
       <div style={styleContainer}>
-        {array.length === 0 ? (
+        {eleicoes.length === 0 ? (
           <div>Não existe eleições passadas.</div>
         ) : (
-          array.map((obj, index) => (
+          eleicoes.map((obj, index) => (
             <ListaEleicoes
               key={"ELeicao" + index}
               name={obj.name}

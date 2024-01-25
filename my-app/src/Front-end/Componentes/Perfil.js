@@ -53,7 +53,6 @@ const Perfil = (props) => {
   });
 
   const handleLogout = () => {
-    console.log("Entra no logout");
     handleGetSubmit();
     localStorage.removeItem("Token");
   };

@@ -46,7 +46,6 @@ function UsePatch({ Data, FORM_ENDPOINT }) {
         console.table(data);
         setRes(data);
         try {
-          console.log("PATCH");
         } catch {}
       })
       .catch((error) => {

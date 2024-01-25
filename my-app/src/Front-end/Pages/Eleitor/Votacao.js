@@ -54,7 +54,7 @@ const Window = () => {
   function handleState(page, choice) {
     setState(page);
     setObj(choice);
-    console.log(JSON.stringify(choice));
+    // console.log(JSON.stringify(choice));
   }
 
   const defineContent = () => {

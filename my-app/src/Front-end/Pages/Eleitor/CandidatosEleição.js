@@ -2,6 +2,8 @@ import Carousel from "react-bootstrap/Carousel";
 // import "./style.css";
 
 import * as constants from "../../constants";
+import { useState, useEffect } from "react";
+import UseGet from "../../../Back-end/HTTP/GET";
 
 const styleTitle = {
   color: constants.color.secondary,
@@ -67,52 +69,52 @@ const styleTime = {
 // Recebe:
 //  getEleicao: eleição a exibir
 const Dados = ({ getEleicao }) => {
-  //Receber array de candidatos de acordo com o id da eleição.
-  const array = [
-    {
-      id_candidato: 11,
-      nome: "AAAAA",
-      tipo: "Lista",
-      descricao:
-        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend",
-      foto: "cvcb",
-    },
-    {
-      id_candidato: 12,
-      nome: "AAAA2",
-      tipo: "Lista",
-      descricao:
-        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend",
-      responsavel: "Nulla vitae elit libero, a pharetra augue mollis interdum.",
-      foto: "",
-    },
-    {
-      id_candidato: 13,
-      nome: "AAAA3",
-      tipo: "Lista",
-      descricao:
-        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend",
-      responsavel: "Nulla vitae elit libero, a pharetra augue mollis interdum.",
-      foto: "bcvb",
-    },
-    {
-      id_candidato: 14,
-      nome: "AAAA5",
-      tipo: "Lista",
-      descricao:
-        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend",
-      responsavel: "Nulla vitae elit libero, a pharetra augue mollis interdum.",
-      foto: "",
-    },
-    {
-      id_candidato: 16,
-      nome: "AAAAA",
-      tipo: "Lista",
-      descricao:
-        "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifendmagnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend ",
-      foto: "",
-    },
-  ];
+  const [eleicaoId, setEleicaoId] = useState("");
+  const [flag, setFlag] = useState(true);
+  const [numero, setNumero] = useState("");
+  const [candidatos, setCandidatos] = useState([]);
+
+  useEffect(() => {
+    if (flag) {
+      let User = localStorage.getItem("User");
+      let desUser = JSON.parse(User);
+      setNumero(desUser.numero);
+      setEleicaoId(getEleicao.id_eleicao);
+      setFlag(false);
+    }
+  });
+
+  const { handleGetSubmit, status, message, res } = UseGet({
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/listar",
+  });
+
+  useEffect(() => {
+    if (flag) {
+      handleGetSubmit();
+      setFlag(false);
+    }
+  });
+
+  useEffect(() => {
+    if (res && res.Candidatos && Array.isArray(res.Candidatos)) {
+      const candidatoList = res.Candidatos.map((candidato) => ({
+        id_candidato: candidato.id_candidato,
+        nome: candidato.nome,
+        tipo: candidato.tipo,
+        descricao: candidato.objetivo,
+      }));
+      setCandidatos(filtrarCandidatos(candidatoList));
+    }
+  }, [res]);
+
+  const filtrarCandidatos = (candidatos) => {
+    const candidatosFiltrados = candidatos.filter((candidatos) => {
+      const idCandidato = candidatos.id_candidato;
+      return idCandidato == eleicaoId;
+    });
+
+    return candidatosFiltrados;
+  };
 
   return (
     <>
@@ -138,7 +140,7 @@ const Dados = ({ getEleicao }) => {
               height: "100%",
             }}
           >
-            {array.map((obj, index) => (
+            {candidatos.map((obj, index) => (
               <Carousel.Item
                 data-bs-theme="primary"
                 key={"Candidato" + index}
@@ -165,15 +167,19 @@ const Dados = ({ getEleicao }) => {
                       textAlign: "justify",
                     }}
                   >
-                    {obj.responsavel ? <>
-                      <strong style={{ fontStyle: "italic" }}>
-                        Responsáveis:
-                      </strong>
-                      <br />
-                      {obj.responsavel}
-                      <br />
-                      <br />
-                    </> : <></>}
+                    {obj.responsavel ? (
+                      <>
+                        <strong style={{ fontStyle: "italic" }}>
+                          Responsáveis:
+                        </strong>
+                        <br />
+                        {obj.responsavel}
+                        <br />
+                        <br />
+                      </>
+                    ) : (
+                      <></>
+                    )}
                     <strong style={{ fontStyle: "italic" }}>Objetivos:</strong>
                     <br />
                     {obj.descricao}

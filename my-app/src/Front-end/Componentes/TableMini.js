@@ -50,7 +50,7 @@ const Mini = ({ candidatos, selecionados, handleCheckboxChange }) => {
     }
 
     setSelectedCheckboxes(updatedCheckboxes);
-    console.log(updatedCheckboxes);
+    // console.log(updatedCheckboxes);
     handleCheckboxChange(
       candidatos.filter((candidato) =>
         updatedCheckboxes.includes(candidato.id_candidato)
@@ -69,7 +69,7 @@ const Mini = ({ candidatos, selecionados, handleCheckboxChange }) => {
       </thead>
       <tbody>
         {candidatos.map((obj, index) => (
-          <tr key={"CandiSelect"+index}>
+          <tr key={"CandiSelect" + index}>
             <td style={{ ...styleCell, padding: "0px", paddingInline: "0px" }}>
               <CheckBox
                 state={selecionados.includes(obj.id_candidato)}

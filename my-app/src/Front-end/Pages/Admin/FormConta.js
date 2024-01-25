@@ -43,8 +43,7 @@ const styleContainer = {
 const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   const handleAdicionar = () => {
     //Fazer função para adicionar candidato
-    console.log("adicionar");
-
+    // console.log("adicionar");
     // handlePostSubmit0()
     //   .then(() => {
     // if(handleAdd) handleAdd({ nome: Nome, numero_id: ID, email: Email, estado: Estado });
@@ -53,8 +52,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const handleEditar = () => {
     //Fazer função para editar candidato
-    console.log("editar");
-
+    // console.log("editar");
     // handlePostSubmit1()
     //   .then(() => {
     //     obj.nome = Nome;

@@ -60,9 +60,21 @@ const Adecorrer = ({ handle }) => {
         data_inicio: eleicao.data_inicio,
         data_fim: eleicao.data_fim,
       }));
-      setEleicoes(eleicaoList);
+      setEleicoes(eleicoesDecorrer(eleicaoList));
     }
   }, [res]);
+
+  const eleicoesDecorrer = (eleicoes) => {
+    const dataAtual = new Date();
+    const eleicoesFiltradas = eleicoes.filter((eleicao) => {
+      const dataInicio = new Date(eleicao.data_inicio);
+      const dataFim = new Date(eleicao.data_fim);
+
+      return dataFim > dataAtual && dataInicio <= dataAtual;
+    });
+
+    return eleicoesFiltradas;
+  };
 
   return (
     <div style={styleWindow}>
@@ -73,10 +85,10 @@ const Adecorrer = ({ handle }) => {
         ) : (
           eleicoes.map((obj, index) => (
             <ItemEleicoes
-              key={"ELeicao" + index}
+              key={"Eleicao" + index}
               name={obj.nome}
               handleInfo={() => handle(2, obj)}
-              linkVotar={"vote" /*/" + obj.id_eleicao*/}
+              linkVotar={"vote"}
             />
           ))
         )}
