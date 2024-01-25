@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import * as contants from "../constants";
 import Button from "./FormBtn";
 import UsePost from "../../Back-end/HTTP/POST";
+import useGet from "../../Back-end/HTTP/GET";
 
 const styleForm = {
   width: "100%",
@@ -34,6 +35,11 @@ const FormLogin = () => {
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/login",
   });
 
+  const { handleGetSubmit, gstatus, gmsg, gres } = useGet({
+    Data: -1,
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/detalhes",
+  });
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -52,17 +58,13 @@ const FormLogin = () => {
       setShow(false);
       handlePostSubmit()
         .then((data) => {
-          // Handle success or access data from the response if needed
           if (localStorage.getItem("Token")) {
-            localStorage.setItem("email", Email);
-            localStorage.setItem("pass", PalavraPasse);
-            // Assuming navigate is a function for navigating to another page
-            navigate("/home");
+            handleGetSubmit().then(() => {
+              navigate("/home");
+            });
           }
         })
         .catch((error) => {
-          // Handle error
-          // console.error("Error in handlePostSubmit:", error);
           setMessage(error);
           setShow(true);
         });

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Menu from "../../Componentes/Menu";
 import Perfil from "../../Componentes/Perfil";
@@ -26,11 +26,24 @@ const styleWindow = {
 const Page = ({ user }) => {
   let [state, setState] = useState(0);
   let [eleicao, setEleicao] = useState(null);
+  const [nome, setNome] = useState("");
+  const [numero, setNumero] = useState("");
+  const [flag, setFlag] = useState(true);
 
-  const handleState = (page, aEleicao) => {
+  useEffect(() => {
+    if (flag) {
+      let User = localStorage.getItem("User");
+      let desUser = JSON.parse(User);
+      setNome(desUser.nome);
+      setNumero(desUser.numero);
+      setFlag(false);
+    }
+  });
+
+  const handleState = (page) => {
     setState(page);
-    setEleicao(aEleicao);
-  }
+    setEleicao(eleicao);
+  };
 
   const content = (page) => {
     switch (page) {
@@ -46,7 +59,7 @@ const Page = ({ user }) => {
       case 1:
         return <Passadas />;
       case 2:
-        return <CandidatosEleição getEleicao={eleicao} />
+        return <CandidatosEleição getEleicao={eleicao} />;
     }
   };
 
@@ -59,8 +72,8 @@ const Page = ({ user }) => {
         handle={handleState}
       />
       <Perfil
-        nome="Nome Teste de Utilizador"
-        numId="a2021101569test"
+        nome={nome}
+        numId={numero}
         // nome={user.nome}
         // numId={user.numId}
       />

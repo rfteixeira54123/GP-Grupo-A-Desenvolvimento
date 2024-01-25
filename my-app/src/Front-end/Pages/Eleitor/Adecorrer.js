@@ -1,5 +1,8 @@
 import * as constants from "../../constants";
 import ItemEleicoes from "../../Componentes/ItemEleicoes";
+import UseGet from "../../../Back-end/HTTP/GET";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const styleTitle = {
   color: constants.color.secondary,
@@ -32,25 +35,48 @@ const styleContainer = {
   overflowY: "auto",
 };
 
-const array = [
-  { id_eleicao: 110, nome: "Presidente", data_inicio: "20/11/2023 às 08:00h", data_fim: "24/11/2023 às 20:00h" },
-];
-
 //  Recebe handle para ação do botão de informações de uma eleição
 const Adecorrer = ({ handle }) => {
+  const [flag, setFlag] = useState(true);
+  const [eleicoes, setEleicoes] = useState([]);
+
+  const { handleGetSubmit, status, message, res } = UseGet({
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/listar",
+  });
+
+  useEffect(() => {
+    if (flag) {
+      handleGetSubmit();
+      setFlag(false);
+    }
+  });
+
+  useEffect(() => {
+    if (res && res.Eleicoes && Array.isArray(res.Eleicoes)) {
+      const eleicaoList = res.Eleicoes.map((eleicao) => ({
+        id_eleicao: eleicao.id_eleicao,
+        nome: eleicao.nome,
+        cargo_disputa: eleicao.cargo_disputa,
+        data_inicio: eleicao.data_inicio,
+        data_fim: eleicao.data_fim,
+      }));
+      setEleicoes(eleicaoList);
+    }
+  }, [res]);
+
   return (
     <div style={styleWindow}>
       <div style={styleTitle}>ELEIÇÕES A DECORRER</div>
       <div style={styleContainer}>
-        {array.length === 0 ? (
+        {eleicoes.length === 0 ? (
           <div>Não existe eleições atuais.</div>
         ) : (
-          array.map((obj, index) => (
+          eleicoes.map((obj, index) => (
             <ItemEleicoes
               key={"ELeicao" + index}
               name={obj.nome}
               handleInfo={() => handle(2, obj)}
-              linkVotar={"vote"/*/" + obj.id_eleicao*/}
+              linkVotar={"vote" /*/" + obj.id_eleicao*/}
             />
           ))
         )}

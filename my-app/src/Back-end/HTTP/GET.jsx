@@ -43,6 +43,16 @@ function UseGet({ Data, FORM_ENDPOINT }) {
       })
       .then((data) => {
         setRes(data);
+        let User = {
+          id: data.userID,
+          nome: data.userName,
+          email: data.Email,
+          numero: data.Identificador,
+          privilegio: data.Access,
+        };
+        if (Data === -1) {
+          localStorage.setItem("User", JSON.stringify(User));
+        }
       })
       .catch((error) => {
         console.error("Erro durante o pedido GET:", error);

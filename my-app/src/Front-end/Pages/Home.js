@@ -7,10 +7,11 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    let option = false;
-
+    let User = localStorage.getItem("User");
+    let desUser = JSON.parse(User);
+    let priv = desUser.privilegio;
     if (!localStorage.getItem("Token")) return <Login />;
-    else if (option) return <Eleitor />;
+    else if (priv == 0) return <Eleitor />;
     else return <Admin />;
   };
 

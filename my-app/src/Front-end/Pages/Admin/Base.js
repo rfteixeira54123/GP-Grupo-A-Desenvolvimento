@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // import * as links from "../../links";
 
@@ -15,10 +15,23 @@ const stylePage = {
 // Recebe:
 //  menuStates: array com 4 booleans para definir o estado dos botões do menu
 //  user: {nome, numId}: dados do utilizador
-const Page = ({user}) => {
-  let[state, setState] = useState(0);
+const Page = ({ user }) => {
+  let [state, setState] = useState(0);
+  const [nome, setNome] = useState("");
+  const [numero, setNumero] = useState("");
+  const [flag, setFlag] = useState(true);
 
-  function handleState (page) {
+  useEffect(() => {
+    if (flag) {
+      let User = localStorage.getItem("User");
+      let desUser = JSON.parse(User);
+      setNome(desUser.nome);
+      setNumero(desUser.numero);
+      setFlag(false);
+    }
+  });
+
+  function handleState(page) {
     setState(page);
   }
 
@@ -30,17 +43,18 @@ const Page = ({user}) => {
           "Gestão de Contas",
           "Gestão de Eleições",
           "Gestão de Candidatos",
-          "Gestão de Eventos"
+          "Gestão de Eventos",
         ]}
         state={state}
         handle={handleState}
       />
       <Perfil
-      nome="Nome Teste de Utilizador" numId="a2021101569test"
+        nome={nome}
+        numId={numero}
         // nome={user.nome}
         // numId={user.numId}
       />
-      <Conteudo state={state}/>
+      <Conteudo state={state} />
     </div>
   );
 };
