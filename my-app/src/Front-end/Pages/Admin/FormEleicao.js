@@ -100,43 +100,65 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   const [candidatos, setCandidatos] = useState([]); //Atualizar com o array de candidatos da eleição.
   const [Tipo, setTipo] = useState(obj.cargo_disputa);
   const [Nome, setNome] = useState(obj.nome);
-  const [Inicio, setInicio] = useState(obj.data_inicio);
-  const [Fim, setFim] = useState(obj.data_fim);
+  const [Inicio, setInicio] = useState(obj.id_eleicao ? format(obj.data_inicio, "yyyy-MM-dd"): obj.data_inicio);
+  const [Fim, setFim] = useState(obj.id_eleicao ? format(obj.data_fim, "yyyy-MM-dd") : obj.data_fim);
   const [idCandidato, setIdCandidato] = useState();
+  const [valTipo, setvalTipo] = useState(false);
+  const [valNome, setvalNome] = useState(false);
+  const [valInicio, setvalInicio] = useState(false);
+  const [valFim, setvalFim] = useState(false);
 
   const handleTipo = (e) => {
     setTipo(e.target.value);
+    setvalTipo(!e.target.value);
   };
   const handleNome = (e) => {
     setNome(e.target.value);
+    setvalNome(!e.target.value);
   };
   const handleInicio = (e) => {
     setInicio(format(e.target.value, "yyyy-MM-dd"));
+    setvalInicio(!e.target.value);
   };
   const handleFim = (e) => {
     setFim(format(e.target.value, "yyyy-MM-dd"));
+    setvalFim(!e.target.value);
   };
 
+  const verifyFields = () => {
+    setvalNome(Nome.length < 5);
+    setvalTipo(!Tipo);
+    setvalInicio(!Inicio);
+    setvalFim(!Fim);
+  }
+
   const handleAdicionar = () => {
-    handlePostSubmit0()
-      .then(() => {
-        if(handleAdd) handleAdd({ nome: Nome, cargo_disputa: Tipo, data_fim: Fim, data_inicio: Inicio });
-      });
+    verifyFields();
+    if(Nome && Nome.length > 4 && Tipo && Inicio && Fim){
+      handlePostSubmit0()
+        .then(() => {
+          if(handleAdd) 
+            handleAdd({ nome: Nome, cargo_disputa: Tipo, data_fim: Fim, data_inicio: Inicio });
+        });
+    }
   };
 
   const handleEditar = () => {
-    handlePatchSubmit();
-    for (let i = 0; i < candidatos.length; i++) {
-      candidatos[0] = candidatos[i];
-      setIdCandidato(candidatos[0].id_candidato);
-      handlePostSubmit1()
-        .then(() => {
-          obj.nome = Nome;
-          obj.cargo_disputa = Tipo;
-          obj.data_inicio = Inicio;
-          obj.data_fim = Fim;
-          if(handleEdit) handleEdit(obj);
-        });
+    verifyFields();
+    if(Nome && Nome.length > 4 && Tipo && Inicio && Fim){
+      handlePatchSubmit();
+      for (let i = 0; i < candidatos.length; i++) {
+        candidatos[0] = candidatos[i];
+        setIdCandidato(candidatos[0].id_candidato);
+        handlePostSubmit1()
+          .then(() => {
+            obj.nome = Nome;
+            obj.cargo_disputa = Tipo;
+            obj.data_inicio = Inicio;
+            obj.data_fim = Fim;
+            if(handleEdit) handleEdit(obj);
+          });
+      }
     }
   };
 
@@ -244,20 +266,26 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
             <Form.Group className="mb-3">
               <Form.Label>Nome: </Form.Label>
               <Form.Control
+                required
                 type="text"
                 defaultValue={Nome}
                 onChange={handleNome}
+                isInvalid={valNome}
               />
+              <Form.Control.Feedback type="invalid">O nome deve conter no mínimo 5 caracteres.</Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>Tipo: </Form.Label>
               <Form.Control
+                required
                 type="text"
                 defaultValue={Tipo}
                 onChange={handleTipo}
+                isInvalid={valTipo}
               />
+              <Form.Control.Feedback type="invalid">O campo deve ser preenchido.</Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -266,20 +294,26 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
             <Form.Group className="mb-3">
               <Form.Label>Início: </Form.Label>
               <Form.Control
+                required
                 type="date"
                 defaultValue={Inicio} // formatar para AAAA-MM-DD
                 onChange={handleInicio}
+                isInvalid={valInicio}
               />
+              <Form.Control.Feedback type="invalid">O campo deve ser preenchido.</Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>Fim: </Form.Label>
               <Form.Control
+                required
                 type="date"
                 defaultValue={Fim} // formatar para AAAA-MM-DD
                 onChange={handleFim}
+                isInvalid={valFim}
               />
+              <Form.Control.Feedback type="invalid">O campo deve ser preenchido.</Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
