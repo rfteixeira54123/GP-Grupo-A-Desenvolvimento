@@ -201,10 +201,11 @@ const Dados = ({ getEleicao }) => {
                     position: "absolute",
                     top: 0,
                     right: 0,
+                    overflow: "hidden"
                   }}
                 >
                   {obj.foto ? (
-                    <img alt="candidato" src={obj.foto} />
+                    <img alt="candidato" src={obj.foto} style={{width: "100%"}}/>
                   ) : (
                     <div
                       style={{

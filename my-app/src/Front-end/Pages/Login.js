@@ -35,8 +35,8 @@ const styleInfo = {
 
 const styleWind = {
   backgroundColor: contants.color.dark_gray,
-  width: "70%",
-  height: "70%",
+  width: "80%",
+  height: "80%",
   borderRadius: "50px",
   padding: "2rem",
   display: "flex",
@@ -58,6 +58,7 @@ const styleText = {
   textAlign: "justify",
   fontSize: "13px",
   overflow: "auto",
+  paddingInline: "10px",
 };
 
 // Recebe:
@@ -81,7 +82,7 @@ const Login = (props) => {
           <h2 style={styleTitulo}>Informações</h2>
           <div style={styleText}>
             {props.text.map((value, index) => (
-              <p key={index}>{value}</p>
+              <p key={index}>{value}<br /></p>
             ))}
           </div>
         </div>
@@ -92,19 +93,33 @@ const Login = (props) => {
 
 Login.defaultProps = {
   text: [
-    `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-    eiusmod tempor incididunt ut labore et dolore magna aliqua. Tellus
-    rutrum tellus pellentesque eu tincidunt tortor aliquam.`,
-    `Dui sapien eget mi proin sed libero enim. Lectus quam id leo in
-    vitae. Commodo elit at imperdiet dui. Tristique risus nec feugiat
-    in. Adipiscing commodo elit at imperdiet dui accumsan sit amet
-    nulla. Molestie at elementum eu facilisis sed. Fusce id velit ut
-    tortor pretium viverra suspendisse. Vel pharetra vel turpis nunc
-    eget. Tempor nec feugiat nisl pretium. Pulvinar etiam non quam
-    lacus suspendisse faucibus interdum posuere lorem. Mauris cursus
-    mattis molestie a iaculis at erat. Enim neque volutpat ac
-    tincidunt vitae semper.`,
-    `Cum sociis natoque penatibus et magnis dis parturient montes.`,
+    `Bem-vindo à plataforma de votação online, o Voto Online, 
+    um espaço dedicado a fortalecer a participação democrática 
+    e a voz dos estudantes da prestigiada Instituição de Ensino 
+    Xpto. O nosso compromisso é proporcionar um ambiente seguro 
+    e eficiente para a realização de votações em eleições 
+    estudantis, garantindo a transparência e a representatividade 
+    no processo decisório.`,
+    `A plataforma Voto Online destina-se exclusivamente aos alunos 
+    matriculados na Instituição de Ensino Xpto. O nosso foco é 
+    proporcionar uma ferramenta personalizada que atenda às 
+    necessidades específicas da comunidade estudantil, promovendo 
+    a representatividade e a diversidade de opiniões.`,
+    `Para aceder aos serviços da plataforma, é indispensável 
+    possuir credenciais válidas fornecidas pela sua instituição de 
+    ensino. Se esta é a sua primeira vez utilizando o Voto Online e 
+    não possui as suas credenciais, recomendamos que verifique o seu 
+    email institucional. Muitas vezes, as informações necessárias são 
+    enviadas para este endereço.
+    Caso não encontre as credenciais no seu email, ou em caso de 
+    dúvidas, entre em contato diretamente com a sua instituição de 
+    ensino. A equipa responsável estará pronta para fornecer as 
+    orientações necessárias e garantir que tenha acesso pleno à 
+    plataforma.`,
+    `Contamos com a sua participação ativa e empenhada no Voto Online. 
+    Juntos, moldaremos o futuro estudantil da Instituição de Ensino Xpto, 
+    tornando cada eleição um reflexo verdadeiro dos desejos e necessidades 
+    da nossa comunidade académica.`,
   ],
 };
 

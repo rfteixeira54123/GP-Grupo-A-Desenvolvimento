@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Spinner from 'react-bootstrap/Spinner';
 
 import { TableUtilizadores } from "../../Componentes/Table";
 import Button from "../../Componentes/Button";
@@ -49,7 +50,7 @@ const Page = (props) => {
   const [toEdit, setToEdit] = useState(null);
   const [toDelete, setToDelete] = useState(null);
   const [toEnable, setToEnable] = useState(null);
-  const [statePopup, setStatePopup] = useState(0);
+  const [statePopup, setStatePopup] = useState(10);
   const [showButtons, setShowButtons] = useState(false);
   const [forceRenderButtons, setForceRenderButtons] = useState(false);
   const [forceRenderTable, setForceRenderTable] = useState(false);
@@ -94,6 +95,7 @@ const Page = (props) => {
         estado: contas.estado,
       }));
       setContas(ContasList);
+      handleOptionClick();
     }
   }, [res]);
 
@@ -112,6 +114,7 @@ const Page = (props) => {
 
   const handleOptionClick = () => {
     setForceRenderTable((prevState) => !prevState);
+    setStatePopup(0);
   };
 
   const handleDelete = (obj) => {
@@ -204,6 +207,8 @@ const Page = (props) => {
             variant={true}
           />
         );
+      case 10:
+        return  <Spinner animation="border" />;
       default:
         return <></>;
     }

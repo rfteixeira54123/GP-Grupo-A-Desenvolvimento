@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Spinner from 'react-bootstrap/Spinner';
 
 import { TableEleicoes } from "../../Componentes/Table";
 import Button from "../../Componentes/Button";
@@ -55,7 +56,7 @@ const Page = () => {
   const [toEdit, setToEdit] = useState(null);
   const [toDelete, setToDelete] = useState(null);
   const [forceRenderButtons, setForceRenderButtons] = useState(false);
-  const [statePopup, setStatePopup] = useState(0);
+  const [statePopup, setStatePopup] = useState(10);
   const [forceRenderTable, setForceRenderTable] = useState(false);
 
   const [eleicoes, setEleicoes] = useState([]);
@@ -101,6 +102,7 @@ const Page = () => {
 
   const handleOptionClick = () => {
     setForceRenderTable((prevState) => !prevState);
+    setStatePopup(0);
   };
 
   const handleDelete = (obj) => {
@@ -170,6 +172,8 @@ const Page = () => {
             handleCancelar={() => setStatePopup(0)}
           />
         );
+      case 10:
+        return  <Spinner animation="border" />;
       default:
         return <></>;
     }

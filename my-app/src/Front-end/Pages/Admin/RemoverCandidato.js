@@ -100,9 +100,10 @@ const Info = ({ choice, handleCancelar }) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                overflow: "hidden",
               }}
             >
-              <img alt="candidato" src={choice[0].foto} />
+              <img alt="candidato" src={choice[0].foto} style={{width: "100%"}} />
             </div>
             <div
               style={{

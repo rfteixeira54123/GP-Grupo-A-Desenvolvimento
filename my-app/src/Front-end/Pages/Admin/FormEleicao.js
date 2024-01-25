@@ -1,14 +1,15 @@
+import { useEffect, useState } from "react";
+import { differenceInCalendarDays, format } from "date-fns";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { TiDelete } from "react-icons/ti";
+import Spinner from "react-bootstrap/Spinner";
 
 import * as constants from "../../constants";
 import Button from "../../Componentes/ButtonSmall";
 import FormSelecionaCandidatos from "./FormSelecionaCandidatos";
-import { useEffect, useState } from "react";
 import UsePost from "../../../Back-end/HTTP/POST";
-import { differenceInCalendarDays, format } from "date-fns";
 import UsePatch from "../../../Back-end/HTTP/PATCH";
 import Candidato from "../../../Back-end/Objetos/ClassCandidato";
 
@@ -107,7 +108,6 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   const [Fim, setFim] = useState(
     obj.id_eleicao ? format(obj.data_fim, "yyyy-MM-dd") : obj.data_fim
   );
-  const [idCandidato, setIdCandidato] = useState([]);
   const [valTipo, setvalTipo] = useState(false);
   const [valNome, setvalNome] = useState(false);
   const [valInicio, setvalInicio] = useState(false);
@@ -134,12 +134,13 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
     setvalNome(Nome.length < 5);
     setvalTipo(!Tipo);
     setvalInicio(!Inicio);
-    setvalFim(!Fim);
+    setvalFim(Fim < Inicio);
   };
 
   const handleAdicionar = () => {
     verifyFields();
-    if (Nome && Nome.length > 4 && Tipo && Inicio && Fim) {
+    if (Nome && Nome.length > 4 && Tipo && Inicio && Fim && Fim >= Inicio) {
+      setStatePopup(10);
       handlePostSubmit0().then(() => {
         if (handleAdd)
           handleAdd({
@@ -154,12 +155,18 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const handleEditar = () => {
     verifyFields();
-    if (Nome && Nome.length > 4 && Tipo && Inicio && Fim) {
-      console.log(obj.id_eleicao);
-      handlePatchSubmit();
-      handlePostSubmit1();
+    if (Nome && Nome.length > 4 && Tipo && Inicio && Fim && Fim >= Inicio) {
+      setStatePopup(10);
+      handlePatchSubmit().then(() => {
+        handlePostSubmit1().then(() => {
+          obj.nome = Nome;
+          obj.cargo_disputa = Tipo;
+          obj.data_inicio = Inicio;
+          obj.data_fim = Fim;
+          if (handleEdit) handleEdit(obj);
+        });
+      });
     }
-    if (handleEdit) handleEdit(obj);
   };
 
   const {
@@ -231,6 +238,8 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
             handleAdicionar={handleAdicionarCandidato}
           />
         );
+      case 10:
+        return <Spinner animation="border" />;
       default:
         return <></>;
     }
@@ -245,9 +254,6 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
     alignItems: "center",
     justifyContent: "center",
   };
-
-  // atualiza o array de candidatos da eleicao
-  // setCandidatos(searchEleicao(obj.id_eleicao));
 
   return (
     <div style={styleContainer}>
@@ -320,7 +326,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
                 isInvalid={valFim}
               />
               <Form.Control.Feedback type="invalid">
-                O campo deve ser preenchido.
+                A data final de ser maior que a data inicial.
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
