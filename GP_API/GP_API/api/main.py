@@ -19,9 +19,7 @@ from jsoncheck.json_checker import CheckJson
 app = Flask(__name__)
 '''
 TODO
-Listar TODOS os candidatos
 Implementacao Base de dados
-Testar com dados de teste
 
 --OPTIONAL--
 BlackList de Tokens (Anular sessÃµes de tokens com uma lista de tokens invalidos)
@@ -31,7 +29,7 @@ CORS(app)
 
 
 
-
+InvalidTokens = ["ioj213jkask"]
 
 
 def getconnectionDB():
@@ -210,16 +208,12 @@ def remover_conta():
 
     conn = getconnectionDB()
     cursor = conn.cursor()
-    #cursor.execute("SELECT")
+    cursor.execute("SELECT * FROM remover_utilizador(%s)",(body["ID_Conta"],))
 
     conn.commit()
     cursor.close()
     conn.close()
-    result_status = 200
-    if result_status != 200:
-        abort(result_status)
-
-    abort(ERRO_NAO_IMPLEMENTADO)#NOT IMPLEMENTED
+    return jsonify("OK"),200
 
 
 
@@ -244,7 +238,7 @@ def lista_contas():
 @app.post("/conta/inserir")
 @auth.Authentication(access=[Access.ADMIN])
 @CheckJson(properties = [("Nome",str,8),
-                         ("Email",str,3),
+                         ("Email",str,8),
                          ("PalavraPasse",str,8),
                          ("Identificacao",int),
                          ("estado",bool),
@@ -281,42 +275,80 @@ def inserir_conta():
 
 
 @app.patch("/conta/editar")
-@auth.Authentication(access=[Access.ALUNO,Access.ADMIN]) #Aluno pode editar sua prÃ³pria password
-@CheckJson(properties = [("Nome",str,8),
-                         ("Email",str,3),
-                         ("Palavra-Passe",str,8),
-                         ("estado",bool),
-                         ("acessibilidade",bool),
+@auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("Email",str,8),
+                         ("PalavraPasse",str,8),
+                         ("Identificacao",int),
                          ("ID_Conta",int)
                          ])
 def editar_conta():
-
     body = request.get_json()
 
-      
+    connection = getconnectionDB()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM editar_utilizador(%s,%s,%s,%s,%s)",(body["ID_Conta"],body["Email"],body["PalavraPasse"],None,body["Identificacao"]))
+    connection.commit()
+
+    if cursor.fetchall()[0][0] == False:
+        cursor.close()
+        connection.close()
+        raise InputError("Erro ao editar utilizador")
     
+
+    cursor.close()
+    connection.close()
+
+    return jsonify("OK"),200
+
+@app.patch("/conta/mudar_password")
+@auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
+@CheckJson(properties=[("PalavraPasse",str,8)])
+def password_mudar_conta():
+    body = request.get_json()
+    token = request.headers.get('Authorization')
+    data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
+
+    connection = getconnectionDB()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM editar_utilizador(%s,%s,%s,%s,%s)",(data["userID"],None,body["PalavraPasse"],None,None))
+    connection.commit()
+
+    if cursor.fetchall()[0][0] == False:
+        cursor.close()
+        connection.close()
+        raise InputError("Erro ao editar utilizador")
+    
+
+    cursor.close()
+    connection.close()
+
+    return jsonify("OK"),200
+
+
+@app.patch("/conta/acessibilidade")
+@auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
+@CheckJson(properties=[("acessibilidade",bool)])
+def mudar_acessibilidade():
+    body = request.get_json()
     
     token = request.headers.get('Authorization')
     data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
 
-    if data["Access"] != Access.ADMIN: #Se nao for administrador, temos que saber se este Ã© o proprio utilizador, ele pode editar --SÃ-- a sua password
-        if data["userID"] != body["ID_Conta"]:
-            raise AuthDenied()
-
-        connection = getconnectionDB()
-        cursor = connection.cursor()
-        cursor.callproc("EditarContaLite",(body["ID_Conta"],body["Acessibilidade"],body["Palavra-Passe"])) #Ideia de procedimento, nao podemos arriscar mudar a conta toda sÃ³ para mudar estes 2 valores
-
-        return "OK"
-
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("EditarConta",(body["ID_Conta"],body["Nome"],body["Email"],body["Palavra-Passe"],body["estado"],body["acessibilidade"]))
+    cursor.execute("SELECT * FROM editar_utilizador(%s,%s,%s,%s,%s)",(data["userID"],None,None,body["acessibilidade"],None))
+    connection.commit()
 
+    if cursor.fetchall()[0][0] == False:
+        cursor.close()
+        connection.close()
+        raise InputError("Erro ao editar utilizador")
+    
 
-    return "OK"
+    cursor.close()
+    connection.close()
 
-
+    return jsonify("OK"),200
 
 
 
@@ -334,10 +366,11 @@ def definir_ativo_conta():
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.callproc("AtivarDesativarConta",(body["ID_Conta"],body["estado"]))
+    cursor.execute("AtivarDesativarConta",(body["ID_Conta"],body["estado"]))
     
     if result_status != 200:
         abort(result_status)
+
 
 @app.get("/conta/detalhes")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])
@@ -530,6 +563,40 @@ def adicionar_candidatos_eleicao():
 
     return result
 
+@app.delete("/eleicao/desassociar_candidatos")
+@auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("ID_Eleicao",int)
+                         ])
+def desassociar_candidatos_eleicao():
+
+    body = request.get_json()
+
+    if "ID_Candidatos" in body:
+        ids = body["ID_Candidatos"]
+        try:
+            for _id in ids:
+                int(_id)
+        except:
+            raise JSONTypeError(list,"ID_Candidatos")
+    else:
+        raise JSONPropError("ID_Candidatos")
+
+
+    connection = getconnectionDB()
+    cursor = connection.cursor()
+
+    result = []
+    for _id in ids:
+        result.append((_id,body["ID_Eleicao"]))
+    result = tuple(result)
+    print(result)
+    cursor.executemany("SELECT * FROM desassociar_candidato(%s,%s)",result)
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+
+    return jsonify("OK"),200
 
 @app.post("/eleicao/adicionar_candidato")
 @auth.Authentication(access=[Access.ADMIN])
@@ -607,10 +674,6 @@ def listar_candidato():
 def inserir_candidato():
 
     body = request.get_json()
-
-       
-        
-    result_status = 200
     
     connection = getconnectionDB()
     cursor = connection.cursor()
@@ -651,24 +714,21 @@ def editar_candidato():
 
 @app.delete("/candidato/remover")
 @auth.Authentication(access=[Access.ADMIN])
-@CheckJson(properties = [("ID_Eleicao",int),
-                         ("ID_Candidato",int)
+@CheckJson(properties = [("ID_Candidato",int)
                          ])
 def remover_candidato():
 
     body = request.get_json()
 
-
-
-    result_status = ERRO_NAO_IMPLEMENTADO
-    
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.execute("removeCandidato",(body["ID_Lista_Candidatos"],body["ID_Candidato"]))
-    #Isto sÃ³ remove a associacao de um candidato para o seu gestor, ela nao apaga mesmo da base de dados
+    cursor.execute("SELECT * FROM remover_candidato(%s)",(body["ID_Candidato"],))
+    
+    connection.commit()
+    cursor.close()
+    connection.close()
 
-    if result_status != 200:
-        abort(result_status)
+    return jsonify("OK"),200
 
 
 ##
