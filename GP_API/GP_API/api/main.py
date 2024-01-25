@@ -497,17 +497,48 @@ def editar_eleicao():
 
 
 
-@app.post("/eleicao/adicionar_candidato")
+@app.post("/eleicao/adicionar_candidatos")
 @auth.Authentication(access=[Access.ADMIN])
 @CheckJson(properties = [("ID_Eleicao",int)
+                         ])
+def adicionar_candidatos_eleicao():
+
+    body = request.get_json()
+
+    if "ID_Candidatos" in body:
+        ids = body["ID_Candidatos"]
+        try:
+            for _id in ids:
+                int(_id)
+        except:
+            raise JSONTypeError(list,"ID_Candidatos")
+    else:
+        raise JSONPropError("ID_Candidatos")
+
+
+    connection = getconnectionDB()
+    cursor = connection.cursor()
+
+    result = {"Results" : []}
+    for _id in ids:
+        cursor.execute("SELECT * FROM adicionar_candidato(%s,%s)",(body["ID_Eleicao"],_id))
+        result["Results"].append({"ID_Candidato": _id, "result": cursor.fetchall()[0][0]})
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+
+    return result
+
+
+@app.post("/eleicao/adicionar_candidato")
+@auth.Authentication(access=[Access.ADMIN])
+@CheckJson(properties = [("ID_Eleicao",int),
+                         ("ID_Candidato",int)
                          ])
 def adicionar_candidato_eleicao():
 
     body = request.get_json()
-
-    if body["ID_Candidato"]:
-        ids = body["ID_Candidato"]
-
     connection = getconnectionDB()
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM adicionar_candidato(%s,%s)",(body["ID_Eleicao"],body["ID_Candidato"]))
