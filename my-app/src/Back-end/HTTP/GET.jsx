@@ -43,14 +43,14 @@ function UseGet({ Data, FORM_ENDPOINT }) {
       })
       .then((data) => {
         setRes(data);
-        let User = {
-          id: data.userID,
-          nome: data.userName,
-          email: data.Email,
-          numero: data.Identificador,
-          privilegio: data.Access,
-        };
         if (Data === -1) {
+          let User = {
+            id: data.userID,
+            nome: data.userName,
+            email: data.Email,
+            numero: data.Identificador,
+            privilegio: data.Access,
+          };
           localStorage.setItem("User", JSON.stringify(User));
         }
       })

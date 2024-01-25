@@ -1,6 +1,8 @@
 import * as constants from "../../constants";
 import Button from "../../Componentes/ButtonSmall";
-
+import useDelete from "../../../Back-end/HTTP/DELETE";
+import usePatch from "../../../Back-end/HTTP/PATCH";
+import { useState, useEffect } from "react";
 const styleTop = {
   backgroundColor: constants.color.primary,
   borderBottom: "2px solid " + constants.color.secondary,
@@ -38,21 +40,40 @@ const styleContainer = {
 //  handleCancelar: método para fechar o popup
 //  variant: booleano que define se desativa (true) ou remove (false) o utilizador.
 const Info = ({ choice, handleCancelar, variant }) => {
+  const { handleDeleteSubmit } = useDelete({
+    Data: {
+      ID_Conta: choice[0].id_conta,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/remover",
+  });
+
+  const { handlePatchSubmit } = usePatch({
+    Data: {
+      estado: false,
+      ID_Conta: choice[0].id_conta,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/definir_ativo",
+  });
+
   const handleConfirmarDesativar = () => {
-    //Fazer função para desativar contas recebidas no array choice
+    console.log("entra");
+    handlePatchSubmit();
   };
 
   const handleConfirmarRemover = () => {
-    //Fazer função para remover contas recebidas no array choice
+    console.log(choice[0].id_conta);
+    console.log("entra");
+    handleDeleteSubmit();
   };
-
 
   return (
     <>
       <div style={styleContainer}>
         {choice.length > 1 ? (
           <>
-            <div style={styleTop}>{variant ? "Desativar" : "Remover"} contas</div>
+            <div style={styleTop}>
+              {variant ? "Desativar" : "Remover"} contas
+            </div>
             <div
               style={{
                 color: constants.color.secondary,
@@ -61,8 +82,8 @@ const Info = ({ choice, handleCancelar, variant }) => {
               }}
             >
               {" "}
-              Tem a certeza que deseja {variant ? "desativar" : "remover"} todas as {choice.length} contas selecionadas
-              ?
+              Tem a certeza que deseja {variant ? "desativar" : "remover"} todas
+              as {choice.length} contas selecionadas ?
             </div>
             <div
               style={{
@@ -74,15 +95,19 @@ const Info = ({ choice, handleCancelar, variant }) => {
               <Button label="Cancelar" handle={handleCancelar} />
               <Button
                 label="Confirmar"
-                handle={variant ? handleConfirmarDesativar : handleConfirmarDesativar}
+                handle={
+                  variant ? handleConfirmarDesativar : handleConfirmarDesativar
+                }
                 danger={true}
-                disabled={true}
+                disabled={false}
               />
             </div>
           </>
         ) : (
           <>
-            <div style={styleTop}>{variant ? "Desativar" : "Remover"} conta</div>
+            <div style={styleTop}>
+              {variant ? "Desativar" : "Remover"} conta
+            </div>
             <div
               style={{
                 color: constants.color.secondary,
@@ -90,11 +115,21 @@ const Info = ({ choice, handleCancelar, variant }) => {
                 marginBlock: "1rem",
               }}
             >
-              Tem a certeza que deseja {variant ? (choice[0].estado ? "desativar" : "ativar") : "remover"} o utilizador ?
-              <br />Nome: {choice[0].nome}
-              <br />Nº de ID: {choice[0].numero_id}
-              <br />Email: {choice[0].email}
-              <br />Tipo: {choice[0].tipo}
+              Tem a certeza que deseja{" "}
+              {variant
+                ? choice[0].estado
+                  ? "desativar"
+                  : "ativar"
+                : "remover"}{" "}
+              o utilizador ?
+              <br />
+              Nome: {choice[0].nome}
+              <br />
+              Nº de ID: {choice[0].numero_id}
+              <br />
+              Email: {choice[0].email}
+              <br />
+              Tipo: {choice[0].tipo}
             </div>
             <div
               style={{
@@ -107,9 +142,11 @@ const Info = ({ choice, handleCancelar, variant }) => {
               <Button label="Cancelar" handle={handleCancelar} />
               <Button
                 label="Confirmar"
-                handle={variant ? handleConfirmarDesativar : handleConfirmarRemover}
+                handle={
+                  variant ? handleConfirmarDesativar : handleConfirmarRemover
+                }
                 danger={true}
-                disabled={true}
+                disabled={false}
               />
             </div>
           </>

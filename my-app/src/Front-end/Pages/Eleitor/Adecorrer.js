@@ -66,6 +66,7 @@ const Adecorrer = ({ handle }) => {
 
   const eleicoesDecorrer = (eleicoes) => {
     const dataAtual = new Date();
+    console.log(eleicoes);
     const eleicoesFiltradas = eleicoes.filter((eleicao) => {
       const dataInicio = new Date(eleicao.data_inicio);
       const dataFim = new Date(eleicao.data_fim);

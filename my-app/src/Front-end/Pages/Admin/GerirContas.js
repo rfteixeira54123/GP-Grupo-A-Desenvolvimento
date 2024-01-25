@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { TableUtilizadores } from "../../Componentes/Table";
 import Button from "../../Componentes/Button";
@@ -6,6 +6,10 @@ import Filter from "../../Componentes/Filter";
 import RemoverConta from "./RemoverConta";
 import FormConta from "./FormConta";
 import * as constants from "../../constants";
+import useGet from "../../../Back-end/HTTP/GET";
+import usePost from "../../../Back-end/HTTP/POST";
+import usePatch from "../../../Back-end/HTTP/PATCH";
+import useDelete from "../../../Back-end/HTTP/DELETE";
 
 const styleWindow = {
   width: "100%",
@@ -51,6 +55,47 @@ const Page = (props) => {
   const [forceRenderTable, setForceRenderTable] = useState(false);
 
   const [contas, setContas] = useState([]);
+  const [flag, setFlag] = useState(true);
+  const [userId, setUserId] = useState("");
+
+  const { handleGetSubmit, status, message, res } = useGet({
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/listar",
+  });
+
+  const { handlePatchSubmit: handlePatchSubmit1 } = usePatch({
+    Data: {
+      ID_Conta: userId,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/editar",
+  });
+
+  const { handlePostSubmit } = usePost({
+    Data: {
+      ID_Conta: userId,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/inserir",
+  });
+
+  useEffect(() => {
+    if (flag) {
+      handleGetSubmit();
+      setFlag(false);
+    }
+  });
+
+  useEffect(() => {
+    if (res && res.Contas && Array.isArray(res.Contas)) {
+      const ContasList = res.Contas.map((contas) => ({
+        id_conta: contas.id_conta,
+        nome: contas.nome,
+        email: contas.email,
+        numero_id: contas.num_identificacao,
+        tipo: contas.tipo,
+        estado: contas.estado,
+      }));
+      setContas(ContasList);
+    }
+  }, [res]);
 
   const updateShowButtons = (array) => {
     if (array.includes(-1)) {

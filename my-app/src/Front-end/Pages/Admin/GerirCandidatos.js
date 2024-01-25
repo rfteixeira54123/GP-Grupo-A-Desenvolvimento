@@ -128,13 +128,10 @@ const Page = () => {
   const handleEdited = (obj) => {
     let updateCandidatos = [...candidatos];
 
-    // Use map para percorrer o array e substituir o objeto correspondente
     updateCandidatos = updateCandidatos.map((candidato) => {
       if (candidato.id_candidato === obj.id_candidato) {
-        // Se o id_eleicao for igual, substitua o objeto
         return obj;
       }
-      // Caso contrário, mantenha o objeto inalterado
       return candidato;
     });
 

@@ -6,10 +6,11 @@ import { TiDelete } from "react-icons/ti";
 import * as constants from "../../constants";
 import Button from "../../Componentes/ButtonSmall";
 import FormSelecionaCandidatos from "./FormSelecionaCandidatos";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UsePost from "../../../Back-end/HTTP/POST";
-import { format } from "date-fns";
+import { differenceInCalendarDays, format } from "date-fns";
 import UsePatch from "../../../Back-end/HTTP/PATCH";
+import Candidato from "../../../Back-end/Objetos/ClassCandidato";
 
 const styleTop = {
   backgroundColor: constants.color.primary,
@@ -97,12 +98,16 @@ const styleBtnFloat = {
 //  handleEdit: método para fechar o popup após editar.
 const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   //Fazer get para buscar candidatos da eleição.
-  const [candidatos, setCandidatos] = useState([]); //Atualizar com o array de candidatos da eleição.
+  const [candidatos, setCandidatos] = useState([]);
   const [Tipo, setTipo] = useState(obj.cargo_disputa);
   const [Nome, setNome] = useState(obj.nome);
-  const [Inicio, setInicio] = useState(obj.id_eleicao ? format(obj.data_inicio, "yyyy-MM-dd"): obj.data_inicio);
-  const [Fim, setFim] = useState(obj.id_eleicao ? format(obj.data_fim, "yyyy-MM-dd") : obj.data_fim);
-  const [idCandidato, setIdCandidato] = useState();
+  const [Inicio, setInicio] = useState(
+    obj.id_eleicao ? format(obj.data_inicio, "yyyy-MM-dd") : obj.data_inicio
+  );
+  const [Fim, setFim] = useState(
+    obj.id_eleicao ? format(obj.data_fim, "yyyy-MM-dd") : obj.data_fim
+  );
+  const [idCandidato, setIdCandidato] = useState([]);
   const [valTipo, setvalTipo] = useState(false);
   const [valNome, setvalNome] = useState(false);
   const [valInicio, setvalInicio] = useState(false);
@@ -130,36 +135,31 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
     setvalTipo(!Tipo);
     setvalInicio(!Inicio);
     setvalFim(!Fim);
-  }
+  };
 
   const handleAdicionar = () => {
     verifyFields();
-    if(Nome && Nome.length > 4 && Tipo && Inicio && Fim){
-      handlePostSubmit0()
-        .then(() => {
-          if(handleAdd) 
-            handleAdd({ nome: Nome, cargo_disputa: Tipo, data_fim: Fim, data_inicio: Inicio });
-        });
+    if (Nome && Nome.length > 4 && Tipo && Inicio && Fim) {
+      handlePostSubmit0().then(() => {
+        if (handleAdd)
+          handleAdd({
+            nome: Nome,
+            cargo_disputa: Tipo,
+            data_fim: Fim,
+            data_inicio: Inicio,
+          });
+      });
     }
   };
 
   const handleEditar = () => {
     verifyFields();
-    if(Nome && Nome.length > 4 && Tipo && Inicio && Fim){
+    if (Nome && Nome.length > 4 && Tipo && Inicio && Fim) {
+      console.log(obj.id_eleicao);
       handlePatchSubmit();
-      for (let i = 0; i < candidatos.length; i++) {
-        candidatos[0] = candidatos[i];
-        setIdCandidato(candidatos[0].id_candidato);
-        handlePostSubmit1()
-          .then(() => {
-            obj.nome = Nome;
-            obj.cargo_disputa = Tipo;
-            obj.data_inicio = Inicio;
-            obj.data_fim = Fim;
-            if(handleEdit) handleEdit(obj);
-          });
-      }
+      handlePostSubmit1();
     }
+    if (handleEdit) handleEdit(obj);
   };
 
   const {
@@ -185,15 +185,15 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   } = UsePost({
     Data: {
       ID_Eleicao: obj.id_eleicao,
-      ID_Candidato: idCandidato,
+      ID_Candidatos: candidatos.map((candidato) => candidato.id_candidato),
     },
     FORM_ENDPOINT:
-      "https://gp-api-alpha.vercel.app/eleicao/adicionar_candidato",
+      "https://gp-api-alpha.vercel.app/eleicao/adicionar_candidatos",
   });
 
   const { handlePatchSubmit, pstatus, pmsg, pres } = UsePatch({
     Data: {
-      Id_Eleica: obj.id_eleicao,
+      ID_Eleicao: obj.id_eleicao,
       Nome: Nome,
       Data_Inicio: Inicio,
       Data_Fim: Fim,
@@ -272,7 +272,9 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
                 onChange={handleNome}
                 isInvalid={valNome}
               />
-              <Form.Control.Feedback type="invalid">O nome deve conter no mínimo 5 caracteres.</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                O nome deve conter no mínimo 5 caracteres.
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col>
@@ -285,7 +287,9 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
                 onChange={handleTipo}
                 isInvalid={valTipo}
               />
-              <Form.Control.Feedback type="invalid">O campo deve ser preenchido.</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                O campo deve ser preenchido.
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -300,7 +304,9 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
                 onChange={handleInicio}
                 isInvalid={valInicio}
               />
-              <Form.Control.Feedback type="invalid">O campo deve ser preenchido.</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                O campo deve ser preenchido.
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col>
@@ -313,7 +319,9 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
                 onChange={handleFim}
                 isInvalid={valFim}
               />
-              <Form.Control.Feedback type="invalid">O campo deve ser preenchido.</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                O campo deve ser preenchido.
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>

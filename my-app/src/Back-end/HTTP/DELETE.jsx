@@ -1,58 +1,56 @@
 import { useState } from "react";
 
-function useDelete({ Data, FORM_ENDPOINT }) {
+function UseDelete({ Data, FORM_ENDPOINT }) {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
+  const [res, setRes] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setStatus("loading");
     setMessage("");
 
-    fetch(FORM_ENDPOINT, {
+    return fetch(FORM_ENDPOINT, {
       method: "DELETE",
       mode: "cors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: JSON.parse(localStorage.getItem("Token")),
+        Authorization: localStorage.getItem("Token"),
       },
       body: JSON.stringify(Data),
     })
       .then((response) => {
         if (response.status === 200) {
-          setMessage("successo");
+          return response.json();
+        } else if (response.status === 401) {
+          throw "não autorizado";
         } else if (response.status === 403) {
-          setMessage("nao autorizado");
+          throw "nao autorizado";
         } else if (response.status === 500) {
-          setMessage("server error");
+          throw "server error";
         } else if (response.status === 501) {
-          setMessage("nao implementado");
+          throw "nao implementado";
         } else if (response.status === 415) {
-          setMessage("nao definido");
+          throw "nao definido";
         } else if (response.status === 422) {
-          setMessage("json em falta");
+          throw "nao tem tamanho suficiente";
         } else if (response.status === 403) {
-          setMessage("nao tem permissao");
-        } else if (response.status === 422) {
-          setMessage("entidade nao processavel");
+          throw "nao tem permissao";
+        } else if (response.status === 425) {
+          throw "nao tem tamanho suficiente";
         } else {
-          setMessage("erro");
+          throw "erro";
         }
-        console.table(response);
-        return response.json();
       })
-      .then(() => {
-        setMessage("OK");
-        setStatus("success");
+      .then((data) => {
+        setRes(data);
+        console.log(data);
       })
-      .catch((err) => {
-        setMessage(err.toString());
-        setStatus("error");
+      .catch((error) => {
+        console.error("Erro durante o pedido DELETE:", error);
       });
   };
-
-  return { handleSubmit, status, message };
+  return { handleDeleteSubmit: handleSubmit, status, message, res };
 }
 
-export default useDelete;
+export default UseDelete;

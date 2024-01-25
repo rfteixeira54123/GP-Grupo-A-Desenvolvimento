@@ -43,7 +43,6 @@ function UsePatch({ Data, FORM_ENDPOINT }) {
         }
       })
       .then((data) => {
-        console.table(data);
         setRes(data);
         try {
         } catch {}

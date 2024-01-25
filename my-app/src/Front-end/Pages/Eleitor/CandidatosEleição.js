@@ -102,15 +102,16 @@ const Dados = ({ getEleicao }) => {
         nome: candidato.nome,
         tipo: candidato.tipo,
         descricao: candidato.objetivo,
+        id_eleicao: candidato.id_eleicao,
       }));
       setCandidatos(filtrarCandidatos(candidatoList));
     }
   }, [res]);
 
   const filtrarCandidatos = (candidatos) => {
+    console.log(candidatos);
     const candidatosFiltrados = candidatos.filter((candidatos) => {
-      const idCandidato = candidatos.id_candidato;
-      return idCandidato == eleicaoId;
+      return candidatos.id_eleicao == getEleicao.id_eleicao;
     });
 
     return candidatosFiltrados;

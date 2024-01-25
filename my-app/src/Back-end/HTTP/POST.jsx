@@ -15,7 +15,7 @@ function UsePost({ Data, FORM_ENDPOINT }) {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: localStorage.getItem("Token") || "",
+        Authorization: localStorage.getItem("Token"),
       },
       body: JSON.stringify(Data),
     })
@@ -43,8 +43,8 @@ function UsePost({ Data, FORM_ENDPOINT }) {
         }
       })
       .then((data) => {
-        console.table(data);
         setRes(data);
+        console.log(data);
         try {
           if (data.token) localStorage.setItem("Token", data.token);
         } catch {}
