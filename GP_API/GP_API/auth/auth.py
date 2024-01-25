@@ -51,6 +51,7 @@ def refresh_token(data):
                            'userName': data['userName'],
                            'acessibilidade': data['acessibilidade'],
                            'Access': data['Access'],
+                           'Email': data['Email'],
                            'expiration': (datetime.datetime.utcnow() + datetime.timedelta(hours=1)).isoformat()},
                           os.environ["SECRET_KEY"])
     return newtoken

@@ -168,6 +168,7 @@ def login():
                         'userName': result['nome'],
                         'acessibilidade': result['acessibilidade'],
                         'Access':tipoconta,
+                        'Email': result['email'],
                         'expiration': (datetime.datetime.utcnow() + datetime.timedelta(hours=1)).isoformat()},
                        os.environ["SECRET_KEY"])
     
@@ -227,13 +228,18 @@ def remover_conta():
 @auth.Authentication(access=[Access.ADMIN])
 def lista_contas():
     connection = getconnectionDB()
-    cursor = connection.cursor()
-    cursor.callproc("listarContas",(0,))
-
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
+    cursor.execute("SELECT * FROM listar_utilizadores()")
+    result = {"Contas": []}
     for conta in cursor.fetchall():
-        print(conta)
+        conta['tipo'] = acess_type(conta['tipo'])
+
+        if conta['num_identificacao'] == None:
+            conta['num_identificacao'] = 0
+        result["Contas"].append(conta)
+    
         
-    return {"Contas":[{"ID_Conta":1,"Tipo_Conta":'Aluno',"Nome": 'Nome', "Email": 'email@email.com',"Palavra-Passe": 'FDA$#BDHSAI"#232',"estado": True,"acessibilidade": False}] }
+    return result
 
 @app.post("/conta/inserir")
 @auth.Authentication(access=[Access.ADMIN])
@@ -493,12 +499,15 @@ def editar_eleicao():
 
 @app.post("/eleicao/adicionar_candidato")
 @auth.Authentication(access=[Access.ADMIN])
-@CheckJson(properties = [("ID_Eleicao",int),
-                         ("ID_Candidato",int)
+@CheckJson(properties = [("ID_Eleicao",int)
                          ])
 def adicionar_candidato_eleicao():
 
     body = request.get_json()
+
+    if body["ID_Candidato"]:
+        ids = body["ID_Candidato"]
+
     connection = getconnectionDB()
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM adicionar_candidato(%s,%s)",(body["ID_Eleicao"],body["ID_Candidato"]))
