@@ -89,7 +89,11 @@ const List = ({ array, OnHandleBtn, selected }) => {
         </div>
       </div>
       <div style={{ width: "18rem", marginTop: "1.5rem" }}>
-        <Button id="" label="Submeter voto" handle={() => OnHandleBtn(1, array[selectedCheckboxes[0]])} />
+        <Button
+          id=""
+          label="Submeter voto"
+          handle={() => OnHandleBtn(1, array[selectedCheckboxes[0]])}
+        />
       </div>
     </>
   );

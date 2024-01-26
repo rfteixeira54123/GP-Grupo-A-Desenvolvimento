@@ -42,21 +42,22 @@ const styleContainer = {
 const Info = ({ choice, handleCancelar, variant }) => {
   const { handleDeleteSubmit } = useDelete({
     Data: {
-      ID_Conta: choice[0].id_conta,
+      ID_Contas: [choice[0].id_conta],
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/remover",
   });
 
   const { handlePatchSubmit } = usePatch({
     Data: {
-      estado: false,
-      ID_Conta: choice[0].id_conta,
+      estado: !choice[0].estado,
+      ID_Contas: [choice[0].id_conta],
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/definir_ativo",
   });
 
   const handleConfirmarDesativar = () => {
     console.log("entra");
+    console.log(!choice[0].estado, choice[0].id_conta);
     handlePatchSubmit();
   };
 

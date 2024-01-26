@@ -55,6 +55,7 @@ const Perfil = (props) => {
   const handleLogout = () => {
     handleGetSubmit();
     localStorage.removeItem("Token");
+    localStorage.removeItem("User");
   };
 
   if (hovering) {

@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
 
 import * as constants from "../../constants";
 import Button from "../../Componentes/ButtonSmall";
+import usePost from "../../../Back-end/HTTP/POST";
+import usePatch from "../../../Back-end/HTTP/PATCH";
 
 const styleTop = {
   backgroundColor: constants.color.primary,
@@ -52,6 +54,27 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   const [valNome, setvalNome] = useState(false);
   const [valNum, setvalNum] = useState(false);
   const [valEmail, setvalEmail] = useState(false);
+  const [flag, setFlag] = useState(true);
+
+  const { handlePatchSubmit } = usePatch({
+    Data: {
+      ID_Conta: obj.id_conta,
+      Email: Email,
+      Identificacao: Num,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/editar",
+  });
+
+  //NÃO USAR PALIZE
+  const { handlePostSubmit } = usePost({
+    Data: {
+      Email: Email,
+      Nome: Nome,
+      TipoConta: Tipo,
+      Identificacao: Num,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/inserir",
+  });
 
   const handleNome = (e) => {
     setNome(e.target.value);
@@ -96,6 +119,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const handleEditar = () => {
     verifyFields();
+    handlePatchSubmit();
     // if (Nome && Estado && Num && Email) {
     //   setStatePopup(10);
     //   //Fazer função para editar candidato

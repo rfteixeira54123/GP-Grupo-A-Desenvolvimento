@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from "react-bootstrap/Spinner";
 
 import { TableUtilizadores } from "../../Componentes/Table";
 import Button from "../../Componentes/Button";
@@ -61,20 +61,6 @@ const Page = (props) => {
 
   const { handleGetSubmit, status, message, res } = useGet({
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/listar",
-  });
-
-  const { handlePatchSubmit: handlePatchSubmit1 } = usePatch({
-    Data: {
-      ID_Conta: userId,
-    },
-    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/editar",
-  });
-
-  const { handlePostSubmit } = usePost({
-    Data: {
-      ID_Conta: userId,
-    },
-    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/inserir",
   });
 
   useEffect(() => {
@@ -208,7 +194,7 @@ const Page = (props) => {
           />
         );
       case 10:
-        return  <Spinner animation="border" />;
+        return <Spinner animation="border" />;
       default:
         return <></>;
     }

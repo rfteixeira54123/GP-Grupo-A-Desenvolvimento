@@ -1,6 +1,6 @@
 import * as constants from "../../constants";
 import Button from "../../Componentes/ButtonSmall";
-
+import useDelete from "../../../Back-end/HTTP/DELETE";
 const styleTop = {
   backgroundColor: constants.color.primary,
   borderBottom: "2px solid " + constants.color.secondary,
@@ -38,8 +38,15 @@ const styleContainer = {
 //  handleCancelar: método para fechar o popup
 const Info = ({ choice, handleCancelar }) => {
   const handleConfirmar = () => {
-    //Fazer função para remover candidatos recebidos no array choice
+    handleDeleteSubmit();
   };
+
+  const { handleDeleteSubmit } = useDelete({
+    Data: {
+      ID_Candidato: choice[0].id_candidato,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/remover",
+  });
 
   return (
     <>
@@ -103,7 +110,11 @@ const Info = ({ choice, handleCancelar }) => {
                 overflow: "hidden",
               }}
             >
-              <img alt="candidato" src={choice[0].foto} style={{width: "100%"}} />
+              <img
+                alt="candidato"
+                src={choice[0].foto}
+                style={{ width: "100%" }}
+              />
             </div>
             <div
               style={{

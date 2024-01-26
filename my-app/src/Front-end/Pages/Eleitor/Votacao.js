@@ -5,7 +5,8 @@ import Logo from "../../Imagens/Full_Blue_Icon.png";
 import ListaCandidatos from "../../Componentes/ListaCandidatos";
 import Popup from "../../Componentes/PopupConfirma";
 import PopupFinaliza from "../../Componentes/PopupFinaliza";
-
+import { useEffect } from "react";
+import useGet from "../../../Back-end/HTTP/GET";
 const styleWindow = {
   display: "flex",
   alignItems: "center",
@@ -28,28 +29,36 @@ const styleTitle = {
 };
 
 //Definir candidatos a exibir
-const array = [
-  { id_candidato: 10, nome: "AAAAAAA" },
-  { id_candidato: 11, nome: "BBBBBBBB" },
-  { id_candidato: 12, nome: "BBBBBB" },
-  { id_candidato: 13, nome: "BBBBBBBB" },
-  { id_candidato: 14, nome: "BBBBBBBB" },
-  { id_candidato: 15, nome: "BBBBBBBB" },
-  { id_candidato: 16, nome: "BBBBBBBB" },
-  { id_candidato: 17, nome: "BBBBBBBB" },
-  { id_candidato: 18, nome: "BBBBBBBB" },
-  { id_candidato: 19, nome: "BBBBBBBB" },
-  { id_candidato: 110, nome: "BBBBBBBB" },
-  { id_candidato: 111, nome: "BBBBBBBB" },
-  { id_candidato: 112, nome: "BBBBBBBB" },
-  { id_candidato: 113, nome: "CCCCCC" },
-];
 
 const nome = "";
 
 const Window = () => {
   let [state, setState] = useState(0);
   let [obj, setObj] = useState(null);
+  const [flag, setFlag] = useState(true);
+  const [candidatos, setCandidatos] = useState([]);
+
+  const { handleGetSubmit, status, message, res } = useGet({
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/listar",
+  });
+
+  useEffect(() => {
+    if (flag) {
+      handleGetSubmit();
+      setFlag(false);
+    }
+  });
+
+  useEffect(() => {
+    if (res && res.Candidatos && Array.isArray(res.Candidatos)) {
+      const candidatoList = res.Candidatos.map((candidato) => ({
+        id_candidato: candidato.id_candidato,
+        nome: candidato.nome,
+        tipo: candidato.tipo,
+      }));
+      setCandidatos(candidatoList);
+    }
+  }, [res]);
 
   function handleState(page, choice) {
     setState(page);
@@ -68,9 +77,9 @@ const Window = () => {
       case 0:
         return (
           <ListaCandidatos
-            array={array}
+            array={candidatos}
             OnHandleBtn={handleState}
-            selected={[array.findIndex((item) => item === obj)]}
+            selected={[candidatos.findIndex((item) => item === obj)]}
           />
         );
 

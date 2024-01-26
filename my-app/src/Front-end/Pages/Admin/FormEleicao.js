@@ -12,6 +12,7 @@ import FormSelecionaCandidatos from "./FormSelecionaCandidatos";
 import UsePost from "../../../Back-end/HTTP/POST";
 import UsePatch from "../../../Back-end/HTTP/PATCH";
 import Candidato from "../../../Back-end/Objetos/ClassCandidato";
+import useGet from "../../../Back-end/HTTP/GET";
 
 const styleTop = {
   backgroundColor: constants.color.primary,
@@ -112,6 +113,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   const [valNome, setvalNome] = useState(false);
   const [valInicio, setvalInicio] = useState(false);
   const [valFim, setvalFim] = useState(false);
+  const [flag, setFlag] = useState(true);
 
   const handleTipo = (e) => {
     setTipo(e.target.value);
@@ -208,6 +210,45 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/editar",
   });
+
+  const {
+    handleGetSubmit,
+    gstatus,
+    message,
+    res: gres,
+  } = useGet({
+    FORM_ENDPOINT:
+      "https://gp-api-alpha.vercel.app/eleicao" +
+      obj.id_eleicao +
+      "/listar_candidatos",
+  });
+
+  useEffect(() => {
+    if (flag) {
+      handleGetSubmit();
+      setFlag(false);
+    }
+  });
+
+  useEffect(() => {
+    console.log(gres);
+    try {
+      if (gres && gres.Candidatos && Array.isArray(gres.Candidatos)) {
+        const candidatoList = gres.Candidatos.map((candidato) => ({
+          id_candidato: candidato.id_candidato,
+          nome: candidato.nome,
+          tipo: candidato.tipo,
+          descricao: candidato.objetivo,
+          foto: candidato.link_imagem,
+        }));
+        setCandidatos(candidatoList);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, [gres]);
+
+  ///eleicao1/listar_candidatos
 
   const handleRemoveCandidato = (index) => {
     // Crie uma cópia do array candidatos para não modificar o original diretamente
