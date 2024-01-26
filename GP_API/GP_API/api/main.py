@@ -11,6 +11,7 @@ from dataclasses import dataclass
 import jwt
 import datetime
 from jsoncheck.json_checker import CheckJson
+import secrets
 
 
 
@@ -20,6 +21,7 @@ app = Flask(__name__)
 '''
 TODO
 Implementacao Base de dados
+REMOVER PALAVRA-PASSE AO LISTAR CONTAS
 
 --OPTIONAL--
 BlackList de Tokens (Anular sessÃµes de tokens com uma lista de tokens invalidos)
@@ -115,6 +117,7 @@ def refresh_token_auth():
 
 @app.post("/pedido/recuperacao")
 def pedido_recuperacao():
+    abort(ERRO_NAO_IMPLEMENTADO)
     if request.data:
         body = request.get_json()
     else:
@@ -127,6 +130,7 @@ def pedido_recuperacao():
 
 @app.route("/_cghpw<string:token>")
 def pedido_recupercao_confirm(token):
+    abort(ERRO_NAO_IMPLEMENTADO)
     result_status = ERRO_NAO_IMPLEMENTADO
 
     if result_status != 200:
@@ -201,14 +205,26 @@ def logout():
 
 @app.delete("/conta/remover")
 @auth.Authentication(access=[Access.ADMIN])
-@CheckJson(properties = [("ID_Conta",int)
-                         ])
 def remover_conta():
     body = request.get_json()
 
+    if "ID_Contas" in body:
+        ids = body["ID_Contas"]
+        try:
+            for _id in ids:
+                int(_id)
+        except:
+            raise JSONTypeError(list,"ID_Contas")
+    else:
+        raise JSONPropError("ID_Contas")
+
+    contas = []
+    for _id in ids:
+        contas.append((_id,))
+    contas = tuple(contas)
     conn = getconnectionDB()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM remover_utilizador(%s)",(body["ID_Conta"],))
+    cursor.executemany("SELECT * FROM remover_utilizador(%s)",contas)
 
     conn.commit()
     cursor.close()
@@ -239,10 +255,7 @@ def lista_contas():
 @auth.Authentication(access=[Access.ADMIN])
 @CheckJson(properties = [("Nome",str,8),
                          ("Email",str,8),
-                         ("PalavraPasse",str,8),
                          ("Identificacao",int),
-                         ("estado",bool),
-                         ("acessibilidade",bool),
                          ("TipoConta",str)
                          ])
 def inserir_conta():
@@ -252,11 +265,11 @@ def inserir_conta():
     if body["TipoConta"] != "Administrador" and body["TipoConta"] != "Aluno":
         raise InputError("Tipo de conta invalido")
         
-        
+    palavrapasse = secrets.token_urlsafe(8)    
     
     connection = getconnectionDB()
     cursor = connection.cursor(cursor_factory=RealDictCursor) #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta Ã© de aluno)
-    cursor.execute("SELECT * FROM inserir_utilizador(%s,%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],body["PalavraPasse"],body["Identificacao"],body["estado"],body["acessibilidade"],body["TipoConta"]))
+    cursor.execute("SELECT * FROM inserir_utilizador(%s,%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],palavrapasse,body["Identificacao"],True,False,body["TipoConta"]))
     result = cursor.fetchall()[0]['inserir_utilizador']
     
     connection.commit()
@@ -265,7 +278,7 @@ def inserir_conta():
 
     
     if result == True:
-        return "OK"
+        return jsonify("OK"),200
     else:
         raise InputError("Erro ao inserir conta")
     
@@ -277,7 +290,6 @@ def inserir_conta():
 @app.patch("/conta/editar")
 @auth.Authentication(access=[Access.ADMIN])
 @CheckJson(properties = [("Email",str,8),
-                         ("PalavraPasse",str,8),
                          ("Identificacao",int),
                          ("ID_Conta",int)
                          ])
@@ -286,7 +298,7 @@ def editar_conta():
 
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM editar_utilizador(%s,%s,%s,%s,%s)",(body["ID_Conta"],body["Email"],body["PalavraPasse"],None,body["Identificacao"]))
+    cursor.execute("SELECT * FROM editar_utilizador(%s,%s,%s,%s,%s)",(body["ID_Conta"],body["Email"],None,None,body["Identificacao"]))
     connection.commit()
 
     if cursor.fetchall()[0][0] == False:
@@ -354,22 +366,34 @@ def mudar_acessibilidade():
 
 @app.patch("/conta/definir_ativo")
 @auth.Authentication(access=[Access.ADMIN])
-@CheckJson(properties = [("estado",bool),
-                         ("ID_Conta",int)
+@CheckJson(properties = [("estado",bool)
                          ])
 def definir_ativo_conta():
-
     body = request.get_json()
 
-          
-    result_status = ERRO_NAO_IMPLEMENTADO
-    
-    connection = getconnectionDB()
-    cursor = connection.cursor()
-    cursor.execute("AtivarDesativarConta",(body["ID_Conta"],body["estado"]))
-    
-    if result_status != 200:
-        abort(result_status)
+    if "ID_Contas" in body:
+        ids = body["ID_Contas"]
+        try:
+            for _id in ids:
+                int(_id)
+        except:
+            raise JSONTypeError(list,"ID_Contas")
+    else:
+        raise JSONPropError("ID_Contas")
+
+    contas = []
+    for _id in ids:
+        contas.append((_id,body["estado"]))
+    contas = tuple(contas)
+
+    conn = getconnectionDB()
+    cursor = conn.cursor()
+    cursor.executemany("SELECT * FROM ativar_desativar_conta(%s,%s)",contas)
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify("OK"),200
 
 
 @app.get("/conta/detalhes")

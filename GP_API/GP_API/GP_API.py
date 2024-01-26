@@ -4,5 +4,6 @@
     #api.main.app.run(debug=False)
 
 
-test = [0,1,2,"2"]
-int(test)
+
+password_length = 8
+print(secrets.token_urlsafe(password_length))
