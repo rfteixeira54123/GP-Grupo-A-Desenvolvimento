@@ -35,10 +35,10 @@ const Window = () => {
   const [flag, setFlag] = useState(true);
   const [candidatos, setCandidatos] = useState([]);
 
-  const { id } = useParams();
+  const { id, name } = useParams();
   console.log("ID da votação: "+id);
+  console.log("Nome da votação: "+name);
   //definir nome+tipo da eleição a exibir
-  const nome = "";
 
   const { handleGetSubmit, status, message, res } = useGet({
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/listar",
@@ -105,7 +105,7 @@ const Window = () => {
         src={Logo}
         alt="logo"
       />
-      <div style={styleTitle}>ELEIÇÕES DE {nome}</div>
+      <div style={styleTitle}>ELEIÇÕES DE {name}</div>
       {defineContent()}
     </div>
   );
