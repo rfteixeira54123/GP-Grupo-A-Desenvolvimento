@@ -89,7 +89,7 @@ const Adecorrer = ({ handle }) => {
               key={"Eleicao" + index}
               name={obj.nome}
               handleInfo={() => handle(2, obj)}
-              linkVotar={"vote"}
+              linkVotar={"vote/"+obj.id_eleicao}
             />
           ))
         )}

@@ -18,7 +18,7 @@ function App() {
           <Route path="home" element={<Home />} />
           <Route path="ad" element={<Admin />} />
           <Route path="el" element={<Eleitor />} />
-          <Route path="home/vote" element={<Votacao />} />
+          <Route path="home/vote/:id" element={<Votacao />} />
         </Route>
       </Routes>
     </BrowserRouter>

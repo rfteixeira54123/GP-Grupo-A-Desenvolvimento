@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from 'react-router-dom';
 
 import * as constants from "../../constants";
 import Logo from "../../Imagens/Full_Blue_Icon.png";
@@ -28,15 +29,16 @@ const styleTitle = {
   marginBlock: "1rem",
 };
 
-//Definir candidatos a exibir
-
-const nome = "";
-
 const Window = () => {
   let [state, setState] = useState(0);
   let [obj, setObj] = useState(null);
   const [flag, setFlag] = useState(true);
   const [candidatos, setCandidatos] = useState([]);
+
+  const { id } = useParams();
+  console.log("ID da votação: "+id);
+  //definir nome+tipo da eleição a exibir
+  const nome = "";
 
   const { handleGetSubmit, status, message, res } = useGet({
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/listar",
