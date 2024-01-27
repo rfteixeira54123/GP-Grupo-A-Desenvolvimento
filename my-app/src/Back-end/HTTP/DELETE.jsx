@@ -44,7 +44,6 @@ function UseDelete({ Data, FORM_ENDPOINT }) {
       })
       .then((data) => {
         setRes(data);
-        console.log(data);
       })
       .catch((error) => {
         console.error("Erro durante o pedido DELETE:", error);

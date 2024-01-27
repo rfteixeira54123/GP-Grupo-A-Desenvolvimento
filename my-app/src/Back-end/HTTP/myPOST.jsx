@@ -41,7 +41,6 @@ function UsePost({ Data, FORM_ENDPOINT }) {
         }
       })
       .then((data) => {
-        console.table(data);
         if (data.token) localStorage.setItem("Token", data.token);
       });
   };

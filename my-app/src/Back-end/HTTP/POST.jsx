@@ -8,7 +8,6 @@ function UsePost({ Data, FORM_ENDPOINT }) {
   const handleSubmit = () => {
     setStatus("loading");
     setMessage("");
-    console.log(Data);
     return fetch(FORM_ENDPOINT, {
       method: "POST",
       mode: "cors",
@@ -44,7 +43,6 @@ function UsePost({ Data, FORM_ENDPOINT }) {
       })
       .then((data) => {
         setRes(data);
-        console.log(data);
         try {
           if (data.token) localStorage.setItem("Token", data.token);
         } catch {}
