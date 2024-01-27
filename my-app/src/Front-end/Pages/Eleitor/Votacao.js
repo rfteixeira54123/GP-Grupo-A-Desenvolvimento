@@ -41,9 +41,7 @@ const Window = () => {
 
   const location = useLocation();
   const eleicao = location.state && location.state.eleicao;
-  console.table(eleicao);
   const id = location.state && location.state.id;
-  console.log(id);
 
   const { handleGetSubmit, status, message, res } = useGet({
     FORM_ENDPOINT:
@@ -69,12 +67,25 @@ const Window = () => {
   }, [res]);
 
   function handleState(page, choice) {
+    if (choice == null) {
+      let id = {
+        id_candidato: null,
+      };
+      setObj(id);
+    } else setObj(choice);
     setState(page);
-    setObj(choice);
 
     if (page == 2) {
       // console.log(JSON.stringify());
-      handlePostSubmit();
+      if (obj.id_candidato == null) {
+        console.log("voto em branco");
+        handlePostSubmitBlank();
+      } else {
+        console.log("vota em alguem");
+        console.log(obj.id_candidato);
+        console.log(id);
+        handlePostSubmit();
+      }
       handleLogoutSubmit();
       localStorage.removeItem("Token");
       localStorage.removeItem("User");
@@ -85,6 +96,13 @@ const Window = () => {
     Data: {
       ID_Eleicao: id,
       ID_Candidato: obj.id_candidato,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/votar",
+  });
+
+  const { handlePostSubmit: handlePostSubmitBlank } = usePost({
+    Data: {
+      ID_Eleicao: id,
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/votar",
   });

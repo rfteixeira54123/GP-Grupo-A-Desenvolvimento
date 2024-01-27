@@ -7,7 +7,7 @@ import React, { useState } from "react";
 
 import * as contants from "../constants";
 import Button from "./FormBtn";
-import UsePost from "../../Back-end/HTTP/POST";
+import UsePost from "../../Back-end/HTTP/myPOST";
 import useGet from "../../Back-end/HTTP/GET";
 
 const styleForm = {
@@ -55,7 +55,7 @@ const FormLogin = () => {
       setMessage("Todos os campos devem ser preenchidos.");
       setShow(true);
     } else {
-      if (PalavraPasse .length < 8 || Email.length < 8) {
+      if (PalavraPasse.length < 8 || Email.length < 8) {
         setMessage("Os campos devem conter no mínimo 8 caracteres.");
         setShow(true);
       } else {

@@ -8,7 +8,6 @@ function UsePost({ Data, FORM_ENDPOINT }) {
   const handleSubmit = () => {
     setStatus("loading");
     setMessage("");
-
     return fetch(FORM_ENDPOINT, {
       method: "POST",
       mode: "cors",
@@ -22,6 +21,8 @@ function UsePost({ Data, FORM_ENDPOINT }) {
       .then((response) => {
         if (response.status === 200) {
           return response.json();
+        } else if (response.status === 401) {
+          throw "email nao existe";
         } else if (response.status === 403) {
           throw "nao autorizado";
         } else if (response.status === 500) {
@@ -41,7 +42,14 @@ function UsePost({ Data, FORM_ENDPOINT }) {
         }
       })
       .then((data) => {
-        if (data.token) localStorage.setItem("Token", data.token);
+        setRes(data);
+        try {
+          if (data.token) localStorage.setItem("Token", data.token);
+        } catch {}
+      })
+      .catch((error) => {
+        console.log(error);
+        // throw error;
       });
   };
   return { handlePostSubmit: handleSubmit, status, message, res };

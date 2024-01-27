@@ -40,7 +40,7 @@ const Adecorrer = ({ handle }) => {
   const [eleicoes, setEleicoes] = useState([]);
 
   const { handleGetSubmit, status, message, res } = UseGet({
-    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/listar",
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/listar/votado/0",
   });
 
   useEffect(() => {
@@ -65,7 +65,6 @@ const Adecorrer = ({ handle }) => {
 
   const eleicoesDecorrer = (eleicoes) => {
     const dataAtual = new Date();
-    console.log(eleicoes);
     const eleicoesFiltradas = eleicoes.filter((eleicao) => {
       const dataInicio = new Date(eleicao.data_inicio);
       const dataFim = new Date(eleicao.data_fim);
