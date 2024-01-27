@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { differenceInCalendarDays, format } from "date-fns";
+import { format } from "date-fns";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -136,14 +136,15 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const verifyFields = () => {
     setvalNome(Nome.length < 5);
-    setvalTipo(!Tipo);
+    setvalTipo(Tipo.length < 2);
     setvalInicio(!Inicio);
     setvalFim(Fim < Inicio);
   };
 
   const handleAdicionar = () => {
     verifyFields();
-    if (Nome && Nome.length > 4 && Tipo && Inicio && Fim && Fim >= Inicio) {
+    if (Nome && Nome.length > 4 && Tipo && Tipo > 1 && Inicio && Fim && Fim >= Inicio) {
+      console.log("adicionar");
       setStatePopup(10);
       handlePostSubmit0().then(() => {
         if (handleAdd)
@@ -159,7 +160,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const handleEditar = () => {
     verifyFields();
-    if (Nome && Nome.length > 4 && Tipo && Inicio && Fim && Fim >= Inicio) {
+    if (Nome && Nome.length > 4 && Tipo && Tipo > 1 && Inicio && Fim && Fim >= Inicio) {
       setStatePopup(10);
       handlePatchSubmit().then(() => {
         handlePostSubmit1().then(() => {
@@ -353,7 +354,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
                 isInvalid={valTipo}
               />
               <Form.Control.Feedback type="invalid">
-                O campo deve ser preenchido.
+                O tipo deve conter no mínimo 2 caracteres.
               </Form.Control.Feedback>
             </Form.Group>
           </Col>

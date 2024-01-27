@@ -1,6 +1,9 @@
 import * as constants from "../../constants";
 import Button from "../../Componentes/ButtonSmall";
 import useDelete from "../../../Back-end/HTTP/DELETE";
+import { useState } from "react";
+import Spinner from "react-bootstrap/Spinner";
+
 const styleTop = {
   backgroundColor: constants.color.primary,
   borderBottom: "2px solid " + constants.color.secondary,
@@ -36,10 +39,7 @@ const styleContainer = {
 // Recebe:
 //  choice: array de ids de candidatos selecionados
 //  handleCancelar: método para fechar o popup
-const Info = ({ choice, handleCancelar }) => {
-  const handleConfirmar = () => {
-    handleDeleteSubmit();
-  };
+const Info = ({ choice, handleCancelar, handleConfirmar }) => {
 
   const { handleDeleteSubmit } = useDelete({
     Data: {
@@ -47,6 +47,34 @@ const Info = ({ choice, handleCancelar }) => {
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/remover",
   });
+
+  const handleRemove = () => {
+    setStatePopup(10);
+    handleDeleteSubmit().then(() => {
+      handleConfirmar();
+    });
+  };
+
+  const [statePopup, setStatePopup] = useState(0);
+
+  const decidePopup = () => {
+    switch (statePopup) {
+      case 10:
+        return <Spinner animation="border" />;
+      default:
+        return <></>;
+    }
+  };
+
+  const stylePopUp = {
+    display: statePopup === 0 ? "none" : "flex",
+    backgroundColor: constants.color.white70,
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  };
 
   return (
     <>
@@ -73,11 +101,7 @@ const Info = ({ choice, handleCancelar }) => {
               }}
             >
               <Button label="Cancelar" handle={handleCancelar} />
-              <Button
-                label="Confirmar"
-                handle={handleConfirmar}
-                danger={true}
-              />
+              <Button label="Confirmar" handle={handleRemove} danger={true} />
             </div>
           </>
         ) : (
@@ -125,14 +149,11 @@ const Info = ({ choice, handleCancelar }) => {
               }}
             >
               <Button label="Cancelar" handle={handleCancelar} />
-              <Button
-                label="Confirmar"
-                handle={handleConfirmar}
-                danger={true}
-              />
+              <Button label="Confirmar" handle={handleRemove} danger={true} />
             </div>
           </>
         )}
+        <div style={stylePopUp}>{decidePopup()}</div>
       </div>
     </>
   );

@@ -55,19 +55,24 @@ const FormLogin = () => {
       setMessage("Todos os campos devem ser preenchidos.");
       setShow(true);
     } else {
-      setShow(false);
-      handlePostSubmit()
-        .then((data) => {
-          if (localStorage.getItem("Token")) {
-            handleGetSubmit().then(() => {
-              navigate("/home");
-            });
-          }
-        })
-        .catch((error) => {
-          setMessage(error);
-          setShow(true);
-        });
+      if (PalavraPasse .length < 8 || Email.length < 8) {
+        setMessage("Os campos devem conter no mínimo 8 caracteres.");
+        setShow(true);
+      } else {
+        setShow(false);
+        handlePostSubmit()
+          .then((data) => {
+            if (localStorage.getItem("Token")) {
+              handleGetSubmit().then(() => {
+                navigate("/home");
+              });
+            }
+          })
+          .catch((error) => {
+            setMessage(error);
+            setShow(true);
+          });
+      }
     }
   };
 

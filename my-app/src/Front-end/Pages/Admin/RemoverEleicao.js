@@ -1,5 +1,7 @@
 import * as constants from "../../constants";
 import Button from "../../Componentes/ButtonSmall";
+import { useState } from "react";
+import Spinner from "react-bootstrap/Spinner";
 
 const styleTop = {
   backgroundColor: constants.color.primary,
@@ -36,11 +38,38 @@ const styleContainer = {
 // Recebe:
 //  choice: array de ids de eleicoes selecionadas
 //  handleCancelar: método para fechar o popup
-const Info = ({ choice, handleCancelar }) => {
-  const handleConfirmar = () => {
+//  handleConfirmar: método para atualizar lista de eleicoes.
+const Info = ({ choice, handleCancelar, handleConfirmar }) => {
+  const handleRemove = () => {
     // O que é o ID_LISTA_CANDIDATOS na API ?
     // o endpoint apenas suporta remover 1 candidato por cada vez
     //Fazer função para remover eleicoes recebidos no array choice
+    console.log("remover");
+    setStatePopup(10);
+    // handleDeleteSubmit().then(()=>{
+    //   handleConfirmar;
+    // });
+  };
+
+  const [statePopup, setStatePopup] = useState(0);
+
+  const decidePopup = () => {
+    switch (statePopup) {
+      case 10:
+        return <Spinner animation="border" />;
+      default:
+        return <></>;
+    }
+  };
+
+  const stylePopUp = {
+    display: statePopup === 0 ? "none" : "flex",
+    backgroundColor: constants.color.white70,
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   return (
@@ -70,7 +99,7 @@ const Info = ({ choice, handleCancelar }) => {
               <Button label="Cancelar" handle={handleCancelar} />
               <Button
                 label="Confirmar"
-                handle={handleConfirmar}
+                handle={handleRemove}
                 danger={true}
               />
             </div>
@@ -106,12 +135,13 @@ const Info = ({ choice, handleCancelar }) => {
               <Button label="Cancelar" handle={handleCancelar} />
               <Button
                 label="Confirmar"
-                handle={handleConfirmar}
+                handle={handleRemove}
                 danger={true}
               />
             </div>
           </>
         )}
+        <div style={stylePopUp}>{decidePopup()}</div>
       </div>
     </>
   );

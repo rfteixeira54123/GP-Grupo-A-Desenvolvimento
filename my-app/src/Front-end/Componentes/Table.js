@@ -333,7 +333,7 @@ export const TableUtilizadores = (props) => {
                   <td style={{...styleCell, textAlign: "start"}}>{user.nome}</td>
                   <td style={{...styleCell, textAlign: "start"}}>{user.email}</td>
                   <td style={styleCell}>{user.numero_id}</td>
-                  <td style={styleCell}>{user.tipo}</td>
+                  <td style={styleCell}>{user.tipo ? "Eleitor" : "Administrador"}</td>
                   <td style={styleCell} onClick={() => props.handleEnable(user)} ><CheckBoxEstado state={user.estado} /></td>
                   <td style={styleCell} onClick={() => props.handleEdit(user)} ><MdOutlineEdit size={25} /></td>
                   <td style={styleCell} onClick={() => props.handleDelete(user)}><AiFillDelete size={22} /></td>

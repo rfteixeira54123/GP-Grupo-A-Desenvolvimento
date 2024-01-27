@@ -8,7 +8,7 @@ import Candidato from "../../../Back-end/Objetos/ClassCandidato";
 import { GereCandidatos } from "../../../Back-end/GereClasses/GereCandidatos";
 import useGet from "../../../Back-end/HTTP/GET";
 import React, { useState, useEffect } from "react";
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from "react-bootstrap/Spinner";
 
 const styleWindow = {
   width: "100%",
@@ -122,12 +122,8 @@ const Page = () => {
     setStatePopup(3);
   };
 
-  const handleAdd = (obj) => {
-    let updateCandidatos = [...candidatos];
-    updateCandidatos.push(obj);
-    setCandidatos(updateCandidatos);
-    handleOptionClick();
-    setStatePopup(0);
+  const handleUpdate = () => {
+    setFlag(true);
   };
 
   const handleEdited = (obj) => {
@@ -151,9 +147,7 @@ const Page = () => {
         return (
           <FormCandidato
             handleCancelar={() => setStatePopup(0)}
-            handleAdd={(obj) => {
-              handleAdd(obj);
-            }}
+            handleAdd={() => handleUpdate()}
           />
         );
       case 2:
@@ -161,6 +155,7 @@ const Page = () => {
           <RemoverCandidato
             choice={selected}
             handleCancelar={() => setStatePopup(0)}
+            handleConfirmar={() => handleUpdate()}
           />
         );
       case 3:
@@ -176,10 +171,11 @@ const Page = () => {
           <RemoverCandidato
             choice={[toDelete]}
             handleCancelar={() => setStatePopup(0)}
+            handleConfirmar={() => handleUpdate()}
           />
         );
       case 10:
-        return  <Spinner animation="border" />;
+        return <Spinner animation="border" />;
       default:
         return <></>;
     }
@@ -245,12 +241,3 @@ const Page = () => {
 };
 
 export default Page;
-
-// const array = [
-//   { id_candidato: 0, nome: "Nome do Candidato", tipo: "Lista", descricao: "magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend magnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifendmagnis dis parturient montes, nascetur ridiculus mus. Donecquam felis, ultricies nec, pellentesque eu, pretium quis, sem.Nulla consequat massa quis enim. Donec pede justo, fringillavel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncusut, imperdiet a, venenatis vitae, justo. Nullam dictum feliseu pede mollis pretium. Integer tincidunt. Cras dapibus.Vivamus elementum semper nisi. Aenean vulputate eleifend " },
-//   { id_candidato: 1, nome: "Nome do Candidato", tipo: "Lista" },
-//   { id_candidato: 2, nome: "Nome do Candidato", tipo: "Presidente" },
-//   { id_candidato: 3, nome: "Nome do Candidato", tipo: "Lista" },
-//   { id_candidato: 4, nome: "Nome do Candidato", tipo: "Diretor" },
-//   { id_candidato: 5, nome: "Nome do Candidato", tipo: "Lista" },
-// ];

@@ -2,7 +2,9 @@ import * as constants from "../../constants";
 import Button from "../../Componentes/ButtonSmall";
 import useDelete from "../../../Back-end/HTTP/DELETE";
 import usePatch from "../../../Back-end/HTTP/PATCH";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Spinner from "react-bootstrap/Spinner";
+
 const styleTop = {
   backgroundColor: constants.color.primary,
   borderBottom: "2px solid " + constants.color.secondary,
@@ -38,8 +40,9 @@ const styleContainer = {
 // Recebe:
 //  choice: array de ids de contas selecionadas
 //  handleCancelar: método para fechar o popup
+//  handleConfirmar: método para atualizar lista de contas.
 //  variant: booleano que define se desativa (true) ou remove (false) o utilizador.
-const Info = ({ choice, handleCancelar, variant }) => {
+const Info = ({ choice, handleCancelar, variant, handleConfirmar }) => {
   const { handleDeleteSubmit } = useDelete({
     Data: {
       ID_Contas: [choice[0].id_conta],
@@ -56,15 +59,42 @@ const Info = ({ choice, handleCancelar, variant }) => {
   });
 
   const handleConfirmarDesativar = () => {
-    console.log("entra");
+    console.log("desativa");
     console.log(!choice[0].estado, choice[0].id_conta);
-    handlePatchSubmit();
+    setStatePopup(10);
+    handlePatchSubmit().then(() => {
+      handleConfirmar();
+    });
   };
 
   const handleConfirmarRemover = () => {
     console.log(choice[0].id_conta);
-    console.log("entra");
-    handleDeleteSubmit();
+    console.log("remove esse");
+    setStatePopup(10);
+    handleDeleteSubmit().then(() => {
+      handleConfirmar();
+    });
+  };
+
+  const [statePopup, setStatePopup] = useState(0);
+
+  const decidePopup = () => {
+    switch (statePopup) {
+      case 10:
+        return <Spinner animation="border" />;
+      default:
+        return <></>;
+    }
+  };
+
+  const stylePopUp = {
+    display: statePopup === 0 ? "none" : "flex",
+    backgroundColor: constants.color.white70,
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   return (
@@ -100,7 +130,6 @@ const Info = ({ choice, handleCancelar, variant }) => {
                   variant ? handleConfirmarDesativar : handleConfirmarDesativar
                 }
                 danger={true}
-                disabled={false}
               />
             </div>
           </>
@@ -152,6 +181,7 @@ const Info = ({ choice, handleCancelar, variant }) => {
             </div>
           </>
         )}
+        <div style={stylePopUp}>{decidePopup()}</div>
       </div>
     </>
   );

@@ -96,43 +96,41 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   };
 
   const verifyFields = () => {
-    setvalNome(!Nome);
-    setvalEmail(!Email);
+    setvalNome(Nome.length < 8);
+    setvalEmail(Email.length < 8);
     setvalNum(!Num);
   };
 
   const handleAdicionar = () => {
     verifyFields();
-    handlePostSubmit();
-    // if (Nome && Tipo && Num && Email) {
-    //   setStatePopup(10);
-    //   handlePostSubmit0().then(() => {
-    //     if (handleAdd)
-    //       handleAdd({
-    //         nome: Nome,
-    //         numero_id: ID,
-    //         email: Email,
-    //         estado: Estado,
-    //       });
-    //   });
-    // }
+    if (Nome && Nome.length > 7 && Tipo && Num && Email && Email.length > 7) {
+      setStatePopup(10);
+      handlePostSubmit().then(() => {
+        if (handleAdd)
+          handleAdd({
+            id_conta: -1,
+            nome: Nome,
+            numero_id: Num,
+            email: Email,
+            tipo: Tipo,
+            estado: true,
+          });
+      });
+    }
   };
 
   const handleEditar = () => {
     verifyFields();
-    handlePatchSubmit();
-    // if (Nome && Estado && Num && Email) {
-    //   setStatePopup(10);
-    //   //Fazer função para editar candidato
-    //   handlePostSubmit1().then(() => {
-    //     obj.nome = Nome;
-    //     obj.numero_id = ID;
-    //     obj.email = Email;
-    //     obj.estado = Estado;
-    //     if(handleEdit) handleEdit(obj);
-    //   });
-    // }
-    console.log("editar");
+    if (Nome && Nome.length > 7 && Estado && Num && Email && Email.length > 7) {
+      setStatePopup(10);
+      handlePatchSubmit().then(() => {
+        obj.nome = Nome;
+        obj.numero_id = Num;
+        obj.email = Email;
+        obj.estado = Estado;
+        if(handleEdit) handleEdit(obj);
+      });
+    }
   };
 
   const [statePopup, setStatePopup] = useState(0);
@@ -191,15 +189,21 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
             onChange={handleNome}
             isInvalid={valNome}
           />
+          <Form.Control.Feedback type="invalid">
+            O nome deve conter no mínimo 8 caracteres.
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Nº de ID: </Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             defaultValue={Num}
             onChange={handleNum}
             isInvalid={valNum}
           />
+          <Form.Control.Feedback type="invalid">
+            O campo deve ser preenchido.
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Email: </Form.Label>
@@ -209,6 +213,9 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
             onChange={handleEmail}
             isInvalid={valEmail}
           />
+          <Form.Control.Feedback type="invalid">
+            O email deve conter no mínimo 8 caracteres.
+          </Form.Control.Feedback>
         </Form.Group>
       </Form>
       <div

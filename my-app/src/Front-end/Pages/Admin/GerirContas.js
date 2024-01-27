@@ -8,9 +8,6 @@ import RemoverConta from "./RemoverConta";
 import FormConta from "./FormConta";
 import * as constants from "../../constants";
 import useGet from "../../../Back-end/HTTP/GET";
-import usePost from "../../../Back-end/HTTP/POST";
-import usePatch from "../../../Back-end/HTTP/PATCH";
-import useDelete from "../../../Back-end/HTTP/DELETE";
 
 const styleWindow = {
   width: "100%",
@@ -65,6 +62,7 @@ const Page = (props) => {
 
   useEffect(() => {
     if (flag) {
+      setStatePopup(10);
       handleGetSubmit();
       setFlag(false);
     }
@@ -118,12 +116,8 @@ const Page = (props) => {
     setStatePopup(6);
   };
 
-  const handleAdd = (obj) => {
-    let updateContas = [...contas];
-    updateContas.push(obj);
-    setContas(updateContas);
-    handleOptionClick();
-    setStatePopup(0);
+  const handleUpdate = () => {
+    setFlag(true);
   };
 
   const handleEdited = (obj) => {
@@ -150,7 +144,7 @@ const Page = (props) => {
         return (
           <FormConta
             handleCancelar={() => setStatePopup(0)}
-            handleAdd={(obj) => handleAdd(obj)}
+            handleAdd={() => handleUpdate()}
           />
         );
       case 4:
@@ -166,6 +160,7 @@ const Page = (props) => {
           <RemoverConta
             choice={selected}
             handleCancelar={() => setStatePopup(0)}
+            handleConfirmar={() => handleUpdate()}
             variant={false}
           />
         );
@@ -174,6 +169,7 @@ const Page = (props) => {
           <RemoverConta
             choice={selected}
             handleCancelar={() => setStatePopup(0)}
+            handleConfirmar={() => handleUpdate()}
             variant={true}
           />
         );
@@ -182,6 +178,7 @@ const Page = (props) => {
           <RemoverConta
             choice={[toDelete]}
             handleCancelar={() => setStatePopup(0)}
+            handleConfirmar={() => handleUpdate()}
             variant={false}
           />
         );
@@ -190,6 +187,7 @@ const Page = (props) => {
           <RemoverConta
             choice={[toEnable]}
             handleCancelar={() => setStatePopup(0)}
+            handleConfirmar={() => handleUpdate()}
             variant={true}
           />
         );
@@ -264,7 +262,7 @@ const Page = (props) => {
             justifyContent: "center",
           }}
         >
-          {decidePopup(statePopup)}
+          {decidePopup()}
         </div>
       </div>
     </div>
@@ -272,86 +270,3 @@ const Page = (props) => {
 };
 
 export default Page;
-
-// const array = [
-//   {
-//     id_conta: 0,
-//     nome: "Nome do Utilizador Completo",
-//     email: "a20121456@estgoh.ipc.pt",
-//     numero_id: "a2021258755",
-//     tipo: "Administrador",
-//     estado: true,
-//   },
-//   {
-//     id_conta: 1,
-//     nome: "Nome do Utilizador Completo",
-//     email: "a20121456@estgoh.ipc.pt",
-//     numero_id: "a2021258755",
-//     tipo: "Administrador",
-//     estado: true,
-//   },
-//   {
-//     id_conta: 2,
-//     nome: "Nome do Utilizador Completo",
-//     email: "a20121456@estgoh.ipc.pt",
-//     numero_id: "a2021258755",
-//     tipo: "Administrador",
-//     estado: false,
-//   },
-//   {
-//     id_conta: 3,
-//     nome: "Nome do Utilizador Completo",
-//     email: "a20121456@estgoh.ipc.pt",
-//     numero_id: "a2021258755",
-//     tipo: "Eleitor",
-//     estado: true,
-//   },
-//   {
-//     id_conta: 4,
-//     nome: "Nome do Utilizador Completo",
-//     email: "a20121456@estgoh.ipc.pt",
-//     numero_id: "a2021258755",
-//     tipo: "Eleitor",
-//     estado: false,
-//   },
-//   {
-//     id_conta: 5,
-//     nome: "Nome do Utilizador Completo",
-//     email: "a20121456@estgoh.ipc.pt",
-//     numero_id: "a2021258755",
-//     tipo: "Eleitor",
-//     estado: true,
-//   },
-//   {
-//     id_conta: 6,
-//     nome: "Nome do Utilizador Completo",
-//     email: "a20121456@estgoh.ipc.pt",
-//     numero_id: "a2021258755",
-//     tipo: "Eleitor",
-//     estado: false,
-//   },
-//   {
-//     id_conta: 7,
-//     nome: "Nome do Utilizador Completo",
-//     email: "a20121456@estgoh.ipc.pt",
-//     numero_id: "a2021258755",
-//     tipo: "Eleitor",
-//     estado: true,
-//   },
-//   {
-//     id_conta: 8,
-//     nome: "Nome do Utilizador Completo",
-//     email: "a20121456@estgoh.ipc.pt",
-//     numero_id: "a2021258755",
-//     tipo: "Eleitor",
-//     estado: true,
-//   },
-//   {
-//     id_conta: 9,
-//     nome: "Nome do Utilizador Completo",
-//     email: "a20121456@estgoh.ipc.pt",
-//     numero_id: "a2021258755",
-//     tipo: "Eleitor",
-//     estado: true,
-//   },
-// ];

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from "react-bootstrap/Spinner";
 
 import { TableEleicoes } from "../../Componentes/Table";
 import Button from "../../Componentes/Button";
@@ -115,12 +115,8 @@ const Page = () => {
     setStatePopup(3);
   };
 
-  const handleAdd = (obj) => {
-    let updateEleicoes = [...eleicoes];
-    updateEleicoes.push(obj);
-    setEleicoes(updateEleicoes);
-    handleOptionClick();
-    setStatePopup(0);
+  const handleUpdate = () => {
+    setFlag(true);
   };
 
   const handleEdited = (obj) => {
@@ -147,7 +143,7 @@ const Page = () => {
         return (
           <FormEleicao
             handleCancelar={() => setStatePopup(0)}
-            handleAdd={(obj) => handleAdd(obj)}
+            handleAdd={() => handleUpdate()}
           />
         );
       case 2:
@@ -155,6 +151,7 @@ const Page = () => {
           <RemoverEleicao
             choice={selected}
             handleCancelar={() => setStatePopup(0)}
+            handleConfirmar={() => handleUpdate()}
           />
         );
       case 3:
@@ -170,10 +167,11 @@ const Page = () => {
           <RemoverEleicao
             choice={[toDelete]}
             handleCancelar={() => setStatePopup(0)}
+            handleConfirmar={() => handleUpdate()}
           />
         );
       case 10:
-        return  <Spinner animation="border" />;
+        return <Spinner animation="border" />;
       default:
         return <></>;
     }
@@ -244,25 +242,3 @@ const Page = () => {
 };
 
 export default Page;
-
-// const array = [
-//   {id_eleicao:0, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"2017-06-01T08:30", data_fim:"2017-08-01T08:30"},
-//   {id_eleicao:1, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"2017-06-01T08:30", data_fim:"2017-08-01T08:30"},
-//   {id_eleicao:2, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"2017-06-01T08:30", data_fim:"2017-08-01T08:30"},
-//   {id_eleicao:3, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:4, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:5, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:6, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:7, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:8, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:9, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:10, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:11, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:12, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:13, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:14, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:15, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:16, nome: "Nome da eleição", cargo_disputa: "AE", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:17, nome: "Nome da eleição", cargo_disputa: "Presidente", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"},
-//   {id_eleicao:18, nome: "Nome da eleição", cargo_disputa: "Diretor", data_inicio:"10/10/2023 às 07:00", data_fim:"20/12/2023 às 20:00"}
-// ];
