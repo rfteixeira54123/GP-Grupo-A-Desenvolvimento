@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import * as constants from "../constants";
 import Button from "./FormBtn";
+import useGet from "../../Back-end/HTTP/GET";
 
 const styleTop = {
   backgroundColor: constants.color.primary,
@@ -38,6 +39,16 @@ const styleContainer = {
 //  linkLogout: ação do botão para encerrar sessão
 //  linkHome: ação do botão para voltar a página inicial
 const List = () => {
+  function handleState() {
+    handleLogoutSubmit();
+    localStorage.removeItem("Token");
+    localStorage.removeItem("User");
+  }
+  const { handleGetSubmit: handleLogoutSubmit } = useGet({
+    Data: null,
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/logout",
+  });
+
   return (
     <>
       <div style={styleContainer}>

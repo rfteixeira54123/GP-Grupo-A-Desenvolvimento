@@ -86,9 +86,6 @@ const Window = () => {
         console.log(id);
         handlePostSubmit();
       }
-      handleLogoutSubmit();
-      localStorage.removeItem("Token");
-      localStorage.removeItem("User");
     }
   }
 
@@ -105,11 +102,6 @@ const Window = () => {
       ID_Eleicao: id,
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/votar",
-  });
-
-  const { handleGetSubmit: handleLogoutSubmit } = useGet({
-    Data: null,
-    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/logout",
   });
 
   const defineContent = () => {

@@ -6,6 +6,7 @@ function UsePost({ Data, FORM_ENDPOINT }) {
   const [res, setRes] = useState("");
 
   const handleSubmit = () => {
+    console.log(Data);
     setStatus("loading");
     setMessage("");
     return fetch(FORM_ENDPOINT, {
@@ -42,12 +43,15 @@ function UsePost({ Data, FORM_ENDPOINT }) {
         }
       })
       .then((data) => {
+        console.log("OK");
+        console.log(data);
         setRes(data);
         try {
           if (data.token) localStorage.setItem("Token", data.token);
         } catch {}
       })
       .catch((error) => {
+        console.log("NOK");
         console.log(error);
         // throw error;
       });

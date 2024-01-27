@@ -143,7 +143,15 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const handleAdicionar = () => {
     verifyFields();
-    if (Nome && Nome.length > 4 && Tipo && Tipo.length  > 1 && Inicio && Fim && Fim >= Inicio) {
+    if (
+      Nome &&
+      Nome.length > 4 &&
+      Tipo &&
+      Tipo.length > 1 &&
+      Inicio &&
+      Fim &&
+      Fim >= Inicio
+    ) {
       console.log("adicionar");
       setStatePopup(10);
       handlePostSubmit0().then(() => {
@@ -160,7 +168,15 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const handleEditar = () => {
     verifyFields();
-    if (Nome && Nome.length > 4 && Tipo && Tipo.length > 1 && Inicio && Fim && Fim >= Inicio) {
+    if (
+      Nome &&
+      Nome.length > 4 &&
+      Tipo &&
+      Tipo.length > 1 &&
+      Inicio &&
+      Fim &&
+      Fim >= Inicio
+    ) {
       setStatePopup(10);
       handlePatchSubmit().then(() => {
         handlePostSubmit1().then(() => {
@@ -238,6 +254,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   useEffect(() => {
     try {
+      console.log(gres);
       if (gres && gres.Candidatos && Array.isArray(gres.Candidatos)) {
         const candidatoList = gres.Candidatos.map((candidato) => ({
           id_candidato: candidato.id_candidato,
