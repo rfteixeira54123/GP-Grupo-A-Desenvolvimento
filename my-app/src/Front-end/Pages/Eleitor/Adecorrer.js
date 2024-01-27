@@ -1,8 +1,7 @@
 import * as constants from "../../constants";
 import ItemEleicoes from "../../Componentes/ItemEleicoes";
 import UseGet from "../../../Back-end/HTTP/GET";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const styleTitle = {
   color: constants.color.secondary,
@@ -87,9 +86,8 @@ const Adecorrer = ({ handle }) => {
           eleicoes.map((obj, index) => (
             <ItemEleicoes
               key={"Eleicao" + index}
-              name={obj.nome}
+              obj={obj}
               handleInfo={() => handle(2, obj)}
-              linkVotar={"vote/"+obj.nome+"/"+obj.id_eleicao}
             />
           ))
         )}

@@ -141,7 +141,13 @@ const Dados = ({ getEleicao }) => {
               height: "100%",
             }}
           >
-            {candidatos.map((obj, index) => (
+            {candidatos.length === 0 ?
+              <Carousel.Item
+                data-bs-theme="primary"
+                style={{ color: constants.color.secondary }}>
+                Não há candidatos a exibir.
+              </Carousel.Item>
+            : candidatos.map((obj, index) => (
               <Carousel.Item
                 data-bs-theme="primary"
                 key={"Candidato" + index}

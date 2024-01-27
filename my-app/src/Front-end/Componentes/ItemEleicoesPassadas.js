@@ -4,8 +4,8 @@ import * as constants from "../constants";
 import Button from "./ButtonSmall";
 
 // Recebe props:
-//  name: identificador da elição
-//  linkConsulta: link para aceder informacoes da eleicao
+//  nome: identificador da elição
+//  handle: ação para aceder informacoes da eleicao
 const Lista = (props) => {
   const [hovering, setHovering] = useState(false);
 
@@ -46,8 +46,8 @@ const Lista = (props) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div style={styleText}>{props.name}</div>
-      <Button label="Consultar" link={props.linkConsulta} disabled={true} />
+      <div style={styleText}>{props.nome}</div>
+      <Button label="Consultar" handle={props.handle} disabled={true} />
     </div>
   );
 };

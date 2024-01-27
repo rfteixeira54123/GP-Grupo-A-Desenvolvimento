@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import * as constants from "../constants";
 import Button from "./ButtonSmall";
 
 // Recebe props:
-//  name: identificador da elição
-//  linkVotar: link para votar nessa eleição
+//  obj: eleição
 //  handleInfo: ação para aceder informacoes da eleicao
 const Lista = (props) => {
   const [hovering, setHovering] = useState(false);
@@ -45,14 +45,20 @@ const Lista = (props) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div style={styleText}>{props.name}</div>
+      <div style={styleText}>{props.obj.nome}</div>
       <div style={{ display: "flex", gap: "2rem" }}>
         <Button
           label="Informações"
           disabled={false}
           handle={props.handleInfo}
         />
-        <Button label="Votar" link={props.linkVotar} />
+        <Link
+          to={"vote"}
+          state={{ eleicao: props.obj, id: props.obj.id_eleicao }}
+          style={{ textDecoration: "none" }}
+        >
+          <Button label="Votar" handle={null} />
+        </Link>
       </div>
     </div>
   );

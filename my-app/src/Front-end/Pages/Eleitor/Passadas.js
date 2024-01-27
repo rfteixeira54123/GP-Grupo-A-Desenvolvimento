@@ -1,7 +1,8 @@
 import * as constants from "../../constants";
-import ListaEleicoes from "../../Componentes/ItemEleicoesPassadas";
+import ItemEleicoesPassadas from "../../Componentes/ItemEleicoesPassadas";
 import UseGet from "../../../Back-end/HTTP/GET";
 import { useEffect, useState } from "react";
+
 const styleTitle = {
   color: constants.color.secondary,
   fontSize: "22px",
@@ -52,7 +53,7 @@ const Passadas = () => {
     if (res && res.Eleicoes && Array.isArray(res.Eleicoes)) {
       const eleicaoList = res.Eleicoes.map((eleicao) => ({
         id_eleicao: eleicao.id_eleicao,
-        name: eleicao.nome,
+        nome: eleicao.nome,
         cargo_disputa: eleicao.cargo_disputa,
         data_inicio: eleicao.data_inicio,
         data_fim: eleicao.data_fim,
@@ -73,6 +74,7 @@ const Passadas = () => {
 
     return eleicoesFiltradas;
   };
+
   return (
     <div style={styleWindow}>
       <div style={styleTitle}>ELEIÇÕES PASSADAS</div>
@@ -81,10 +83,10 @@ const Passadas = () => {
           <div>Não existe eleições passadas.</div>
         ) : (
           eleicoes.map((obj, index) => (
-            <ListaEleicoes
-              key={"ELeicao" + index}
-              name={obj.name}
-              linkConsulta={obj.linkConsulta}
+            <ItemEleicoesPassadas
+              key={"Eleicao" + index}
+              nome={obj.nome}
+              handle={null} // alterar para implementar página de consulta
             />
           ))
         )}

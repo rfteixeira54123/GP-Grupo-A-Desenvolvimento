@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import * as constants from "../../constants";
 import Logo from "../../Imagens/Full_Blue_Icon.png";
@@ -29,6 +29,7 @@ const styleTitle = {
   textShadow: constants.shadow.md,
   textAlign: "center",
   marginBlock: "1rem",
+  textTransform: "uppercase",
 };
 
 const Window = () => {
@@ -36,11 +37,13 @@ const Window = () => {
   let [obj, setObj] = useState("");
   const [flag, setFlag] = useState(true);
   const [candidatos, setCandidatos] = useState([]);
+  // const [id, setId] = useState(-1);
 
-  const { id, name } = useParams();
-  // console.log("ID da votação: " + id);
-  // console.log("Nome da votação: " + name);
-  //definir nome+tipo da eleição a exibir
+  const location = useLocation();
+  const eleicao = location.state && location.state.eleicao;
+  console.table(eleicao);
+  const id = location.state && location.state.id;
+  console.log(id);
 
   const { handleGetSubmit, status, message, res } = useGet({
     FORM_ENDPOINT:
@@ -128,7 +131,9 @@ const Window = () => {
         src={Logo}
         alt="logo"
       />
-      <div style={styleTitle}>ELEIÇÕES DE {name}</div>
+      <div style={styleTitle}>
+        ELEIÇÕES DE {eleicao.cargo_disputa} - {eleicao.nome}
+      </div>
       {defineContent()}
     </div>
   );

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import * as constants from "../constants";
 import { useState } from "react";
 
@@ -6,9 +5,7 @@ import { useState } from "react";
 //  label: texto do botão (obrigatório)
 //  disabled: boleano que define se o botão está válido. (opcional)
 //  danger: booleano que muda a cor do botão para vermelho (opcional)
-// Escolhe entre handle ou link a ação do botão:
-//  link: rota que mostra a nova página ao clique do botão.
-//  handle: método a executar ao clique do botão.
+//  handle: método a executar ao clique do botão. (obrigatório)
 const Btn = (props) => {
   const [hovering, setHovering] = useState(false);
 
@@ -52,36 +49,19 @@ const Btn = (props) => {
     textShadow: constants.shadow.small,
   };
 
-  if (props.link) {
-    return (
-      <>
-        <Link to={props.link} style={{ textDecoration: "none" }}>
-          <button
-            style={buttonStyle}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            disabled={props.disabled}
-          >
-            <div style={labelStyle}>{props.label}</div>
-          </button>
-        </Link>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <button
-          style={buttonStyle}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          disabled={props.disabled}
-          onClick={props.handle}
-        >
-          <div style={labelStyle}>{props.label}</div>
-        </button>
-      </>
-    );
-  }
+  return (
+    <>
+      <button
+        style={buttonStyle}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        disabled={props.disabled}
+        onClick={props.handle}
+      >
+        <div style={labelStyle}>{props.label}</div>
+      </button>
+    </>
+  );
 };
 
 Btn.defaultProps = {
