@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 import * as constants from "../../constants";
 import Logo from "../../Imagens/Full_Blue_Icon.png";
@@ -8,6 +8,8 @@ import Popup from "../../Componentes/PopupConfirma";
 import PopupFinaliza from "../../Componentes/PopupFinaliza";
 import { useEffect } from "react";
 import useGet from "../../../Back-end/HTTP/GET";
+import usePost from "../../../Back-end/HTTP/POST";
+
 const styleWindow = {
   display: "flex",
   alignItems: "center",
@@ -31,17 +33,18 @@ const styleTitle = {
 
 const Window = () => {
   let [state, setState] = useState(0);
-  let [obj, setObj] = useState(null);
+  let [obj, setObj] = useState("");
   const [flag, setFlag] = useState(true);
   const [candidatos, setCandidatos] = useState([]);
 
   const { id, name } = useParams();
-  console.log("ID da votação: "+id);
-  console.log("Nome da votação: "+name);
+  // console.log("ID da votação: " + id);
+  // console.log("Nome da votação: " + name);
   //definir nome+tipo da eleição a exibir
 
   const { handleGetSubmit, status, message, res } = useGet({
-    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/candidato/listar",
+    FORM_ENDPOINT:
+      "https://gp-api-alpha.vercel.app/eleicao" + id + "/listar_candidatos",
   });
 
   useEffect(() => {
@@ -65,8 +68,28 @@ const Window = () => {
   function handleState(page, choice) {
     setState(page);
     setObj(choice);
-    // console.log(JSON.stringify(choice));
+
+    if (page == 2) {
+      // console.log(JSON.stringify());
+      handlePostSubmit();
+      handleLogoutSubmit();
+      localStorage.removeItem("Token");
+      localStorage.removeItem("User");
+    }
   }
+
+  const { handlePostSubmit } = usePost({
+    Data: {
+      ID_Eleicao: id,
+      ID_Candidato: obj.id_candidato,
+    },
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/votar",
+  });
+
+  const { handleGetSubmit: handleLogoutSubmit } = useGet({
+    Data: null,
+    FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/logout",
+  });
 
   const defineContent = () => {
     switch (state) {

@@ -8,7 +8,7 @@ function UsePost({ Data, FORM_ENDPOINT }) {
   const handleSubmit = () => {
     setStatus("loading");
     setMessage("");
-
+    console.log(Data);
     return fetch(FORM_ENDPOINT, {
       method: "POST",
       mode: "cors",
