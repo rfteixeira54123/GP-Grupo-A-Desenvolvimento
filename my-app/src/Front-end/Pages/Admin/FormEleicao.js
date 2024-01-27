@@ -160,7 +160,8 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const handleEditar = () => {
     verifyFields();
-    if (Nome && Nome.length > 4 && Tipo && Tipo > 1 && Inicio && Fim && Fim >= Inicio) {
+    console.log(Nome && Nome.length > 4 && Tipo && Tipo.length > 1 && Inicio && Fim && Fim >= Inicio);
+    if (Nome && Nome.length > 4 && Tipo && Tipo.length > 1 && Inicio && Fim && Fim >= Inicio) {
       setStatePopup(10);
       handlePatchSubmit().then(() => {
         handlePostSubmit1().then(() => {

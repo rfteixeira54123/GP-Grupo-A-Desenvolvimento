@@ -49,6 +49,7 @@ function UsePost({ Data, FORM_ENDPOINT }) {
       })
       .catch((error) => {
         console.log(error);
+        throw error;
       });
   };
   return { handlePostSubmit: handleSubmit, status, message, res };
