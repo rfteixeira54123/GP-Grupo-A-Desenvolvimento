@@ -143,7 +143,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const handleAdicionar = () => {
     verifyFields();
-    if (Nome && Nome.length > 4 && Tipo && Tipo > 1 && Inicio && Fim && Fim >= Inicio) {
+    if (Nome && Nome.length > 4 && Tipo && Tipo.length  > 1 && Inicio && Fim && Fim >= Inicio) {
       console.log("adicionar");
       setStatePopup(10);
       handlePostSubmit0().then(() => {
@@ -160,7 +160,6 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const handleEditar = () => {
     verifyFields();
-    console.log(Nome && Nome.length > 4 && Tipo && Tipo.length > 1 && Inicio && Fim && Fim >= Inicio);
     if (Nome && Nome.length > 4 && Tipo && Tipo.length > 1 && Inicio && Fim && Fim >= Inicio) {
       setStatePopup(10);
       handlePatchSubmit().then(() => {
