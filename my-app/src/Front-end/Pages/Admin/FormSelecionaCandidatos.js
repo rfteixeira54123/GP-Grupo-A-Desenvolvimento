@@ -61,7 +61,9 @@ const FormC = ({ selecionados, handleCancelar, handleAdicionar }) => {
 
   useEffect(() => {
     if (res && res.Candidatos && Array.isArray(res.Candidatos)) {
-      const candidatoList = res.Candidatos.map((candidato) => ({
+      const candidatoList = res.Candidatos.filter(
+        (candidato) => candidato.id_eleicao === null
+      ).map((candidato) => ({
         id_candidato: candidato.id_candidato,
         nome: candidato.nome,
         tipo: candidato.tipo,

@@ -13,6 +13,7 @@ import UsePost from "../../../Back-end/HTTP/POST";
 import UsePatch from "../../../Back-end/HTTP/PATCH";
 import Candidato from "../../../Back-end/Objetos/ClassCandidato";
 import useGet from "../../../Back-end/HTTP/GET";
+import useDelete from "../../../Back-end/HTTP/DELETE";
 
 const styleTop = {
   backgroundColor: constants.color.primary,
@@ -101,6 +102,7 @@ const styleBtnFloat = {
 const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   //Fazer get para buscar candidatos da eleição.
   const [candidatos, setCandidatos] = useState([]);
+  const [deleteCandidatos, setDeleteCandidatos] = useState([]);
   const [Tipo, setTipo] = useState(obj.cargo_disputa);
   const [Nome, setNome] = useState(obj.nome);
   const [Inicio, setInicio] = useState(
@@ -165,6 +167,9 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
           obj.cargo_disputa = Tipo;
           obj.data_inicio = Inicio;
           obj.data_fim = Fim;
+          try {
+            localStorage.removeItem("delete");
+          } catch {}
           if (handleEdit) handleEdit(obj);
         });
       });
@@ -231,7 +236,6 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   });
 
   useEffect(() => {
-    console.log(gres);
     try {
       if (gres && gres.Candidatos && Array.isArray(gres.Candidatos)) {
         const candidatoList = gres.Candidatos.map((candidato) => ({
@@ -250,16 +254,30 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   ///eleicao1/listar_candidatos
 
+  //NOTAS :
+  // não sei se é do servidor ser lento, mas é preciso esperar um pouco para utilizar esta função (2~3 segundos)
   const handleRemoveCandidato = (index) => {
     // Crie uma cópia do array candidatos para não modificar o original diretamente
     let updateCandidato = [...candidatos];
+    let removeCandidatos = [...deleteCandidatos];
 
     // Use o método splice para remover o item do array na posição do índice especificado
     updateCandidato.splice(index, 1);
-
     // Atualize o estado com o novo array
     setCandidatos(updateCandidato);
+
+    localStorage.setItem("delete", candidatos[index].id_candidato);
+    handleDeleteSubmit();
   };
+
+  const { handleDeleteSubmit } = useDelete({
+    Data: {
+      ID_Eleicao: obj.id_eleicao,
+      ID_Candidatos: [localStorage.getItem("delete")].map(Number),
+    },
+    FORM_ENDPOINT:
+      "https://gp-api-alpha.vercel.app/eleicao/desassociar_candidatos",
+  });
 
   const handleAdicionarCandidato = (choices) => {
     //Fazer função para adicionar candidato

@@ -57,8 +57,11 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   useEffect(() => {
     if (flag) {
+      console.log(obj);
       setNome(obj.nome);
       setTipo(obj.tipo);
+      setObjetivos(obj.descircao);
+      setImagem(obj.foto);
       setFlag(false);
     }
   });

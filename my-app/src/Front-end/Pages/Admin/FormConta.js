@@ -103,6 +103,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   const handleAdicionar = () => {
     verifyFields();
+    handlePostSubmit();
     // if (Nome && Tipo && Num && Email) {
     //   setStatePopup(10);
     //   handlePostSubmit0().then(() => {
