@@ -60,7 +60,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
       console.log(obj);
       setNome(obj.nome);
       setTipo(obj.tipo);
-      setObjetivos(obj.descircao);
+      setObjetivos(obj.descricao);
       setImagem(obj.foto);
       setFlag(false);
     }
@@ -88,6 +88,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
     setvalTipo(!Tipo);
     setvalImagem(!Imagem);
     setvalObjetivos(!Objetivos);
+    // console.log(Nome+" "+Tipo+" "+Imagem+" "+Objetivos);
   };
 
   const handleAdicionar = () => {

@@ -181,10 +181,11 @@ const Filter = (props) => {
       <>
         <div
           style={styleFilter}
-          onClick={() => {
-            props.handle();
-            handleClick();
-          }}
+          onClick={null} //tirar null ao criar filtros
+          //   () => {
+          //   props.handle();
+          //   handleClick();
+          // }}
         >
           <div style={{ display: "flex", alignItems: "self-end", gap: "5px" }}>
             {filtered ? <TbFilterFilled size={25} /> : <TbFilter size={25} />}

@@ -6,19 +6,22 @@ import * as constants from "../constants";
 //  label: texto do botão
 //  show: booleano mostra ou não o botão
 //  handle: função do botão
-const Btn = ({label, show, handle }) => {
+//  disable: Botão desativado (opcional)
+const Btn = ({ label, show, handle, disable }) => {
   const [hovering, setHovering] = useState(false);
 
   const handleMouseEnter = () => {
-      setHovering(true);
+    setHovering(true);
   };
 
   const handleMouseLeave = () => {
-      setHovering(false);
+    setHovering(false);
   };
 
   const buttonStyle = {
-    backgroundColor: hovering
+    backgroundColor: disable
+      ? constants.color.dark_gray
+      : hovering
       ? constants.color.secondary
       : constants.color.primary, // Cor alterada quando hover
     transition: "background-color 0.3s ease", // Adicionando transição suave na mudança de cor
@@ -51,7 +54,7 @@ const Btn = ({label, show, handle }) => {
         style={buttonStyle}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onClick={handle}
+        onClick={disable ? null : handle}
       >
         <div style={labelStyle}>{label}</div>
       </button>
@@ -61,6 +64,7 @@ const Btn = ({label, show, handle }) => {
 
 Btn.defaultProps = {
   show: true,
+  disable: false,
 };
 
 export default Btn;

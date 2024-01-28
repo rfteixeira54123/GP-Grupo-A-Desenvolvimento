@@ -128,7 +128,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
         obj.numero_id = Num;
         obj.email = Email;
         obj.estado = Estado;
-        if(handleEdit) handleEdit(obj);
+        if (handleEdit) handleEdit(obj);
       });
     }
   };
@@ -167,7 +167,11 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
         {obj.id_conta ? (
           <Form.Group className="mb-3">
             <Form.Label>Estado: </Form.Label>
-            <Form.Select defaultValue={Estado} onChange={handleEstado}>
+            <Form.Select
+              defaultValue={Estado}
+              onChange={handleEstado}
+              disabled={true}
+            >
               <option value={true}>Ativo</option>
               <option value={false}>Inativo</option>
             </Form.Select>
@@ -188,6 +192,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
             defaultValue={Nome}
             onChange={handleNome}
             isInvalid={valNome}
+            disabled={obj.id_conta ? true : false}
           />
           <Form.Control.Feedback type="invalid">
             O nome deve conter no mínimo 8 caracteres.

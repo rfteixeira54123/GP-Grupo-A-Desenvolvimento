@@ -84,11 +84,13 @@ const Page = (props) => {
   }, [res]);
 
   const updateShowButtons = (array) => {
+    console.log(array);
     if (array.includes(-1)) {
       setSelected(contas);
     } else {
-      let updateSelecionados = [];
-      array.map((index) => updateSelecionados.push(contas[index]));
+      let updateSelecionados = contas.filter((conta) =>
+        array.includes(conta.id_conta)
+      );
       setSelected(updateSelecionados);
     }
     // console.log(array);
@@ -157,6 +159,7 @@ const Page = (props) => {
         );
       case 2:
         return (
+          //remove varios
           <RemoverConta
             choice={selected}
             handleCancelar={() => setStatePopup(0)}
@@ -166,6 +169,7 @@ const Page = (props) => {
         );
       case 3:
         return (
+          //desativa varios
           <RemoverConta
             choice={selected}
             handleCancelar={() => setStatePopup(0)}
@@ -175,6 +179,7 @@ const Page = (props) => {
         );
       case 5:
         return (
+          // remove 1 (toDelete)
           <RemoverConta
             choice={[toDelete]}
             handleCancelar={() => setStatePopup(0)}
@@ -184,6 +189,7 @@ const Page = (props) => {
         );
       case 6:
         return (
+          //desativa ou ativa 1 (toEnable)
           <RemoverConta
             choice={[toEnable]}
             handleCancelar={() => setStatePopup(0)}
@@ -202,13 +208,13 @@ const Page = (props) => {
     <div style={styleWindow}>
       <div style={styleTitle}>GESTÃO DE CONTAS</div>
       <div style={styleContainer}>
-        <Filter id={0} handle={() => handleOptionClick()} />
+        <Filter id={0} handle={() => null} />
         <div
           key={forceRenderTable ? "forceRenderTable" : "normalRenderTable"}
           style={{
             width: "96%",
             height: "inherit",
-            maxHeight: forceRenderTable ? "46vh" : "65vh",
+            maxHeight: "65vh",
           }}
         >
           <TableUtilizadores

@@ -98,8 +98,9 @@ const Page = () => {
     if (array.includes(-1)) {
       setSelected(candidatos);
     } else {
-      let updateSelecionados = [];
-      array.map((index) => updateSelecionados.push(candidatos[index]));
+      let updateSelecionados = candidatos.filter((candidato) =>
+        array.includes(candidato.id_candidato)
+      );
       setSelected(updateSelecionados);
     }
 
@@ -231,6 +232,7 @@ const Page = () => {
               label="Remover Selecionados"
               show={showButtons}
               handle={() => setStatePopup(2)}
+              disable={true} //Troca para false para ativar botão.
             />
           </div>
         </div>

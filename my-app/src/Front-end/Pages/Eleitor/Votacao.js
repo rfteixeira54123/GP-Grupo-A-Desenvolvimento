@@ -37,11 +37,16 @@ const Window = () => {
   let [obj, setObj] = useState("");
   const [flag, setFlag] = useState(true);
   const [candidatos, setCandidatos] = useState([]);
-  // const [id, setId] = useState(-1);
 
   const location = useLocation();
-  const eleicao = location.state && location.state.eleicao;
+  let eleicao = location.state && location.state.eleicao;
   const id = location.state && location.state.id;
+
+  const [evitaErro, setEvitaErro] = useState(eleicao ? false : true);
+  const navigate = useNavigate();
+  if(!eleicao){
+    eleicao = {nome: "", cargo_disputa: ""};
+  }
 
   const { handleGetSubmit, status, message, res } = useGet({
     FORM_ENDPOINT:
@@ -49,6 +54,11 @@ const Window = () => {
   });
 
   useEffect(() => {
+    if (evitaErro) {
+      console.log("Não encaminhado corretamente.");
+      navigate("home");
+      setFlag(false);
+    }
     if (flag) {
       handleGetSubmit();
       setFlag(false);
@@ -73,18 +83,18 @@ const Window = () => {
       };
       setObj(id);
     } else setObj(choice);
-    setState(page);
+    
 
     if (page == 2) {
       // console.log(JSON.stringify());
       if (obj.id_candidato == null) {
         console.log("voto em branco");
-        handlePostSubmitBlank();
+        handlePostSubmitBlank().then(() => setState(page));
       } else {
         console.log("vota em alguem");
         console.log(obj.id_candidato);
         console.log(id);
-        handlePostSubmit();
+        handlePostSubmit().then(() => setState(page));
       }
     }
   }

@@ -22,34 +22,22 @@ function UsePost({ Data, FORM_ENDPOINT }) {
         if (response.status === 200) {
           return response.json();
         } else if (response.status === 401) {
-          throw "email nao existe";
+          throw "Credenciais inválidas.";
         } else if (response.status === 403) {
-          throw "nao autorizado";
+          throw "Você não tem permissão para aceder essa funcionalidade.";
         } else if (response.status === 500) {
-          throw "server error";
-        } else if (response.status === 501) {
-          throw "nao implementado";
-        } else if (response.status === 415) {
-          throw "nao definido";
+          throw "Erro desconhecido.";
         } else if (response.status === 422) {
-          throw "nao tem tamanho suficiente";
-        } else if (response.status === 403) {
-          throw "nao tem permissao";
+          throw "Campos não tem caracteres mínimos.";
         } else if (response.status === 425) {
-          throw "nao tem tamanho suficiente";
+          throw "Campos não tem caracteres mínimos.";
         } else {
-          throw "erro";
+          throw "Erro.";
         }
       })
       .then((data) => {
         setRes(data);
-        try {
           if (data.token) localStorage.setItem("Token", data.token);
-        } catch {}
-      })
-      .catch((error) => {
-        console.log(error);
-        // throw error;
       });
   };
   return { handlePostSubmit: handleSubmit, status, message, res };

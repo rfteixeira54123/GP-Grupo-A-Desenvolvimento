@@ -43,17 +43,18 @@ const styleContainer = {
 //  handleConfirmar: método para atualizar lista de contas.
 //  variant: booleano que define se desativa (true) ou remove (false) o utilizador.
 const Info = ({ choice, handleCancelar, variant, handleConfirmar }) => {
+  console.table(choice);
   const { handleDeleteSubmit } = useDelete({
     Data: {
-      ID_Contas: [choice[0].id_conta],
+      ID_Contas: choice.map((conta)=> conta.id_conta),
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/remover",
   });
 
   const { handlePatchSubmit } = usePatch({
     Data: {
-      estado: !choice[0].estado,
-      ID_Contas: [choice[0].id_conta],
+      estado: (choice.length > 1 ? false : !choice[0].estado),
+      ID_Contas: choice.map((conta)=> conta.id_conta),
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/definir_ativo",
   });
@@ -127,7 +128,7 @@ const Info = ({ choice, handleCancelar, variant, handleConfirmar }) => {
               <Button
                 label="Confirmar"
                 handle={
-                  variant ? handleConfirmarDesativar : handleConfirmarDesativar
+                  variant ? handleConfirmarDesativar : handleConfirmarRemover
                 }
                 danger={true}
               />

@@ -187,7 +187,7 @@ const Page = () => {
           style={{
             width: "96%",
             height: "inherit",
-            maxHeight: forceRenderTable ? "52vh" : "65vh",
+            maxHeight: "65vh",
           }}
         >
           <TableEleicoes
@@ -218,6 +218,7 @@ const Page = () => {
               label="Remover Selecionados"
               show={showButtons}
               handle={() => setStatePopup(2)}
+              disable={true}
             />
           </div>
         </div>

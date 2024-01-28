@@ -115,7 +115,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   const [valNome, setvalNome] = useState(false);
   const [valInicio, setvalInicio] = useState(false);
   const [valFim, setvalFim] = useState(false);
-  const [flag, setFlag] = useState(true);
+  const [flag, setFlag] = useState(obj.id_eleicao ? true : false);
 
   const handleTipo = (e) => {
     setTipo(e.target.value);
@@ -152,9 +152,9 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
       Fim &&
       Fim >= Inicio
     ) {
-      console.log("adicionar");
       setStatePopup(10);
       handlePostSubmit0().then(() => {
+        // handlePostSubmit1().then(() => { //descomentar se soubermos o id da elicao adicionada
         if (handleAdd)
           handleAdd({
             nome: Nome,
@@ -162,6 +162,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
             data_fim: Fim,
             data_inicio: Inicio,
           });
+        // });
       });
     }
   };
@@ -270,6 +271,8 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
     }
   }, [gres]);
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Verificar lógica daqui
   ///eleicao1/listar_candidatos
 
   //NOTAS :
@@ -302,6 +305,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
     // console.table(choices);
     setCandidatos(choices);
   };
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   const [statePopup, setStatePopup] = useState(0);
 
@@ -434,6 +438,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
           <Button
             label="Adicionar Candidatos"
             handle={() => setStatePopup(1)}
+            disabled={obj.id_eleicao ? false : true}
           />
         </div>
       </div>

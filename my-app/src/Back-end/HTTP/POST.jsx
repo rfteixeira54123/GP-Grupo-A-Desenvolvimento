@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function UsePost({ Data, FORM_ENDPOINT }) {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
   const [res, setRes] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
     console.log(Data);
@@ -23,23 +25,22 @@ function UsePost({ Data, FORM_ENDPOINT }) {
         if (response.status === 200) {
           return response.json();
         } else if (response.status === 401) {
-          throw "não autorizado";
+          navigate("/");
+          // throw "não autorizado";
         } else if (response.status === 403) {
-          throw "nao autorizado";
+          navigate("/");
+          // throw "nao autorizado";
         } else if (response.status === 500) {
-          throw "server error";
+          throw "Erro no servidor.";
         } else if (response.status === 501) {
-          throw "nao implementado";
+          throw "Erro não implementado.";
         } else if (response.status === 415) {
-          throw "nao definido";
+          throw "Erro não definido";
         } else if (response.status === 422) {
-          throw "nao tem tamanho suficiente";
-        } else if (response.status === 403) {
-          throw "nao tem permissao";
-        } else if (response.status === 425) {
-          throw "nao tem tamanho suficiente";
+          throw "Erro ao realizar pedido.";
         } else {
-          throw "erro";
+          // throw "erro";
+          throw response.json();
         }
       })
       .then((data) => {
@@ -52,8 +53,7 @@ function UsePost({ Data, FORM_ENDPOINT }) {
       })
       .catch((error) => {
         console.log("NOK");
-        console.log(error);
-        // throw error;
+        console.error(error);
       });
   };
   return { handlePostSubmit: handleSubmit, status, message, res };
