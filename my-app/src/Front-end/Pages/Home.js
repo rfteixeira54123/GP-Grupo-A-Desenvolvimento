@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 const Home = () => {
   const handleLogin = () => {
+    if (!localStorage.getItem("User")) return <Login />;
     let User = localStorage.getItem("User");
     let desUser = JSON.parse(User);
     let priv = desUser.privilegio;

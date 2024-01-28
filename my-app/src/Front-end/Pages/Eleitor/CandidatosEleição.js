@@ -73,6 +73,7 @@ const Dados = ({ getEleicao }) => {
   const [flag, setFlag] = useState(true);
   const [numero, setNumero] = useState("");
   const [candidatos, setCandidatos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (flag) {
@@ -90,7 +91,7 @@ const Dados = ({ getEleicao }) => {
 
   useEffect(() => {
     if (flag) {
-      handleGetSubmit();
+      handleGetSubmit().then(()=>setLoading(false));
       setFlag(false);
     }
   });
@@ -145,7 +146,7 @@ const Dados = ({ getEleicao }) => {
               <Carousel.Item
                 data-bs-theme="primary"
                 style={{ color: constants.color.secondary }}>
-                Não há candidatos a exibir.
+                {loading ? "Carregando...": "Não há candidatos a exibir."}
               </Carousel.Item>
             : candidatos.map((obj, index) => (
               <Carousel.Item

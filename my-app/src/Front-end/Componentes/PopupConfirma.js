@@ -39,7 +39,7 @@ const List = ({ OnHandleBtn, choice }) => {
   return (
     <>
       <div style={styleContainer}>
-        {choice != null ? (
+        {(choice && choice.id_candidato) ? (
           <>
             <div style={styleTop}>Confirme seu voto</div>
             <div

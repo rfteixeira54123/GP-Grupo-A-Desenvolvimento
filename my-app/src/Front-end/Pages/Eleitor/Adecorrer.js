@@ -38,6 +38,7 @@ const styleContainer = {
 const Adecorrer = ({ handle }) => {
   const [flag, setFlag] = useState(true);
   const [eleicoes, setEleicoes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const { handleGetSubmit, status, message, res } = UseGet({
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/listar/votado/0",
@@ -45,7 +46,7 @@ const Adecorrer = ({ handle }) => {
 
   useEffect(() => {
     if (flag) {
-      handleGetSubmit();
+      handleGetSubmit().then(()=>setLoading(false));
       setFlag(false);
     }
   });
@@ -80,7 +81,7 @@ const Adecorrer = ({ handle }) => {
       <div style={styleTitle}>ELEIÇÕES A DECORRER</div>
       <div style={styleContainer}>
         {eleicoes.length === 0 ? (
-          <div>Não existe eleições atuais.</div>
+          <div>{loading ? "Carregando...": "Não existe eleições atuais."}</div>
         ) : (
           eleicoes.map((obj, index) => (
             <ItemEleicoes

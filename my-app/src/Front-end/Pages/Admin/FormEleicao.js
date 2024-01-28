@@ -116,6 +116,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   const [valInicio, setvalInicio] = useState(false);
   const [valFim, setvalFim] = useState(false);
   const [flag, setFlag] = useState(obj.id_eleicao ? true : false);
+  const [forceRender, setForceRender] = useState(false);
 
   const handleTipo = (e) => {
     setTipo(e.target.value);
@@ -168,6 +169,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   };
 
   const handleEditar = () => {
+    console.table(candidatos);
     verifyFields();
     if (
       Nome &&
@@ -271,24 +273,18 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
     }
   }, [gres]);
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Verificar lógica daqui
   ///eleicao1/listar_candidatos
 
   //NOTAS :
   // não sei se é do servidor ser lento, mas é preciso esperar um pouco para utilizar esta função (2~3 segundos)
-  const handleRemoveCandidato = (index) => {
-    // Crie uma cópia do array candidatos para não modificar o original diretamente
-    let updateCandidato = [...candidatos];
-    let removeCandidatos = [...deleteCandidatos];
-
-    // Use o método splice para remover o item do array na posição do índice especificado
-    updateCandidato.splice(index, 1);
-    // Atualize o estado com o novo array
-    setCandidatos(updateCandidato);
-
-    localStorage.setItem("delete", candidatos[index].id_candidato);
-    handleDeleteSubmit();
+  const handleRemoveCandidato = (id) => {
+    localStorage.setItem("delete", id);
+    handleDeleteSubmit().then(() => {
+      let updateCandidato = candidatos.filter(
+        (candidato) => id !== candidato.id_candidato
+      );
+      setCandidatos(updateCandidato);
+    });
   };
 
   const { handleDeleteSubmit } = useDelete({
@@ -300,13 +296,14 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
       "https://gp-api-alpha.vercel.app/eleicao/desassociar_candidatos",
   });
 
-  const handleAdicionarCandidato = (choices) => {
-    //Fazer função para adicionar candidato
-    // console.table(choices);
-    setCandidatos(choices);
+  const handleAdicionarCandidato = (newChoices) => {
+    setFlag(false);
+    let updateCandidato = [...candidatos];
+    updateCandidato.push(...newChoices);
+    setCandidatos(updateCandidato);
+    console.table(updateCandidato);
   };
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+  
   const [statePopup, setStatePopup] = useState(0);
 
   const decidePopup = () => {
@@ -427,7 +424,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
                     title="Remover candidato"
                     color={constants.color.red_light}
                     size={30}
-                    onClick={() => handleRemoveCandidato(index)}
+                    onClick={() => handleRemoveCandidato(obj.id_candidato)}
                   />
                 </div>
               </li>

@@ -44,8 +44,8 @@ const Window = () => {
 
   const [evitaErro, setEvitaErro] = useState(eleicao ? false : true);
   const navigate = useNavigate();
-  if(!eleicao){
-    eleicao = {nome: "", cargo_disputa: ""};
+  if (!eleicao) {
+    eleicao = { nome: "", cargo_disputa: "" };
   }
 
   const { handleGetSubmit, status, message, res } = useGet({
@@ -77,25 +77,24 @@ const Window = () => {
   }, [res]);
 
   function handleState(page, choice) {
-    if (choice == null) {
-      let id = {
-        id_candidato: null,
-      };
-      setObj(id);
-    } else setObj(choice);
+    if (choice && choice.id_candidato) {
+      setObj(choice);
+    } else {
+      setObj({ id_candidato: null });
+    }
     
-
     if (page == 2) {
-      // console.log(JSON.stringify());
-      if (obj.id_candidato == null) {
-        console.log("voto em branco");
-        handlePostSubmitBlank().then(() => setState(page));
-      } else {
+      if (obj.id_candidato) {
         console.log("vota em alguem");
-        console.log(obj.id_candidato);
-        console.log(id);
+        console.table(obj);
         handlePostSubmit().then(() => setState(page));
+      } else {
+        console.log("voto em branco");
+        console.table(obj);
+        handlePostSubmitBlank().then(() => setState(page));
       }
+    } else{
+      setState(page);
     }
   }
 

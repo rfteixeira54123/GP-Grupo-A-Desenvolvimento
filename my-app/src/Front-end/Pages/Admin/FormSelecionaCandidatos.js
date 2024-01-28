@@ -43,7 +43,6 @@ const styleContainer = {
 //  handleCancelar: método para fechar o popup
 //  handleAdicionar: método para atualizar os candidatos selecionados
 const FormC = ({ selecionados, handleCancelar, handleAdicionar }) => {
-  // Fazer GET candidatos da aplicação com base no tipo
   const [choices, setChoices] = useState(selecionados);
   const [flag, setFlag] = useState(true);
 

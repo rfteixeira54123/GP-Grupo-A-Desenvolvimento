@@ -122,7 +122,7 @@ export const TableEleicoes = (props) => {
               <th style={styleHeaderText}>Início</th>
               <th style={styleHeaderText}>Fim</th>
               <th style={{...styleHeaderText, fontSize:12}}>Editar</th>
-              <th style={{...styleHeaderText, fontSize:12}}>Apagar</th>
+              {/* <th style={{...styleHeaderText, fontSize:12}}>Apagar</th> */}
             </tr>
           </thead>
           <tbody style={{overflowY: "auto"}}>
@@ -135,7 +135,7 @@ export const TableEleicoes = (props) => {
                   <td style={styleCell}>{format(obj.data_inicio, "dd/MM/yyyy")}</td>
                   <td style={styleCell}>{format(obj.data_fim, "dd/MM/yyyy")}</td>
                   <td style={styleCell} onClick={() => props.handleEdit(obj)} ><MdOutlineEdit size={25} /></td>
-                  <td style={styleCell} onClick={() => props.handleDelete(obj)}><AiFillDelete size={22} /></td>
+                  {/* <td style={styleCell} onClick={() => props.handleDelete(obj)}><AiFillDelete size={22} /></td> */}
                 </tr>
               ))  : 
               <tr>

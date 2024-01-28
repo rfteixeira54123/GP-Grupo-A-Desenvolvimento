@@ -78,7 +78,7 @@ const List = () => {
             marginTop: "1.5rem",
           }}
         >
-          <Button id="" label="Terminar sessão" />
+          <Button id="" label="Terminar sessão" handle={handleState}/>
         </Link>
       </div>
     </>

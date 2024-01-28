@@ -120,14 +120,13 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   };
 
   const handleEditar = () => {
+    console.log("editar");
     verifyFields();
-    if (Nome && Nome.length > 7 && Estado && Num && Email && Email.length > 7) {
+    if (Num && Email && Email.length > 7) {
       setStatePopup(10);
       handlePatchSubmit().then(() => {
-        obj.nome = Nome;
         obj.numero_id = Num;
         obj.email = Email;
-        obj.estado = Estado;
         if (handleEdit) handleEdit(obj);
       });
     }

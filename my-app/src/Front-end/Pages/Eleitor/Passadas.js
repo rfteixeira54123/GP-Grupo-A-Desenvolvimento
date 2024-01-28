@@ -37,6 +37,7 @@ const styleContainer = {
 const Passadas = () => {
   const [flag, setFlag] = useState(true);
   const [eleicoes, setEleicoes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const { handleGetSubmit, status, message, res } = UseGet({
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/listar",
@@ -44,7 +45,7 @@ const Passadas = () => {
 
   useEffect(() => {
     if (flag) {
-      handleGetSubmit();
+      handleGetSubmit().then(()=>setLoading(false));
       setFlag(false);
     }
   });
@@ -80,12 +81,12 @@ const Passadas = () => {
       <div style={styleTitle}>ELEIÇÕES PASSADAS</div>
       <div style={styleContainer}>
         {eleicoes.length === 0 ? (
-          <div>Não existe eleições passadas.</div>
+          <div>{loading ? "Carregando...": "Não existe eleições passadas."}</div>
         ) : (
           eleicoes.map((obj, index) => (
             <ItemEleicoesPassadas
               key={"Eleicao" + index}
-              nome={obj.nome}
+              nome={"Eleição de "+obj.cargo_disputa+" - "+obj.nome}
               handle={null} // alterar para implementar página de consulta
             />
           ))
