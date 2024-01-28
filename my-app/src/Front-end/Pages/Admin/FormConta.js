@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
 
@@ -54,7 +54,6 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   const [valNome, setvalNome] = useState(false);
   const [valNum, setvalNum] = useState(false);
   const [valEmail, setvalEmail] = useState(false);
-  const [flag, setFlag] = useState(true);
 
   const { handlePatchSubmit } = usePatch({
     Data: {
@@ -106,15 +105,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
     if (Nome && Nome.length > 7 && Tipo && Num && Email && Email.length > 7) {
       setStatePopup(10);
       handlePostSubmit().then(() => {
-        if (handleAdd)
-          handleAdd({
-            id_conta: -1,
-            nome: Nome,
-            numero_id: Num,
-            email: Email,
-            tipo: Tipo,
-            estado: true,
-          });
+        if (handleAdd) handleAdd();
       });
     }
   };

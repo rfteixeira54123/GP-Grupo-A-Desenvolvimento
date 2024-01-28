@@ -40,7 +40,7 @@ const Adecorrer = ({ handle }) => {
   const [eleicoes, setEleicoes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const { handleGetSubmit, status, message, res } = UseGet({
+  const { handleGetSubmit, res } = UseGet({
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/eleicao/listar/votado/0",
   });
 
