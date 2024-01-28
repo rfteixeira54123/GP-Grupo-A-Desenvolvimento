@@ -1,0 +1,485 @@
+openapi: 3.0.0
+info:
+  title: GP
+  version: 1.0.0
+components:
+  securitySchemes:
+    noauthAuth:
+      type: http
+      scheme: noauth
+    oauth2Auth:
+      type: apiKey
+      in: header
+      name: Authorization
+security:
+  - oauth2Auth: []
+tags:
+  - name: Geral
+  - name: Gestao Contas
+  - name: Gestao Eleicoes
+  - name: Gestao Candidatos
+paths:
+  /login:
+    post:
+      tags:
+        - Geral
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Email: root@root.com
+                PalavraPasse: '12345678'
+      security:
+        - noauthAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Cache-Control:
+              schema:
+                type: string
+                example: 'public, max-age=0, must-revalidate'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '298'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Date:
+              schema:
+                type: string
+                example: 'Sun, 28 Jan 2024 20:14:21 GMT'
+            Server:
+              schema:
+                type: string
+                example: Vercel
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=63072000; includeSubDomains; preload
+            X-Vercel-Cache:
+              schema:
+                type: string
+                example: MISS
+            X-Vercel-Id:
+              schema:
+                type: string
+                example: 'iad1::iad1::cnzcz-1706472859957-21909a4c18e4'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                token: >-
+                  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEyLCJJZGVudGlmaWNhZG9yIjowLCJ1c2VyTmFtZSI6IlJvb3RfMTIzIiwiYWNlc3NpYmlsaWRhZGUiOmZhbHNlLCJBY2Nlc3MiOjAsIkVtYWlsIjoicm9vdEByb290LmNvbSIsImV4cGlyYXRpb24iOiIyMDI0LTAxLTI4VDIxOjE0OjIxLjMzNjYyNCJ9.m5wVLrroRN_CeoKs8g2Yr5AP5zgXztI7F_K0HaMOL_Y
+        '401':
+          description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Cache-Control:
+              schema:
+                type: string
+                example: 'public, max-age=0, must-revalidate'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '72'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Date:
+              schema:
+                type: string
+                example: 'Sun, 28 Jan 2024 20:14:36 GMT'
+            Server:
+              schema:
+                type: string
+                example: Vercel
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=63072000; includeSubDomains; preload
+            X-Vercel-Cache:
+              schema:
+                type: string
+                example: MISS
+            X-Vercel-Id:
+              schema:
+                type: string
+                example: 'iad1::iad1::8ml5g-1706472874920-76d52829b250'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Error:
+                  error: Uma conta nao foi encotrada com estas credenciais
+  /eleicao/votar:
+    post:
+      tags:
+        - Geral
+      summary: Votar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ID_Eleicao: 1
+                ID_Candidato: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /token/refresh:
+    post:
+      tags:
+        - Geral
+      summary: Refresh Token
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /conta/inserir:
+    post:
+      tags:
+        - Gestao Contas
+      summary: Inserir Conta
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Email: admin@admin.com
+                Nome: Admin_123
+                TipoConta: Administrador
+                Identificacao: 330
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /conta/detalhes:
+    get:
+      tags:
+        - Gestao Contas
+      summary: Detalhes Conta
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /conta/listar:
+    get:
+      tags:
+        - Gestao Contas
+      summary: Listar Contas
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /conta/remover:
+    delete:
+      tags:
+        - Gestao Contas
+      summary: Remover Conta
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /conta/acessibilidade:
+    patch:
+      tags:
+        - Gestao Contas
+      summary: Editar Conta Acessibilidade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                acessibilidade: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /conta/editar:
+    patch:
+      tags:
+        - Gestao Contas
+      summary: Editar Conta
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Email: teste2@teste.com
+                PalavraPasse: password
+                Identificacao: 123
+                ID_Conta: 5
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /conta/mudar_password:
+    patch:
+      tags:
+        - Gestao Contas
+      summary: Editar Conta Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                PalavraPasse: Password123
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /conta/definir_ativo:
+    patch:
+      tags:
+        - Gestao Contas
+      summary: Definir Ativo Conta
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                estado: true
+                ID_Contas:
+                  - 5
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /eleicao/inserir:
+    post:
+      tags:
+        - Gestao Eleicoes
+      summary: Inserir Eleicao
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Nome: Eleicao Teste 2
+                Data_Inicio: '2024-01-23'
+                Data_Fim: '2024-01-30'
+                Descricao: Descricao Teste 2
+                Cargo_Disputa: Teste 2
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /eleicao/editar:
+    patch:
+      tags:
+        - Gestao Eleicoes
+      summary: Editar Eleicao
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ID_Eleicao: 0
+                Nome: Teste EDITADO
+                Data_Inicio: '2024-01-23'
+                Data_Fim: '2024-01-30'
+                Descricao: Descricao Teste
+                Cargo_Disputa: Edit
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /eleicao/listar:
+    get:
+      tags:
+        - Gestao Eleicoes
+      summary: Eleicoes Listar
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  '/eleicao/listar/votado/{votado}':
+    get:
+      tags:
+        - Gestao Eleicoes
+      summary: Eleicoes Listar Votado
+      parameters:
+        - name: votado
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /eleicao/adicionar_candidatos:
+    post:
+      tags:
+        - Gestao Eleicoes
+      summary: Eleicao Adicionar Candidatos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ID_Eleicao: 2
+                ID_Candidatos:
+                  - 13
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /eleicao/adicionar_candidato:
+    post:
+      tags:
+        - Gestao Eleicoes
+      summary: Eleicao Adicionar Candidato
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ID_Eleicao: 2
+                ID_Candidato: 13
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  '/eleicao{eleicao_id}/listar_candidatos':
+    get:
+      tags:
+        - Gestao Eleicoes
+      summary: Eleicao Listar Candidatos
+      parameters:
+        - name: eleicao_id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /eleicao/desassociar_candidatos:
+    delete:
+      tags:
+        - Gestao Eleicoes
+      summary: Eleicao Dessasociar Candidatos
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /candidato/inserir:
+    post:
+      tags:
+        - Gestao Candidatos
+      summary: Inserir Candidato
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Nome: Candidato Teste 2
+                Tipo: Tipo Teste 2
+                Objetivo: Objetivo Teste 2
+                Link_Imagem: >-
+                  https://i.pinimg.com/originals/a0/21/d7/a021d7d1c9c83486f22fb3579ff07780.gif
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /candidato/editar:
+    patch:
+      tags:
+        - Gestao Candidatos
+      summary: Editar Candidato
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ID_Candidato: 6
+                Nome: Candidato Teste 2 EDITADO
+                Tipo: Tipo Teste 2
+                Objetivo: Objetivo Teste 2
+                Link_Imagem: >-
+                  https://i.pinimg.com/originals/a0/21/d7/a021d7d1c9c83486f22fb3579ff07780.gif
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /candidato/remover:
+    delete:
+      tags:
+        - Gestao Candidatos
+      summary: Remover Candidato
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /candidato/listar:
+    get:
+      tags:
+        - Gestao Candidatos
+      summary: Candidatos Listar
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

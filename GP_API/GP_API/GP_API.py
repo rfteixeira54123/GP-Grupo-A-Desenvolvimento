@@ -6,4 +6,4 @@
 
 
 password_length = 8
-print(secrets.token_urlsafe(password_length))
+print(int(None))

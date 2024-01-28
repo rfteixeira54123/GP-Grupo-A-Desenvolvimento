@@ -12,12 +12,21 @@ import jwt
 import datetime
 from jsoncheck.json_checker import CheckJson
 import secrets
-
-
-
-
+from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
+
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGER_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name' : "Test GP API"    
+    }
+)
+
+app.register_blueprint(SWAGGER_BLUEPRINT,url_prefix = SWAGGER_URL)
 '''
 TODO
 Implementacao Base de dados
@@ -262,14 +271,14 @@ def inserir_conta():
 
     body = request.get_json()
     
-    if body["TipoConta"] != "Administrador" and body["TipoConta"] != "Aluno":
+    if body["TipoConta"] != "Administrador" and body["TipoConta"] != "Eleitor" :
         raise InputError("Tipo de conta invalido")
         
     palavrapasse = secrets.token_urlsafe(8)    
     
     connection = getconnectionDB()
     cursor = connection.cursor(cursor_factory=RealDictCursor) #Precisamos de saber o tipo de conta (Assumindo que este tipo de conta Ã© de aluno)
-    cursor.execute("SELECT * FROM inserir_utilizador(%s,%s,%s,%s,%s,%s,%s)",(body["Nome"],body["Email"],palavrapasse,body["Identificacao"],True,False,body["TipoConta"]))
+    cursor.execute("SELECT * FROM inserir_utilizador(%s,%s,%s,%s,%s,%s,%s,%s)",(0,body["Nome"],body["Email"],palavrapasse,body["Identificacao"],True,False,body["TipoConta"]))
     result = cursor.fetchall()[0]['inserir_utilizador']
     
     connection.commit()
@@ -422,32 +431,51 @@ def lista_eleicao():
     result = {"Eleicoes": []}
     for eleicao in cursor.fetchall():
         result["Eleicoes"].append(eleicao)
-        '''
-        result["Eleicoes"].append(
-            {
-            "ID_Eleicao": eleicao["id_eleicao"],
-            "Nome": eleicao["nome"],
-            "Data_Inicio" : eleicao["data_inicio"].strftime("%Y-%m-%d"),
-            "Data_Fim" : eleicao["data_fim"].strftime("%Y-%m-%d"),
-            "Descricao" : eleicao["descricao"],
-            "Cargo_Disputa": eleicao["cargo_disputa"],
-            "Estado": eleicao["estado"]
-            }) 
-        50% mais rapido sem isto
-        '''
-        
-
-    
     return result
+
+@app.get("/eleicao/listar/votado/<int:votado>")
+@auth.Authentication(access=[Access.ALUNO])
+def lista_eleicao_votado(votado):
+    token = request.headers.get('Authorization')
+    data = jwt.decode(token,os.environ["SECRET_KEY"],algorithms=['HS256'])
+    userID = data["userID"]
+    if votado == 0:
+        connection = getconnectionDB()
+        cursor = connection.cursor(cursor_factory=RealDictCursor)
+        cursor.execute("SELECT * FROM listar_eleicoes_n_votadas(%s)",(userID,))
+        result = {"Eleicoes": []}
+        for eleicao in cursor.fetchall():
+            result["Eleicoes"].append(eleicao)
+        return result
+    else:
+        connection = getconnectionDB()
+        cursor = connection.cursor(cursor_factory=RealDictCursor)
+        cursor.execute("SELECT * FROM listar_eleicoes_votadas(%s)",(userID,))
+        result = {"Eleicoes": []}
+        for eleicao in cursor.fetchall():
+            result["Eleicoes"].append(eleicao)
+        return result
 
 @app.post("/eleicao/votar")
 @auth.Authentication(access=[Access.ALUNO])
-@CheckJson(properties = [("ID_Eleicao",int),
-                         ("ID_Candidato",int)
+@CheckJson(properties = [("ID_Eleicao",int)
                          ])
 def votar_eleicao():
 
+    isnulo = False
     body = request.get_json()
+
+    if "ID_Candidato" not in body:
+        isnulo = True
+    else:
+        try:
+            int(body["ID_Candidato"])
+        except:
+            raise JSONTypeError(int,"ID_Candidato")
+
+    ID_Candidato = 0
+    if isnulo == False:
+        ID_Candidato = body["ID_Candidato"]
 
      
     token = request.headers.get('Authorization')
@@ -457,17 +485,18 @@ def votar_eleicao():
     
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM votar(%s,%s,%s)",(body["ID_Eleicao"],userID,body["ID_Candidato"]))
+    cursor.execute("SELECT * FROM votar(%s,%s,%s,%s)",(body["ID_Eleicao"],userID,ID_Candidato,isnulo))
 
     connection.commit()
-    if cursor.fetchall()[0][0] != True:
-        cursor.close()
-        connection.close()
+    result = str(cursor.fetchall()[0][0])
+    cursor.close()
+    connection.close()
 
-        raise InputError("Erro ao votar")
 
+    cursor.close()
+    connection.close()
     
-    return jsonify("OK"),200
+    return jsonify(result),200
         
 
 
@@ -563,10 +592,10 @@ def adicionar_candidatos_eleicao():
     body = request.get_json()
 
     if "ID_Candidatos" in body:
-        ids = body["ID_Candidatos"]
+        props = body["ID_Candidatos"]
         try:
-            for _id in ids:
-                int(_id)
+            for prop in props:
+                int(prop)
         except:
             raise JSONTypeError(list,"ID_Candidatos")
     else:
@@ -576,16 +605,17 @@ def adicionar_candidatos_eleicao():
     connection = getconnectionDB()
     cursor = connection.cursor()
 
-    result = {"Results" : []}
-    for _id in ids:
-        cursor.execute("SELECT * FROM adicionar_candidato(%s,%s)",(body["ID_Eleicao"],_id))
-        result["Results"].append({"ID_Candidato": _id, "result": cursor.fetchall()[0][0]})
-    connection.commit()
 
+    jsonresult = {"Results" : []}
+    for prop in props:
+        cursor.execute("SELECT * FROM adicionar_candidato(%s,%s)",(body["ID_Eleicao"],prop))
+        jsonresult["Results"].append({"ID_Candidato": prop, "result": cursor.fetchall()[0][0]})
+    
+    connection.commit()
     cursor.close()
     connection.close()
 
-    return result
+    return jsonresult
 
 @app.delete("/eleicao/desassociar_candidatos")
 @auth.Authentication(access=[Access.ADMIN])
