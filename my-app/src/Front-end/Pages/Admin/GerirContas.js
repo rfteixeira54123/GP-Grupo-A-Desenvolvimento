@@ -78,7 +78,8 @@ const Page = (props) => {
         tipo: contas.tipo,
         estado: contas.estado,
       }));
-      setContas(ContasList);
+      let ordContas = ContasList.sort((a,b) => a.email.localeCompare(b.email));
+      setContas(ordContas);
       handleOptionClick();
     }
   }, [res]);
