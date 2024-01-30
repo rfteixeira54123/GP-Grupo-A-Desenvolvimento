@@ -78,7 +78,8 @@ const Page = () => {
         descricao: candidato.objetivo,
         foto: candidato.link_imagem,
       }));
-      setCandidatos(candidatoList);
+      let ordList = candidatoList.sort((a,b) => a.nome.localeCompare(b.nome));
+      setCandidatos(ordList);
       handleOptionClick();
     }
   }, [res]);

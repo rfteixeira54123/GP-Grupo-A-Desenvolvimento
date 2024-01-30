@@ -202,7 +202,8 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
         <Form.Group className="mb-3">
           <Form.Label>Foto: </Form.Label>
           <Form.Control
-            type="file"
+            type="url"
+            placeholder="Insira o URL de uma imagem."
             defaultValue={Imagem}
             onChange={handleImagem}
             isInvalid={valImagem}

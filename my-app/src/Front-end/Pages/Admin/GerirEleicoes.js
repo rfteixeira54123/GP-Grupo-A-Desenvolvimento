@@ -82,7 +82,8 @@ const Page = () => {
         data_inicio: eleicao.data_inicio,
         data_fim: eleicao.data_fim,
       }));
-      setEleicoes(eleicaoList);
+      let ordList = eleicaoList.sort((a,b) => a.nome.localeCompare(b.nome));
+      setEleicoes(ordList);
       handleOptionClick();
     }
   }, [res]);
