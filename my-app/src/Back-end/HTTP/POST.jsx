@@ -25,34 +25,44 @@ function UsePost({ Data, FORM_ENDPOINT }) {
         if (response.status === 200) {
           return response.json();
         } else if (response.status === 401) {
-          navigate("/");
-          // throw "não autorizado";
+          alert("Erro ao contactar o servidor!");
+          throw "não autorizado";
         } else if (response.status === 403) {
-          navigate("/");
-          // throw "nao autorizado";
+          alert("Erro ao contactar o servidor!");
+          throw "nao autorizado";
         } else if (response.status === 500) {
-          throw "Erro no servidor.";
+          alert("Erro ao contactar o servidor! tente mais tarde. ");
+          throw "server error";
         } else if (response.status === 501) {
-          throw "Erro não implementado.";
+          alert("Erro ao contactar o servidor! tente mais tarde. ");
+          throw "nao implementado";
         } else if (response.status === 415) {
-          throw "Erro não definido";
+          alert("Erro ao contactar o servidor! tente mais tarde.  ");
+          throw "nao definido";
         } else if (response.status === 422) {
-          throw "Erro ao realizar pedido.";
+          alert("Os campos não contêm o tamanho minimo!");
+          throw "nao tem tamanho suficiente";
+        } else if (response.status === 403) {
+          alert("Erro ao contactar o servidor!");
+          throw "nao tem permissao";
+        } else if (response.status === 425) {
+          alert("Os campos não contêm o tamanho minimo!");
+          throw "nao tem tamanho suficiente";
         } else {
-          // throw "erro";
-          throw response.json();
+          alert("Erro ao contactar o servidor!");
+          throw "erro";
         }
       })
       .then((data) => {
-        console.log("OK");
-        console.log(data);
+        // console.log("OK");
+        // console.log(data);
         setRes(data);
         try {
           if (data.token) localStorage.setItem("Token", data.token);
         } catch {}
       })
       .catch((error) => {
-        console.log("NOK");
+        // console.log("NOK");
         console.error(error);
       });
   };

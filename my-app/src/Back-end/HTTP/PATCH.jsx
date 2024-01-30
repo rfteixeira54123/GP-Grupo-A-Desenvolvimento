@@ -23,22 +23,31 @@ function UsePatch({ Data, FORM_ENDPOINT }) {
         if (response.status === 200) {
           return response.json();
         } else if (response.status === 401) {
+          alert("Erro ao contactar o servidor!");
           throw "não autorizado";
         } else if (response.status === 403) {
+          alert("Erro ao contactar o servidor!");
           throw "nao autorizado";
         } else if (response.status === 500) {
+          alert("Erro ao contactar o servidor! tente mais tarde. ");
           throw "server error";
         } else if (response.status === 501) {
+          alert("Erro ao contactar o servidor! tente mais tarde. ");
           throw "nao implementado";
         } else if (response.status === 415) {
+          alert("Erro ao contactar o servidor! tente mais tarde.  ");
           throw "nao definido";
         } else if (response.status === 422) {
+          alert("Os campos não contêm o tamanho minimo!");
           throw "nao tem tamanho suficiente";
         } else if (response.status === 403) {
+          alert("Erro ao contactar o servidor!");
           throw "nao tem permissao";
         } else if (response.status === 425) {
+          alert("Os campos não contêm o tamanho minimo!");
           throw "nao tem tamanho suficiente";
         } else {
+          alert("Erro ao contactar o servidor!");
           throw "erro";
         }
       })
@@ -48,7 +57,7 @@ function UsePatch({ Data, FORM_ENDPOINT }) {
         } catch {}
       })
       .catch((error) => {
-        console.log(error);
+        console.erro(error);
       });
   };
   return { handlePatchSubmit: handleSubmit, status, message, res };

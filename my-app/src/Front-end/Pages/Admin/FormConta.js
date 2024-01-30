@@ -111,7 +111,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
   };
 
   const handleEditar = () => {
-    console.log("editar");
+    // console.log("editar");
     verifyFields();
     if (Num && Email && Email.length > 7) {
       setStatePopup(10);

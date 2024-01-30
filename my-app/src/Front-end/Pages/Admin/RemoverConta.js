@@ -46,22 +46,22 @@ const Info = ({ choice, handleCancelar, variant, handleConfirmar }) => {
   console.table(choice);
   const { handleDeleteSubmit } = useDelete({
     Data: {
-      ID_Contas: choice.map((conta)=> conta.id_conta),
+      ID_Contas: choice.map((conta) => conta.id_conta),
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/remover",
   });
 
   const { handlePatchSubmit } = usePatch({
     Data: {
-      estado: (choice.length > 1 ? false : !choice[0].estado),
-      ID_Contas: choice.map((conta)=> conta.id_conta),
+      estado: choice.length > 1 ? false : !choice[0].estado,
+      ID_Contas: choice.map((conta) => conta.id_conta),
     },
     FORM_ENDPOINT: "https://gp-api-alpha.vercel.app/conta/definir_ativo",
   });
 
   const handleConfirmarDesativar = () => {
-    console.log("desativa");
-    console.log(!choice[0].estado, choice[0].id_conta);
+    // console.log("desativa");
+    // console.log(!choice[0].estado, choice[0].id_conta);
     setStatePopup(10);
     handlePatchSubmit().then(() => {
       handleConfirmar();
@@ -69,8 +69,8 @@ const Info = ({ choice, handleCancelar, variant, handleConfirmar }) => {
   };
 
   const handleConfirmarRemover = () => {
-    console.log(choice[0].id_conta);
-    console.log("remove esse");
+    // console.log(choice[0].id_conta);
+    // console.log("remove esse");
     setStatePopup(10);
     handleDeleteSubmit().then(() => {
       handleConfirmar();

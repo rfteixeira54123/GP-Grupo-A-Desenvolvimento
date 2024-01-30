@@ -257,7 +257,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
 
   useEffect(() => {
     try {
-      console.log(gres);
+      // console.log(gres);
       if (gres && gres.Candidatos && Array.isArray(gres.Candidatos)) {
         const candidatoList = gres.Candidatos.map((candidato) => ({
           id_candidato: candidato.id_candidato,
@@ -303,7 +303,7 @@ const FormC = ({ obj, handleCancelar, handleAdd, handleEdit }) => {
     setCandidatos(updateCandidato);
     console.table(updateCandidato);
   };
-  
+
   const [statePopup, setStatePopup] = useState(0);
 
   const decidePopup = () => {

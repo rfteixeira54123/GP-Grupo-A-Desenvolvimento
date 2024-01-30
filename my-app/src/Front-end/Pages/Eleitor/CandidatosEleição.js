@@ -91,7 +91,7 @@ const Dados = ({ getEleicao }) => {
 
   useEffect(() => {
     if (flag) {
-      handleGetSubmit().then(()=>setLoading(false));
+      handleGetSubmit().then(() => setLoading(false));
       setFlag(false);
     }
   });
@@ -110,7 +110,6 @@ const Dados = ({ getEleicao }) => {
   }, [res]);
 
   const filtrarCandidatos = (candidatos) => {
-    console.log(candidatos);
     const candidatosFiltrados = candidatos.filter((candidatos) => {
       return candidatos.id_eleicao == getEleicao.id_eleicao;
     });
@@ -142,92 +141,101 @@ const Dados = ({ getEleicao }) => {
               height: "100%",
             }}
           >
-            {candidatos.length === 0 ?
+            {candidatos.length === 0 ? (
               <Carousel.Item
                 data-bs-theme="primary"
-                style={{ color: constants.color.secondary }}>
-                {loading ? "Carregando...": "Não há candidatos a exibir."}
-              </Carousel.Item>
-            : candidatos.map((obj, index) => (
-              <Carousel.Item
-                data-bs-theme="primary"
-                key={"Candidato" + index}
                 style={{ color: constants.color.secondary }}
               >
-                <div
-                  style={{
-                    width: "calc(100% - 14rem)",
-                  }}
+                {loading ? "Carregando..." : "Não há candidatos a exibir."}
+              </Carousel.Item>
+            ) : (
+              candidatos.map((obj, index) => (
+                <Carousel.Item
+                  data-bs-theme="primary"
+                  key={"Candidato" + index}
+                  style={{ color: constants.color.secondary }}
                 >
-                  <h3 style={{ textAlign: "center" }}>
-                    {obj.tipo} {obj.nome}
-                  </h3>
-                  <p
+                  <div
                     style={{
-                      backgroundColor: constants.color.white70,
-                      borderRadius: "4px",
-                      boxShadow: constants.shadow.md,
-                      overflowY: "auto",
-                      padding: "0.5rem",
-                      fontSize: "14px",
-                      height: "400px",
-                      colorScheme: "auto",
-                      textAlign: "justify",
+                      width: "calc(100% - 14rem)",
                     }}
                   >
-                    {obj.responsavel ? (
-                      <>
-                        <strong style={{ fontStyle: "italic" }}>
-                          Responsáveis:
-                        </strong>
-                        <br />
-                        {obj.responsavel}
-                        <br />
-                        <br />
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                    <strong style={{ fontStyle: "italic" }}>Objetivos:</strong>
-                    <br />
-                    {obj.descricao}
-                    <br />
-                  </p>
-                </div>
-                <div
-                  style={{
-                    backgroundColor: constants.color.primary_light,
-                    border: "1px solid",
-                    borderColor: constants.color.secondary,
-                    borderRadius: "1rem",
-                    width: "13rem",
-                    height: "13rem",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    overflow: "hidden"
-                  }}
-                >
-                  {obj.foto ? (
-                    <img alt="candidato" src={obj.foto} style={{width: "100%"}}/>
-                  ) : (
-                    <div
+                    <h3 style={{ textAlign: "center" }}>
+                      {obj.tipo} {obj.nome}
+                    </h3>
+                    <p
                       style={{
-                        color: constants.color.white,
-                        fontStyle: "italic",
-                        fontWeight: 300,
-                        textShadow: "2px 2px 2px #00000040",
+                        backgroundColor: constants.color.white70,
+                        borderRadius: "4px",
+                        boxShadow: constants.shadow.md,
+                        overflowY: "auto",
+                        padding: "0.5rem",
+                        fontSize: "14px",
+                        height: "400px",
+                        colorScheme: "auto",
+                        textAlign: "justify",
                       }}
                     >
-                      FOTO
-                    </div>
-                  )}
-                </div>
-              </Carousel.Item>
-            ))}
+                      {obj.responsavel ? (
+                        <>
+                          <strong style={{ fontStyle: "italic" }}>
+                            Responsáveis:
+                          </strong>
+                          <br />
+                          {obj.responsavel}
+                          <br />
+                          <br />
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                      <strong style={{ fontStyle: "italic" }}>
+                        Objetivos:
+                      </strong>
+                      <br />
+                      {obj.descricao}
+                      <br />
+                    </p>
+                  </div>
+                  <div
+                    style={{
+                      backgroundColor: constants.color.primary_light,
+                      border: "1px solid",
+                      borderColor: constants.color.secondary,
+                      borderRadius: "1rem",
+                      width: "13rem",
+                      height: "13rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      overflow: "hidden",
+                    }}
+                  >
+                    {obj.foto ? (
+                      <img
+                        alt="candidato"
+                        src={obj.foto}
+                        style={{ width: "100%" }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          color: constants.color.white,
+                          fontStyle: "italic",
+                          fontWeight: 300,
+                          textShadow: "2px 2px 2px #00000040",
+                        }}
+                      >
+                        FOTO
+                      </div>
+                    )}
+                  </div>
+                </Carousel.Item>
+              ))
+            )}
           </Carousel>
         </div>
       </div>

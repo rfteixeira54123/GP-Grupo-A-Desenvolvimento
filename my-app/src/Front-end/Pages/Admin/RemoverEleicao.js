@@ -44,7 +44,6 @@ const Info = ({ choice, handleCancelar, handleConfirmar }) => {
     // O que é o ID_LISTA_CANDIDATOS na API ?
     // o endpoint apenas suporta remover 1 candidato por cada vez
     //Fazer função para remover eleicoes recebidos no array choice
-    console.log("remover");
     setStatePopup(10);
     // handleDeleteSubmit().then(()=>{
     //   handleConfirmar;
@@ -97,11 +96,7 @@ const Info = ({ choice, handleCancelar, handleConfirmar }) => {
               }}
             >
               <Button label="Cancelar" handle={handleCancelar} />
-              <Button
-                label="Confirmar"
-                handle={handleRemove}
-                danger={true}
-              />
+              <Button label="Confirmar" handle={handleRemove} danger={true} />
             </div>
           </>
         ) : (
@@ -133,11 +128,7 @@ const Info = ({ choice, handleCancelar, handleConfirmar }) => {
               }}
             >
               <Button label="Cancelar" handle={handleCancelar} />
-              <Button
-                label="Confirmar"
-                handle={handleRemove}
-                danger={true}
-              />
+              <Button label="Confirmar" handle={handleRemove} danger={true} />
             </div>
           </>
         )}

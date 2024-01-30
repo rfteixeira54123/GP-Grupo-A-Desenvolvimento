@@ -84,7 +84,7 @@ const Page = (props) => {
   }, [res]);
 
   const updateShowButtons = (array) => {
-    console.log(array);
+    // console.log(array);
     if (array.includes(-1)) {
       setSelected(contas);
     } else {

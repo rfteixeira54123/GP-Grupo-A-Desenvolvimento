@@ -55,7 +55,7 @@ function UseGet({ Data, FORM_ENDPOINT }) {
         }
       })
       .catch((error) => {
-        console.error("Erro durante o pedido GET:", error);
+        console.error(error);
       });
   };
   return { handleGetSubmit: handleSubmit, status, message, res };

@@ -55,7 +55,6 @@ const Window = () => {
 
   useEffect(() => {
     if (evitaErro) {
-      console.log("Não encaminhado corretamente.");
       navigate("home");
       setFlag(false);
     }
@@ -82,18 +81,16 @@ const Window = () => {
     } else {
       setObj({ id_candidato: null });
     }
-    
+
     if (page == 2) {
       if (obj.id_candidato) {
-        console.log("vota em alguem");
         console.table(obj);
         handlePostSubmit().then(() => setState(page));
       } else {
-        console.log("voto em branco");
         console.table(obj);
         handlePostSubmitBlank().then(() => setState(page));
       }
-    } else{
+    } else {
       setState(page);
     }
   }
