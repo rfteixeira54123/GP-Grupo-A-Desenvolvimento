@@ -1,0 +1,79 @@
+Metadata-Version: 2.1
+Name: flask-mailman
+Version: 1.0.0
+Summary: Porting Django's email implementation to your Flask applications.
+Home-page: https://github.com/waynerv/flask-mailman
+License: BSD-3-Clause
+Keywords: flask,mail,smtp,flask-mail
+Author: Waynerv
+Author-email: ampedee@gmail.com
+Requires-Python: >=3.7,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Framework :: Flask
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Communications :: Email
+Classifier: Topic :: Software Development :: Build Tools
+Provides-Extra: dev
+Provides-Extra: doc
+Provides-Extra: test
+Requires-Dist: black ; extra == "test"
+Requires-Dist: bump2version ; extra == "dev"
+Requires-Dist: flake8 ; extra == "test"
+Requires-Dist: flask (>=1.0)
+Requires-Dist: isort ; extra == "test"
+Requires-Dist: mkdocs ; extra == "doc"
+Requires-Dist: mkdocs-autorefs ; extra == "doc"
+Requires-Dist: mkdocs-include-markdown-plugin ; extra == "doc"
+Requires-Dist: mkdocs-material ; extra == "doc"
+Requires-Dist: mkdocs-material-extensions ; extra == "doc"
+Requires-Dist: mkdocstrings ; extra == "doc"
+Requires-Dist: pip ; extra == "dev"
+Requires-Dist: pre-commit ; extra == "dev"
+Requires-Dist: pytest ; extra == "test"
+Requires-Dist: pytest-cov ; extra == "test"
+Requires-Dist: toml ; extra == "dev"
+Requires-Dist: tox ; extra == "dev"
+Requires-Dist: twine ; extra == "dev"
+Requires-Dist: virtualenv ; extra == "dev"
+Project-URL: Repository, https://github.com/waynerv/flask-mailman
+Description-Content-Type: text/markdown
+
+# Flask-Mailman
+
+![PyPI](https://img.shields.io/pypi/v/flask-mailman?color=blue)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/flask-mailman?color=brightgreen)
+[![dev workflow](https://github.com/waynerv/flask-mailman/actions/workflows/dev.yml/badge.svg?branch=master)](https://github.com/waynerv/flask-mailman/actions/workflows/dev.yml)
+![GitHub commits since latest release (by SemVer)](https://img.shields.io/github/commits-since/waynerv/flask-mailman/latest?color=cyan)
+![PyPI - License](https://img.shields.io/pypi/l/flask-mailman?color=blue)
+
+Flask-Mailman is a Flask extension providing simple email sending capabilities.
+
+It was meant to replace unmaintained Flask-Mail with a better warranty and more features.
+
+## Usage
+
+Flask-Mail ported Django's email implementation to your Flask applications, which may be the best mail sending implementation that's available for python.
+
+The way of using this extension is almost the same as Django.
+
+Documentation: https://waynerv.github.io/flask-mailman.
+
+**Note: A few breaking changes have been made in v0.2.0 version** to ensure that API of this extension is basically the same as Django.
+Users migrating from Flask-Mail should upgrade with caution.
+
+## Credits
+
+Thanks to [Jetbrains](https://jb.gg/OpenSource) for providing an Open Source license for this project.
+
+[![Jetbrains Logo](docs/img/jetbrains-variant-4.png)](www.jetbrains.com)
+
+Build tools and workflows of this project was inspired by [waynerv/cookiecutter-pypackage](https://github.com/waynerv/cookiecutter-pypackage) project template.
+

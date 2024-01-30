@@ -1,3 +1,4 @@
+from email.message import EmailMessage
 import json
 from errors.errors import *
 import psycopg2
@@ -13,8 +14,20 @@ import datetime
 from jsoncheck.json_checker import CheckJson
 import secrets
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask_mailman import Mail, EmailMessage
 
 app = Flask(__name__)
+mail = Mail()
+
+app.config["MAIL_SERVER"] = os.environ["Email_Server"]
+app.config["MAIL_PORT"] = os.environ["Email_Port"]
+app.config["MAIL_USERNAME"] = os.environ["Email"]
+app.config["MAIL_PASSWORD"] = os.environ["Email_Password"]
+app.config["MAIL_USE_TLS"] = False
+app.config["MAIL_USE_SSL"] = True
+
+
+mail.init_app(app)
 
 SWAGGER_URL = '/swagger'
 API_URL = '/static/swagger.json'
@@ -28,13 +41,9 @@ SWAGGER_BLUEPRINT = get_swaggerui_blueprint(
 
 app.register_blueprint(SWAGGER_BLUEPRINT,url_prefix = SWAGGER_URL)
 '''
-TODO
-Implementacao Base de dados
-REMOVER PALAVRA-PASSE AO LISTAR CONTAS
-
 --OPTIONAL--
 BlackList de Tokens (Anular sessÃµes de tokens com uma lista de tokens invalidos)
-Sistema Email Flask
+REMOVER PALAVRA-PASSE AO LISTAR CONTAS
 '''
 CORS(app)
 
@@ -287,6 +296,27 @@ def inserir_conta():
 
     
     if result == True:
+        emailinfo = body["Email"]
+
+        email_message = (
+            f"Ola,\n"
+            f"Uma conta foi criada com o seu email na plataforma 'Voto Online'[link].\n"
+            f"As credenciais sao as seguintes:\n"
+            f"  Email: {emailinfo}\n"
+            f"  Password: {palavrapasse}\n\n"
+            f"Qualquer duvida responda a este e-mail!\n"
+            f"Cumprimentos,\n"
+            f"Equipa Voto Online"
+        )
+
+        msg = EmailMessage(
+            "Sua conta no Voto Online",
+            email_message,
+            app.config["MAIL_USERNAME"],
+            [body["Email"]]
+        )
+
+        msg.send()
         return jsonify("OK"),200
     else:
         raise InputError("Erro ao inserir conta")
@@ -307,19 +337,19 @@ def editar_conta():
 
     connection = getconnectionDB()
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM editar_utilizador(%s,%s,%s,%s,%s)",(body["ID_Conta"],body["Email"],None,None,body["Identificacao"]))
-    connection.commit()
-
-    if cursor.fetchall()[0][0] == False:
+    try:
+        cursor.execute("SELECT * FROM editar_utilizador(%s,%s,%s,%s,%s)",(body["ID_Conta"],body["Email"],None,None,body["Identificacao"]))
+        connection.commit()
+    except:
         cursor.close()
         connection.close()
         raise InputError("Erro ao editar utilizador")
-    
 
+    result = cursor.fetchall()[0][0]
     cursor.close()
     connection.close()
 
-    return jsonify("OK"),200
+    return jsonify(result),200
 
 @app.patch("/conta/mudar_password")
 @auth.Authentication(access=[Access.ALUNO,Access.ADMIN])

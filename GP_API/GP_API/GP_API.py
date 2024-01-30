@@ -4,6 +4,3 @@
     #api.main.app.run(debug=False)
 
 
-
-password_length = 8
-print(int(None))
