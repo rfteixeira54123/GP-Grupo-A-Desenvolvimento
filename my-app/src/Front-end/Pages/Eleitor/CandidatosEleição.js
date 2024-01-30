@@ -1,8 +1,7 @@
 import Carousel from "react-bootstrap/Carousel";
-// import "./style.css";
-
 import * as constants from "../../constants";
 import { useState, useEffect } from "react";
+import { format } from "date-fns";
 import UseGet from "../../../Back-end/HTTP/GET";
 
 const styleTitle = {
@@ -104,6 +103,7 @@ const Dados = ({ getEleicao }) => {
         tipo: candidato.tipo,
         descricao: candidato.objetivo,
         id_eleicao: candidato.id_eleicao,
+        foto: candidato.link_imagem,
       }));
       setCandidatos(filtrarCandidatos(candidatoList));
     }
@@ -124,9 +124,9 @@ const Dados = ({ getEleicao }) => {
         <div style={styleTop}>
           <div style={styleName}>Eleição {getEleicao.nome}</div>
           <div style={styleTime}>
-            Início: {getEleicao.data_inicio}
+            Início: {format(getEleicao.data_inicio, "iii, dd LLL yyyy")}
             <br />
-            Fim: {getEleicao.data_fim}
+            Fim: {format(getEleicao.data_fim, "iii, dd LLL yyyy")}
           </div>
         </div>
         <div style={styleContainer}>

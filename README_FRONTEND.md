@@ -30,10 +30,11 @@ Este projeto utiliza as seguintes dependências:
 - [react-icons](https://react-icons.github.io/react-icons/): Ícones para sua aplicação React.
 - [react-router-dom](https://reactrouter.com/): Navegação declarativa para componentes React.
 - [react-bootstrap](https://react-bootstrap.github.io/), [bootstrap](https://getbootstrap.com/): Componentes Bootstrap para React.
+- [date-fns](): Biblioteca para formatação de datas.
 
 Instale as dependências usando:
 
-`npm install react-icons react-router-dom react-bootstrap bootstrap`
+`npm install react-icons react-router-dom react-bootstrap bootstrap date-fns`
 
 ## Atualização
 
