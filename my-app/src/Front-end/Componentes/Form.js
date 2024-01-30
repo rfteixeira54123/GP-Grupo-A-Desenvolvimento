@@ -22,9 +22,7 @@ const styleForm = {
 
 const FormLogin = () => {
   const [Email, setEmail] = useState(localStorage.getItem("email"));
-  const [PalavraPasse, setPalavraPasse] = useState(
-    localStorage.getItem("pass")
-  );
+  const [PalavraPasse, setPalavraPasse] = useState("");
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -64,6 +62,7 @@ const FormLogin = () => {
           .then((data) => {
             if (localStorage.getItem("Token")) {
               handleGetSubmit().then(() => {
+                localStorage.setItem("Email", Email);
                 navigate("/home");
               });
             }
