@@ -22,32 +22,25 @@ function UsePost({ Data, FORM_ENDPOINT }) {
         if (response.status === 200) {
           return response.json();
         } else if (response.status === 401) {
-          alert("Erro ao contactar o servidor!");
-          throw "não autorizado";
+          throw "Credenciais inválidas.";
         } else if (response.status === 403) {
-          alert("Erro ao contactar o servidor!");
-          throw "nao autorizado";
+          throw "Você não tem permissão para aceder essa funcionalidade.";
         } else if (response.status === 500) {
           alert("Erro ao contactar o servidor! tente mais tarde. ");
-          throw "server error";
+          throw "Erro ao contactar o servidor! tente mais tarde.";
         } else if (response.status === 501) {
           alert("Erro ao contactar o servidor! tente mais tarde. ");
-          throw "nao implementado";
+          throw "Erro ao contactar o servidor! tente mais tarde.";
         } else if (response.status === 415) {
           alert("Erro ao contactar o servidor! tente mais tarde.  ");
-          throw "nao definido";
+          throw "Erro ao contactar o servidor! tente mais tarde. ";
         } else if (response.status === 422) {
-          alert("Os campos não contêm o tamanho minimo!");
-          throw "nao tem tamanho suficiente";
-        } else if (response.status === 403) {
-          alert("Erro ao contactar o servidor!");
-          throw "nao tem permissao";
+          throw "Campos não tem caracteres mínimos.";
         } else if (response.status === 425) {
-          alert("Os campos não contêm o tamanho minimo!");
-          throw "nao tem tamanho suficiente";
+          throw "Campos não tem caracteres mínimos.";
         } else {
-          alert("Erro ao contactar o servidor!");
-          throw "erro";
+          alert("Erro ao contactar o servidor! tente mais tarde. ");
+          throw "Erro.";
         }
       })
       .then((data) => {
